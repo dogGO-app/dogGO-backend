@@ -26,6 +26,7 @@ subprojects {
 
     val implementation by configurations
     val testImplementation by configurations
+    val runtimeOnly by configurations
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-web")
