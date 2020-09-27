@@ -1,0 +1,1 @@
+web: java -jar $APP_NAME/build/libs/$APP_NAME-0.0.1-SNAPSHOT.jar

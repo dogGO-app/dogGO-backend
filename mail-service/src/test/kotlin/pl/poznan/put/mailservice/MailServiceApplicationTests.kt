@@ -9,5 +9,4 @@ class MailServiceApplicationTests {
 	@Test
 	fun contextLoads() {
 	}
-
 }
