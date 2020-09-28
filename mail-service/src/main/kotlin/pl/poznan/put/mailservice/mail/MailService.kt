@@ -12,7 +12,7 @@ class MailService(
         private val javaMailSender: JavaMailSender,
         private val templateEngine: SpringTemplateEngine,
         @Value("\${spring.mail.username}") private val senderEmail: String,
-        @Value("\${account-acctivation.subject}") private val accountActivationSubject: String
+        @Value("\${account-activation.subject}") private val accountActivationSubject: String
 ) {
 
     fun sendAccountActivationMail(receiver: String, activationCode: String) {
