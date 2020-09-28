@@ -1,3 +1,3 @@
 rootProject.name = "dogGO-backend"
 
-include("mail-service")
+include("mail-service", "auth-service")
