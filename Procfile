@@ -1,0 +1,1 @@
+web: java -jar $SERVICE_NAME/build/libs/$SERVICE_NAME-*.jar
