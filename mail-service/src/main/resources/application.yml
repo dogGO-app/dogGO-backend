@@ -19,6 +19,3 @@ spring:
     mode: HTML
     encoding: UTF-8
     cache: true
-
-account-activation:
-  subject: Aktywacja konta na platformie dogGO

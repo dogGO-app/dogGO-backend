@@ -11,16 +11,19 @@ import org.thymeleaf.spring5.SpringTemplateEngine
 class MailService(
         private val javaMailSender: JavaMailSender,
         private val templateEngine: SpringTemplateEngine,
-        @Value("\${spring.mail.username}") private val senderEmail: String,
-        @Value("\${account-activation.subject}") private val accountActivationSubject: String
+        @Value("\${spring.mail.username}") private val senderEmail: String
 ) {
+
+    companion object {
+        const val ACCOUNT_ACTIVATION_SUBJECT = "Aktywacja konta na platformie dogGO"
+    }
 
     fun sendAccountActivationMail(receiver: String, activationCode: String) {
         val message = javaMailSender.createMimeMessage()
         val helper = MimeMessageHelper(message, true)
         helper.setFrom(senderEmail)
         helper.setTo(receiver)
-        helper.setSubject(accountActivationSubject)
+        helper.setSubject(ACCOUNT_ACTIVATION_SUBJECT)
         helper.setText(prepareAccountActivationContent(receiver, activationCode), true)
         javaMailSender.send(message)
     }
