@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar $SERVICE_NAME/build/libs/$SERVICE_NAME-*.jar
+web: java -Dserver.port=${PORT:-8080} -jar $SERVICE_NAME/build/libs/$SERVICE_NAME-*.jar
