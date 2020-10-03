@@ -8,7 +8,7 @@ spring:
     config:
       discovery:
         enabled: true
-        serviceId: auth-service
+        service-id: auth-service
   datasource:
     url: jdbc:postgresql://localhost:5432/auth-db
     username: postgres
