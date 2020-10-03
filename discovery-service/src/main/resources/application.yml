@@ -11,5 +11,3 @@ eureka:
   client:
     fetch-registry: false
     register-with-eureka: false
-  server:
-    eviction-interval-timer-in-ms: 3000
