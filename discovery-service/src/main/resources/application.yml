@@ -1,11 +1,13 @@
 server:
   port: 8761
+
 spring:
   application:
     name: discovery-service
+
 eureka:
   client:
-    registerWithEureka: false
-    fetchRegistry: false
+    fetch-registry: false
+    register-with-eureka: false
   server:
-    evictionIntervalTimerInMs: 3000
+    eviction-interval-timer-in-ms: 3000

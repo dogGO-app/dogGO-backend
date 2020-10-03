@@ -1,5 +1,6 @@
 server:
   port: 0
+
 spring:
   application:
     name: auth-service
@@ -15,7 +16,7 @@ spring:
   jpa:
     database: POSTGRESQL
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${DDL_AUTO:create-drop}
     properties:
       hibernate:
         format_sql: true
@@ -24,3 +25,11 @@ spring:
         hbm2ddl:
           import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
     show-sql: false
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 3
+  client:
+    service-url:
+      default-zone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
