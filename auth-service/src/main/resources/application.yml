@@ -32,5 +32,5 @@ eureka:
     lease-expiration-duration-in-seconds: 3
     hostname: ${DOMAIN_NAME:localhost}
   client:
-    service-url:
-      default-zone: ${EUREKA_URL:http://localhost:8761}/eureka/
+    serviceUrl:
+      defaultZone: ${EUREKA_URL:http://localhost:8761}/eureka/
