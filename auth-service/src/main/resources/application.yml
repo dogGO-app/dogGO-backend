@@ -31,4 +31,4 @@ eureka:
     hostname: ${DOMAIN_NAME:localhost}
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:http://localhost:8761}/eureka/
+      defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/
