@@ -4,11 +4,6 @@ server:
 spring:
   application:
     name: mail-service
-  cloud:
-    config:
-      discovery:
-        enabled: true
-        service-id: mail-service
   mail:
     host: smtp.gmail.com
     port: 587

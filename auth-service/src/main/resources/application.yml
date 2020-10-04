@@ -4,11 +4,6 @@ server:
 spring:
   application:
     name: auth-service
-  cloud:
-    config:
-      discovery:
-        enabled: true
-        service-id: auth-service
   datasource:
     url: jdbc:postgresql://localhost:5432/auth-db
     username: postgres
