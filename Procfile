@@ -1,1 +1,1 @@
-web: java -jar $SERVICE_NAME/build/libs/$SERVICE_NAME-*.jar
+web: java -Dserver.port=${PORT:-8080} $JAVA_OPTS -jar $SERVICE_NAME/build/libs/$SERVICE_NAME-*.jar

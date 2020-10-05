@@ -1,3 +1,4 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -20,21 +21,29 @@ subprojects {
         sourceCompatibility = JavaVersion.VERSION_11
     }
 
+    extra["springCloudVersion"] = "Hoxton.SR8"
+
     repositories {
         mavenCentral()
     }
 
     val implementation by configurations
     val testImplementation by configurations
-    val runtimeOnly by configurations
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        implementation("org.springframework.cloud:spring-cloud-starter-config")
         testImplementation("org.springframework.boot:spring-boot-starter-test") {
             exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+        }
+    }
+
+    configure<DependencyManagementExtension> {
+        imports {
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
         }
     }
 

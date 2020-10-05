@@ -1,6 +1,14 @@
 server:
-  port: 8080
+  port: 0
+
 spring:
+  application:
+    name: auth-service
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: auth-service
   datasource:
     url: jdbc:postgresql://localhost:5432/auth-db
     username: postgres
@@ -8,7 +16,7 @@ spring:
   jpa:
     database: POSTGRESQL
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${DDL_AUTO:create-drop}
     properties:
       hibernate:
         format_sql: true
@@ -17,3 +25,10 @@ spring:
         hbm2ddl:
           import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
     show-sql: false
+
+eureka:
+  instance:
+    hostname: ${DOMAIN_NAME:localhost}
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/

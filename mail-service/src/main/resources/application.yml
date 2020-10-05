@@ -1,12 +1,19 @@
 server:
-  port: 8080
+  port: 0
 
 spring:
+  application:
+    name: mail-service
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: mail-service
   mail:
     host: smtp.gmail.com
     port: 587
     username: dogGO.kontakt@gmail.com
-    password: somePasswordToChange
+    password: ${MAIL_PASSWORD:somePasswordToChange}
     properties:
       mail:
         smtp:
@@ -19,3 +26,10 @@ spring:
     mode: HTML
     encoding: UTF-8
     cache: true
+
+eureka:
+  instance:
+    hostname: ${DOMAIN_NAME:localhost}
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/
