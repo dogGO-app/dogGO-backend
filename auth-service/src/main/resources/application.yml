@@ -29,3 +29,9 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/
+
+keycloak:
+  custom:
+    admin-user:
+      username: admin
+      password: test12345
