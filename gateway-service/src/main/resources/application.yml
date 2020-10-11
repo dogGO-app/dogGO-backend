@@ -6,12 +6,12 @@ spring:
     name: gateway-service
   cloud:
     gateway:
-      default-filters:
-        - TokenRelay
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
+      default-filters:
+        - TokenRelay
       routes:
         - id: auth-service
           uri: lb://auth-service
