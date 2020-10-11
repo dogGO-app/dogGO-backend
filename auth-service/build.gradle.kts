@@ -18,5 +18,6 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 
 	implementation("org.keycloak:keycloak-admin-client:11.0.2")
+	implementation("javax.ws.rs:javax.ws.rs-api:2.1.1")
 	implementation("com.github.thomasdarimont.embedded-spring-boot-keycloak-server:embedded-keycloak-server-spring-boot-starter:2.4.0")
 }

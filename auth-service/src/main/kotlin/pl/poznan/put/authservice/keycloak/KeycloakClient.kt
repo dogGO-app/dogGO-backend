@@ -20,6 +20,8 @@ final class KeycloakClient(
 ) {
     companion object {
         const val SERVER_URL = "http://localhost:8888/auth"
+        const val CLIENT_ID = "admin-cli"
+        const val CLIENT_SECRET = "3adf256f-b398-4acb-a7dc-188d71e1ff90"
         const val MASTER_REALM_NAME = "master"
         const val USER_ROLE = "user"
     }
@@ -29,13 +31,15 @@ final class KeycloakClient(
             .realm(MASTER_REALM_NAME)
             .username(username)
             .password(password)
-            .clientId("client")
-            .clientSecret("secret")
+            .clientId(CLIENT_ID)
+            .clientSecret(CLIENT_SECRET)
             .resteasyClient(ResteasyClientBuilder().connectionPoolSize(20).build())
             .build()
 
     fun createUser(userDTO: UserDTO): Response.Status {
-        val userRepresentation = userDTO.toUserRepresentation()
+        val userRepresentation = userDTO.toUserRepresentation().apply {
+            isEnabled = true
+        }
         val result = getUsers().create(userRepresentation)
 
         return when (val responseStatus = result.statusInfo.toEnum()) {
