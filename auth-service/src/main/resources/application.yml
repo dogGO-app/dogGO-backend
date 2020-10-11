@@ -35,5 +35,5 @@ keycloak:
     admin-user:
       username: admin
       password: test12345
-#    server:
-#      keycloak-path: /keycloak
+    server:
+      keycloak-path: /keycloak

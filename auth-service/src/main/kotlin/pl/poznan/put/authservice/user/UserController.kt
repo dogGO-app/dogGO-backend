@@ -1,6 +1,7 @@
 package pl.poznan.put.authservice.user
 
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.poznan.put.authservice.user.dto.UserDTO
 
@@ -11,7 +12,7 @@ class UserController(
 ) {
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    fun createUser(@RequestBody userDTO: UserDTO) {
-        userService.createUser(userDTO)
+    fun createUser(@RequestBody userDTO: UserDTO): ResponseEntity<String> {
+        return userService.createUser(userDTO)
     }
 }
