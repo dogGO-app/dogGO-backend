@@ -33,17 +33,13 @@ spring:
       client:
         provider:
           keycloak:
-            token-uri: http://localhost:8888/keycloak/realms/master/protocol/openid-connect/token
-            authorization-uri: http://localhost:8888/keycloak/realms/master/protocol/openid-connect/auth
-            userinfo-uri: http://localhost:8888/keycloak/realms/master/protocol/openid-connect/userinfo
+            issuer-uri: ${AUTH_SERVICE_URL:http://localhost:8888}/keycloak/realms/master
             user-name-attribute: preferred_username
         registration:
           keycloak-doggo:
             provider: keycloak
             client-id: doggo
             client-secret: de8d431e-9bd7-4683-929f-2a55bb77f027
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
 
 eureka:
   instance:

@@ -5,14 +5,18 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class SecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
-        http.authorizeRequests { authorize -> authorize.anyRequest().authenticated() }
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer<HttpSecurity>::jwt)
+        http
+                .cors()
+                .and()
+                .authorizeRequests().anyRequest().hasAuthority("SCOPE_user")
+//                .anyRequest().authenticated()
+                .and()
+                .oauth2ResourceServer().jwt()
     }
 }

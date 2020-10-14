@@ -19,7 +19,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${GATEWAY_URL:http://localhost:8080}/auth/keycloak/realms/master
+          issuer-uri: ${AUTH_SERVICE_URL:http://localhost:8888}/keycloak/realms/master
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html

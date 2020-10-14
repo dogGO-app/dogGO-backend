@@ -1,6 +1,5 @@
 package pl.poznan.put.mailservice.mail
 
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -15,7 +14,6 @@ class MailController(
         mailService.sendAccountActivationMail(receiver, activationCode)
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_user')")
     @GetMapping("/test")
     fun test(): String {
         return "Hello World!"
