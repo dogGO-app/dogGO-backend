@@ -15,7 +15,7 @@ class MailController(
         mailService.sendAccountActivationMail(receiver, activationCode)
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_TEST')")
+    @PreAuthorize("hasAuthority('SCOPE_user')")
     @GetMapping("/test")
     fun test(): String {
         return "Hello World!"

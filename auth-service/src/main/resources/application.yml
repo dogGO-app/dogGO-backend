@@ -33,7 +33,10 @@ eureka:
 keycloak:
   custom:
     admin-user:
-      username: admin
-      password: test12345
+      username: ${KEYCLOAK_ADMIN_USERNAME:admin}
+      password: ${KEYCLOAK_ADMIN_PASSWORD:test12345}
+      create-admin-user-enabled: true
     server:
       keycloak-path: /keycloak
+    migration:
+      import-location: classpath:keycloak-realm-config.json
