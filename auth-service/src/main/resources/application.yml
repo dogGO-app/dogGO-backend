@@ -22,6 +22,12 @@ spring:
     show-sql: false
   liquibase:
     enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_SERVICE_URL:http://localhost:8888}/keycloak/realms/master
+          jwk-set-uri: ${AUTH_SERVICE_URL:http://localhost:8888}/keycloak/realms/master/protocol/openid-connect/certs
 
 eureka:
   instance:
