@@ -31,7 +31,5 @@ class KeycloakService(
     private fun UserDTO.toUserRepresentation() = UserRepresentation().apply {
         email = this@toUserRepresentation.email
         username = this@toUserRepresentation.email
-        firstName = this@toUserRepresentation.firstName
-        lastName = this@toUserRepresentation.lastName
     }
 }
