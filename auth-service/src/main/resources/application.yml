@@ -46,3 +46,6 @@ keycloak:
       keycloak-path: /keycloak
     migration:
       import-location: classpath:keycloak-realm-config.json
+
+springdoc:
+  packages-to-scan: pl.poznan.put.authservice
