@@ -8,8 +8,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http
-                .authorizeRequests().anyRequest().hasAuthority("SCOPE_user")
-//                .authorizeRequests().anyRequest().authenticated() instead of above works too
+                .authorizeRequests()
+                .antMatchers("/v3/api-docs/**").permitAll()
+                .anyRequest().hasAuthority("SCOPE_user")
                 .and()
                 .oauth2ResourceServer().jwt()
     }
