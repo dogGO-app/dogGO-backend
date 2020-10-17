@@ -13,4 +13,9 @@ class MailController(
     fun sendAccountActivationMail(@RequestParam receiver: String, @RequestParam activationCode: String) {
         mailService.sendAccountActivationMail(receiver, activationCode)
     }
+
+    @GetMapping("/test")
+    fun test(): String {
+        return "Hello World!"
+    }
 }

@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8888
 
 spring:
   application:
@@ -11,7 +11,7 @@ spring:
   jpa:
     database: POSTGRESQL
     hibernate:
-      ddl-auto: ${DDL_AUTO:create-drop}
+      ddl-auto: ${DDL_AUTO:validate}
     properties:
       hibernate:
         format_sql: true
@@ -20,13 +20,32 @@ spring:
         hbm2ddl:
           import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
     show-sql: false
+  liquibase:
+    enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_SERVICE_URL:http://localhost:8888}/keycloak/realms/master
+          jwk-set-uri: ${AUTH_SERVICE_URL:http://localhost:8888}/keycloak/realms/master/protocol/openid-connect/certs
 
 eureka:
   instance:
     hostname: ${DOMAIN_NAME:localhost}
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka
+      defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/
+
+keycloak:
+  custom:
+    admin-user:
+      username: ${KEYCLOAK_ADMIN_USERNAME:admin}
+      password: ${KEYCLOAK_ADMIN_PASSWORD:test12345}
+      create-admin-user-enabled: true
+    server:
+      keycloak-path: /keycloak
+    migration:
+      import-location: classpath:keycloak-realm-config.json
 
 springdoc:
   packages-to-scan: pl.poznan.put.authservice
