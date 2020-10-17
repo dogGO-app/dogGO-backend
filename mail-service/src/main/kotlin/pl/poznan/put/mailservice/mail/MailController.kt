@@ -8,14 +8,8 @@ import org.springframework.web.bind.annotation.RestController
 class MailController(
         private val mailService: MailService
 ) {
-
     @GetMapping("/account-activation")
     fun sendAccountActivationMail(@RequestParam receiver: String, @RequestParam activationCode: String) {
         mailService.sendAccountActivationMail(receiver, activationCode)
-    }
-
-    @GetMapping("/test")
-    fun test(): String {
-        return "Hello World!"
     }
 }

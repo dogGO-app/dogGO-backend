@@ -54,10 +54,10 @@ final class KeycloakClient(
         })
     }
 
-    fun setUserRole(userId: String) {
-        val userRoleRepresentation = getMasterRealm().roles().get(USER_ROLE).toRepresentation()
-        getUser(userId).roles().realmLevel().add(listOf(userRoleRepresentation))
-    }
+//    fun setUserRole(userId: String) {
+//        val userRoleRepresentation = getMasterRealm().roles().get(USER_ROLE).toRepresentation()
+//        getUser(userId).roles().realmLevel().add(listOf(userRoleRepresentation))
+//    }
 
     fun getUserByEmail(email: String): UserRepresentation? =
             getUsers().search("email:$email", 0, 1).firstOrNull()
