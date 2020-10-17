@@ -1,9 +1,9 @@
-package pl.poznan.put.authservice.user
+package pl.poznan.put.authservice.modules.user
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import pl.poznan.put.authservice.user.dto.UserDTO
+import pl.poznan.put.authservice.modules.user.dto.UserDTO
 
 @RestController
 @RequestMapping("/user")

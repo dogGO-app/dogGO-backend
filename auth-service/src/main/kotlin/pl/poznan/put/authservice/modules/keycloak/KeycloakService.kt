@@ -1,11 +1,10 @@
-package pl.poznan.put.authservice.keycloak
+package pl.poznan.put.authservice.modules.keycloak
 
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import pl.poznan.put.authservice.user.dto.UserDTO
-import javax.ws.rs.core.Response
+import pl.poznan.put.authservice.modules.user.dto.UserDTO
 import javax.ws.rs.core.Response.Status.CREATED
 
 @Service
@@ -14,13 +13,14 @@ class KeycloakService(
 ) {
     fun createUser(userDTO: UserDTO): ResponseEntity<String> {
         val userRepresentation = userDTO.toUserRepresentation()
-        val response: Response = keycloakClient.createUser(userRepresentation)
+        val response = keycloakClient.createUser(userRepresentation)
 
         if (response.statusInfo.toEnum() == CREATED) {
             val userId = response.location.path.replace(".*/([^/]+)$".toRegex(), "$1")
             keycloakClient.setUserPassword(userId, userDTO.password)
 //            keycloakClient.setUserRole(userId)
         }
+
 
         return ResponseEntity
                 .status(response.status)

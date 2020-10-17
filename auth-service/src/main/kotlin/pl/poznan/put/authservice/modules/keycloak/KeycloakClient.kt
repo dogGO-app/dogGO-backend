@@ -1,4 +1,4 @@
-package pl.poznan.put.authservice.keycloak
+package pl.poznan.put.authservice.modules.keycloak
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder
 import org.keycloak.admin.client.Keycloak

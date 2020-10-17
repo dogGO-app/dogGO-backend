@@ -1,4 +1,4 @@
-package pl.poznan.put.authservice.config
+package pl.poznan.put.authservice.infrastructure.config
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
