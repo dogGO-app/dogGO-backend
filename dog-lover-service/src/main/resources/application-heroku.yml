@@ -1,0 +1,4 @@
+eureka:
+  instance:
+    secure-port: 443
+    non-secure-port: 80

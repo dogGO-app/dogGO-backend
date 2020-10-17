@@ -10,3 +10,13 @@ services:
       POSTGRES_DB: auth-db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1
+
+  dog-lover-database:
+    container_name: dog-lover-db
+    image: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: dog-lover-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1

@@ -6,6 +6,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.10.RELEASE" apply false
     kotlin("jvm") version "1.4.10" apply false
     kotlin("plugin.spring") version "1.4.10" apply false
+    kotlin("plugin.jpa") version "1.4.10" apply false
 }
 
 subprojects {
@@ -14,6 +15,7 @@ subprojects {
         plugin("io.spring.dependency-management")
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.kotlin.plugin.spring")
+        plugin("org.jetbrains.kotlin.plugin.jpa")
     }
 
     group = "pl.poznan.put"
