@@ -43,10 +43,24 @@ final class KeycloakClient(
         getUser(userId).resetPassword(passwordCredential)
     }
 
+    fun setUserStatus(userEmail: String, enabled: Boolean, emailVerified: Boolean) {
+        val userRepresentation = getUserByEmail(userEmail)
+                ?: throw IllegalStateException("User doesn't exist!")
+
+        val userResource = getUser(userRepresentation.id)
+        userResource.update(userRepresentation.apply {
+            isEnabled = enabled
+            isEmailVerified = emailVerified
+        })
+    }
+
     fun setUserRole(userId: String) {
         val userRoleRepresentation = getMasterRealm().roles().get(USER_ROLE).toRepresentation()
         getUser(userId).roles().realmLevel().add(listOf(userRoleRepresentation))
     }
+
+    fun getUserByEmail(email: String): UserRepresentation? =
+            getUsers().search("email:$email", 0, 1).firstOrNull()
 
     private fun getMasterRealm(): RealmResource =
             client.realm(MASTER_REALM_NAME)

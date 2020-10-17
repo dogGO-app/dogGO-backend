@@ -1,9 +1,10 @@
-package pl.poznan.put.authservice.modules.user
+package pl.poznan.put.authservice.modules.user.cache
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.springframework.stereotype.Component
 import java.time.Duration
-import java.util.*
+
+typealias Email = String
 
 @Component
 class UserActivationCodeCache {
@@ -15,15 +16,15 @@ class UserActivationCodeCache {
 
     private val cache = Caffeine.newBuilder()
             .expireAfterWrite(expirationDuration)
-            .build<UUID, String> {
+            .build<Email, String> {
                 buildString(capacity = CODE_LENGTH) {
                     repeat(CODE_LENGTH) { append(allowedChars.random()) }
                 }
             }
 
-    fun get(key: UUID): String =
+    fun get(key: Email): String =
             cache.get(key) ?: throw IllegalStateException("Cache value cannot be null!")
 
-    fun exists(key: UUID): Boolean =
-            cache.getIfPresent(key) != null
+    fun containsEntry(key: Email, value: String): Boolean =
+            cache.getIfPresent(key) == value
 }

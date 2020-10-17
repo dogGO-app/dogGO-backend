@@ -21,11 +21,19 @@ class KeycloakService(
 //            keycloakClient.setUserRole(userId)
         }
 
-
         return ResponseEntity
                 .status(response.status)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response.readEntity(String::class.java))
+    }
+
+    fun activateUser(userEmail: String) {
+        keycloakClient.setUserStatus(userEmail, enabled = true, emailVerified = true)
+    }
+
+    fun isUserEmailVerified(userEmail: String): Boolean? {
+        val user = keycloakClient.getUserByEmail(userEmail)
+        return user?.isEmailVerified
     }
 
     private fun UserDTO.toUserRepresentation() = UserRepresentation().apply {
