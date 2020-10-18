@@ -10,6 +10,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http
                 .authorizeRequests()
+                .antMatchers("/v3/api-docs/**").permitAll()
                 .antMatchers("/user/**").hasAuthority("SCOPE_user")
                 .and()
                 .oauth2ResourceServer().jwt()
