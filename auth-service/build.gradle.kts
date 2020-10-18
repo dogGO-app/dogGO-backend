@@ -18,6 +18,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 	implementation("org.springdoc:springdoc-openapi-webmvc-core:1.4.8")
 
 	runtimeOnly("org.postgresql:postgresql")
@@ -25,5 +26,6 @@ dependencies {
 	implementation("org.keycloak:keycloak-admin-client:11.0.2")
 	implementation("javax.ws.rs:javax.ws.rs-api:2.1.1")
 	implementation("com.github.thomasdarimont.embedded-spring-boot-keycloak-server:embedded-keycloak-server-spring-boot-starter:2.4.0")
+
 	implementation("com.github.ben-manes.caffeine:caffeine:2.8.6")
 }

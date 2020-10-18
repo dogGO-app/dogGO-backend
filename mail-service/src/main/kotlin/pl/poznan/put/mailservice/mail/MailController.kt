@@ -1,6 +1,6 @@
 package pl.poznan.put.mailservice.mail
 
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 class MailController(
         private val mailService: MailService
 ) {
-    @GetMapping("/account-activation")
+    @PostMapping("/account-activation")
     fun sendAccountActivationMail(@RequestParam receiver: String, @RequestParam activationCode: String) {
         mailService.sendAccountActivationMail(receiver, activationCode)
     }

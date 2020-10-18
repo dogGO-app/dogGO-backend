@@ -10,7 +10,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         http
                 .authorizeRequests()
                 .antMatchers("/v3/api-docs/**").permitAll()
-                .anyRequest().hasAuthority("SCOPE_user")
+                .anyRequest().authenticated()
                 .and()
                 .oauth2ResourceServer().jwt()
     }
