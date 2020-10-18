@@ -23,6 +23,12 @@ spring:
             - Path=/api/mail/**
           filters:
             - StripPrefix=2
+        - id: dog-lover-service
+          uri: lb://dog-lover-service
+          predicates:
+            - Path=/api/dog-lover/**
+          filters:
+            - StripPrefix=2
         - id: openapi
           uri: http://localhost:${server.port}
           predicates:
