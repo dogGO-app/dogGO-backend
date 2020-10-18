@@ -18,7 +18,7 @@ class KeycloakService(
         if (response.statusInfo.toEnum() == CREATED) {
             val userId = response.location.path.replace(".*/([^/]+)$".toRegex(), "$1")
             keycloakClient.setUserPassword(userId, userDTO.password)
-//            keycloakClient.setUserRole(userId)
+            keycloakClient.setUserRole(userId)
         }
 
         return ResponseEntity
