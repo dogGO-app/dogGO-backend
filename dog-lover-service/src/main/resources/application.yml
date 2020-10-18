@@ -1,0 +1,39 @@
+server:
+  port: 0
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: dog-lover-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/dog-lover-db
+    username: postgres
+    password: 1
+  jpa:
+    database: POSTGRESQL
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+    properties:
+      hibernate:
+        format_sql: true
+        temp:
+          use_jdbc_metadata_defaults: false
+        hbm2ddl:
+          import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
+    show-sql: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_SERVICE_URL:http://localhost:8888}/keycloak/realms/master
+          jwk-set-uri: ${AUTH_SERVICE_URL:http://localhost:8888}/keycloak/realms/master/protocol/openid-connect/certs
+eureka:
+  instance:
+    hostname: ${DOMAIN_NAME:localhost}
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/
+
+springdoc:
+  packages-to-scan: pl.poznan.put.dogloverservice
