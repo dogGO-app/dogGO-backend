@@ -3,6 +3,7 @@ package pl.poznan.put.authservice.modules.user
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import pl.poznan.put.authservice.infrastructure.client.MailServiceClient
+import pl.poznan.put.authservice.infrastructure.extensions.getCurrentJwtTokenValue
 import pl.poznan.put.authservice.modules.keycloak.KeycloakService
 import pl.poznan.put.authservice.modules.user.cache.UserActivationCodeCache
 import pl.poznan.put.authservice.modules.user.dto.UserActivationDTO
@@ -34,6 +35,7 @@ class UserService(
         }
 
         val activationCode = userActivationCodeCache.get(userEmail)
-        mailServiceClient.sendUserActivationMail(userEmail, activationCode)
+        val currentTokenValue = getCurrentJwtTokenValue()
+        mailServiceClient.sendUserActivationMail("Bearer $currentTokenValue", userEmail, activationCode)
     }
 }

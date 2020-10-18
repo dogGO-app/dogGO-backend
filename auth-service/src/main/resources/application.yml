@@ -10,6 +10,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/auth-db
     username: postgres
     password: 1
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
   jpa:
     database: POSTGRESQL
     hibernate:
@@ -51,3 +55,10 @@ keycloak:
 
 springdoc:
   packages-to-scan: pl.poznan.put.authservice
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
