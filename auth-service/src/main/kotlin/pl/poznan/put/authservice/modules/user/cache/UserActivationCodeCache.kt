@@ -2,6 +2,7 @@ package pl.poznan.put.authservice.modules.user.cache
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.springframework.stereotype.Component
+import pl.poznan.put.authservice.infrastructure.exceptions.CacheValueNullException
 import java.time.Duration
 
 typealias Email = String
@@ -23,7 +24,7 @@ class UserActivationCodeCache {
             }
 
     fun get(key: Email): String =
-            cache.get(key) ?: throw IllegalStateException("Cache value cannot be null!")
+            cache.get(key) ?: throw CacheValueNullException()
 
     fun containsEntry(key: Email, value: String): Boolean =
             cache.getIfPresent(key) == value

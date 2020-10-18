@@ -10,6 +10,7 @@ import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import pl.poznan.put.authservice.infrastructure.exceptions.UserWithGivenEmailNotFoundException
 import javax.ws.rs.core.Response
 
 @Component
@@ -45,7 +46,7 @@ final class KeycloakClient(
 
     fun setUserStatus(userEmail: String, enabled: Boolean, emailVerified: Boolean) {
         val userRepresentation = getUserByEmail(userEmail)
-                ?: throw IllegalStateException("User doesn't exist!")
+                ?: throw UserWithGivenEmailNotFoundException(userEmail)
 
         val userResource = getUser(userRepresentation.id)
         userResource.update(userRepresentation.apply {

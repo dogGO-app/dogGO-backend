@@ -4,6 +4,7 @@ import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import pl.poznan.put.authservice.infrastructure.exceptions.UserWithGivenEmailNotFoundException
 import pl.poznan.put.authservice.modules.user.dto.UserDTO
 import javax.ws.rs.core.Response.Status.CREATED
 
@@ -31,9 +32,10 @@ class KeycloakService(
         keycloakClient.setUserStatus(userEmail, enabled = true, emailVerified = true)
     }
 
-    fun isUserEmailVerified(userEmail: String): Boolean? {
+    fun isUserEmailVerified(userEmail: String): Boolean {
         val user = keycloakClient.getUserByEmail(userEmail)
-        return user?.isEmailVerified
+                ?: throw UserWithGivenEmailNotFoundException(userEmail)
+        return user.isEmailVerified
     }
 
     private fun UserDTO.toUserRepresentation() = UserRepresentation().apply {
