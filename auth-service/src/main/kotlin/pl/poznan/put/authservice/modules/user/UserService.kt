@@ -24,7 +24,6 @@ class UserService(
     fun activateUser(userActivationDTO: UserActivationDTO) {
         val (userEmail, activationCode) = userActivationDTO
         if (!userActivationCodeCache.containsEntry(userEmail, activationCode))
-            // TODO: Use ResponseStatusExceptions in whole project
             throw InvalidActivationCodeException()
 
         keycloakService.activateUser(userEmail)
