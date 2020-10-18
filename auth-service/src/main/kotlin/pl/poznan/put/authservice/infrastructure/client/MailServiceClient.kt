@@ -7,5 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam
 @FeignClient(name = "mail-service")
 interface MailServiceClient {
     @PostMapping("/account-activation")
+    // TODO: Send token?
     fun sendUserActivationMail(@RequestParam receiver: String, @RequestParam activationCode: String)
 }
