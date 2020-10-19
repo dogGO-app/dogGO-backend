@@ -448,6 +448,22 @@
       },
       "notBefore": 0,
       "groups": []
+    },
+    {
+      "username": "admin",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "secretData": "{\"value\":\"1Ofwqr5lz1O/SHII0TPIPvK1Irx4+XgRlEBxgtE0Wg3EipSi2zXENeMG+t66wVs2T9q5NmKPxiA7qgV6iC+Tzw==\",\"salt\":\"vJ6j+Vf1MpJa5r1l9cqV7Q==\"}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}"
+        }
+      ],
+      "realmRoles": [
+        "admin",
+        "offline_access",
+        "uma_authorization"
+      ]
     }
   ],
   "scopeMappings": [
