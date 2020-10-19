@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response
 final class KeycloakClient(
         @Value("\${keycloak.custom.admin-user.username}") private val username: String,
         @Value("\${keycloak.custom.admin-user.password}") private val password: String,
-        @Value("\${security.oauth2.resourceserver.jwt.issuer-uri}") private val issuerUri: String
+        @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri}") private val issuerUri: String
 ) {
     private companion object {
         const val CLIENT_ID = "admin-cli"
