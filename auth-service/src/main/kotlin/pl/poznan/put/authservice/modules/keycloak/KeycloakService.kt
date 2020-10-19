@@ -39,5 +39,6 @@ class KeycloakService(
     private fun UserDTO.toUserRepresentation() = UserRepresentation().apply {
         email = this@toUserRepresentation.email
         username = this@toUserRepresentation.email
+        isEnabled = true
     }
 }

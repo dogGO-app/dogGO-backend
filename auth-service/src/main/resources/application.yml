@@ -49,5 +49,12 @@ keycloak:
     migration:
       import-location: classpath:keycloak-realm-config.json
 
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
+
 springdoc:
   packages-to-scan: pl.poznan.put.authservice
