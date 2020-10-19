@@ -16,10 +16,10 @@ import javax.ws.rs.core.Response
 @Component
 final class KeycloakClient(
         @Value("\${keycloak.custom.admin-user.username}") private val username: String,
-        @Value("\${keycloak.custom.admin-user.password}") private val password: String
+        @Value("\${keycloak.custom.admin-user.password}") private val password: String,
+        @Value("\${security.oauth2.resourceserver.jwt.issuer-uri}") private val issuerUri: String
 ) {
     private companion object {
-        const val SERVER_URL = "http://localhost:8888/keycloak"
         const val CLIENT_ID = "admin-cli"
         const val CLIENT_SECRET = "043a5366-3120-4ec2-93d1-4d69120481c9"
         const val MASTER_REALM_NAME = "master"
@@ -27,7 +27,7 @@ final class KeycloakClient(
     }
 
     private val client: Keycloak = KeycloakBuilder.builder()
-            .serverUrl(SERVER_URL)
+            .serverUrl(issuerUri.removeSuffix("/realms/$MASTER_REALM_NAME"))
             .realm(MASTER_REALM_NAME)
             .username(username)
             .password(password)

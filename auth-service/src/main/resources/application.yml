@@ -62,10 +62,3 @@ feign:
 
 springdoc:
   packages-to-scan: pl.poznan.put.authservice
-
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 160000000
-        readTimeout: 160000000
