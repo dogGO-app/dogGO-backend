@@ -1,4 +1,4 @@
-package pl.poznan.put.dogloverservice.doglover
+package pl.poznan.put.dogloverservice.modules.doglover
 
 import java.util.*
 import javax.persistence.Column

@@ -1,4 +1,4 @@
-package pl.poznan.put.dogloverservice.exceptions
+package pl.poznan.put.dogloverservice.infrastructure.exceptions
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
@@ -8,4 +8,7 @@ open class ServiceException(
         override val message: String
 ) : ResponseStatusException(httpStatus, message)
 
-class DogLoverNotFoundException : ServiceException(HttpStatus.NOT_FOUND, "Dog lover profile not found! It may be not created yet.")
+class DogLoverNotFoundException : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Dog lover profile not found! It may be not created yet."
+)

@@ -1,4 +1,4 @@
-package pl.poznan.put.dogloverservice.config
+package pl.poznan.put.dogloverservice.infrastructure.config
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity

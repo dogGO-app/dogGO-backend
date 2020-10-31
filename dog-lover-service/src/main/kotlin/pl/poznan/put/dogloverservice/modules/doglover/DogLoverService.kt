@@ -1,10 +1,10 @@
-package pl.poznan.put.dogloverservice.doglover
+package pl.poznan.put.dogloverservice.modules.doglover
 
-import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import pl.poznan.put.dogloverservice.doglover.dto.DogLoverProfileDTO
-import pl.poznan.put.dogloverservice.exceptions.DogLoverNotFoundException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverNotFoundException
+import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
+import java.util.*
 
 @Service
 class DogLoverService(
