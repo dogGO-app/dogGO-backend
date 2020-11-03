@@ -61,7 +61,7 @@ final class KeycloakClient(
     }
 
     fun getUserByEmail(email: String): UserRepresentation? =
-            getUsers().search("email:$email", 0, 1).firstOrNull()
+            getUsers().search(email, 0, 1).firstOrNull()
 
     private fun getMasterRealm(): RealmResource =
             client.realm(MASTER_REALM_NAME)
