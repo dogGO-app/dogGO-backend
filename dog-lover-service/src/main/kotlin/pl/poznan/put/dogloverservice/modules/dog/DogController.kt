@@ -11,7 +11,7 @@ import pl.poznan.put.dogloverservice.infrastructure.commons.AuthCommons.getCurre
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogDTO
 
 @RestController
-@RequestMapping("/api/dogs")
+@RequestMapping("/dogs")
 class DogController(
         private val dogService: DogService
 ) {
