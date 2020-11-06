@@ -25,4 +25,8 @@ class DogLoverService(
                         dogLoverProfile.hobby))
         )
     }
+
+    fun getDogLover(userId: UUID): DogLover {
+        return dogLoverRepository.findByIdOrNull(userId) ?: throw DogLoverNotFoundException()
+    }
 }
