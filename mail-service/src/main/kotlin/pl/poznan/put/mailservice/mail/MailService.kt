@@ -1,11 +1,14 @@
 package pl.poznan.put.mailservice.mail
 
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 import org.thymeleaf.context.Context
 import org.thymeleaf.spring5.SpringTemplateEngine
+
+private val logger = KotlinLogging.logger {}
 
 @Service
 class MailService(
@@ -25,7 +28,9 @@ class MailService(
         helper.setTo(receiver)
         helper.setSubject(ACCOUNT_ACTIVATION_SUBJECT)
         helper.setText(prepareAccountActivationContent(receiver, activationCode), true)
+        logger.info { "Sending mail to $receiver..." }
         javaMailSender.send(message)
+        logger.info { "Mail to $receiver sent successfully" }
     }
 
     private fun prepareAccountActivationContent(receiver: String, activationCode: String): String {
