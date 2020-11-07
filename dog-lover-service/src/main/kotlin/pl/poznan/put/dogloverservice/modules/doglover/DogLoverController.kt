@@ -1,12 +1,8 @@
-package pl.poznan.put.dogloverservice.doglover
+package pl.poznan.put.dogloverservice.modules.doglover
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import pl.poznan.put.dogloverservice.common.getCurrentUserId
-import pl.poznan.put.dogloverservice.doglover.dto.DogLoverProfileDTO
+import org.springframework.web.bind.annotation.*
+import pl.poznan.put.dogloverservice.infrastructure.commons.AuthCommons.getCurrentUserId
+import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
 import javax.validation.Valid
 
 @RestController

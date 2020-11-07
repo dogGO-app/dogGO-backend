@@ -1,8 +1,8 @@
-package pl.poznan.put.dogloverservice.doglover
+package pl.poznan.put.dogloverservice.modules.doglover
 
-import java.util.UUID
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
 interface DogLoverRepository : JpaRepository<DogLover, UUID>

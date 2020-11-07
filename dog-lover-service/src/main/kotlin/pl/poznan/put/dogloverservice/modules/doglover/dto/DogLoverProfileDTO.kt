@@ -1,6 +1,6 @@
-package pl.poznan.put.dogloverservice.doglover.dto
+package pl.poznan.put.dogloverservice.modules.doglover.dto
 
-import pl.poznan.put.dogloverservice.doglover.DogLover
+import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 
