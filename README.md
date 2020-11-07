@@ -1,4 +1,6 @@
 # dogGO-backend
+## Database schema
+Current database schema is available at [this address](https://dbdiagram.io/d/5fa669fb3a78976d7b7ae66a). 
 ## Services
 ### discovery-service
 ### gateway-service
