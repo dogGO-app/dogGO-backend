@@ -2,11 +2,15 @@ package pl.poznan.put.mailservice.mail
 
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpStatus
+import org.springframework.mail.MailException
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 import org.thymeleaf.context.Context
 import org.thymeleaf.spring5.SpringTemplateEngine
+import javax.mail.internet.MimeMessage
 
 private val logger = KotlinLogging.logger {}
 
@@ -22,21 +26,34 @@ class MailService(
     }
 
     fun sendAccountActivationMail(receiver: String, activationCode: String) {
-        val message = javaMailSender.createMimeMessage()
-        val helper = MimeMessageHelper(message, true)
-        helper.setFrom(senderEmail)
-        helper.setTo(receiver)
-        helper.setSubject(ACCOUNT_ACTIVATION_SUBJECT)
-        helper.setText(prepareAccountActivationContent(receiver, activationCode), true)
-        logger.info { "Sending mail to $receiver..." }
-        javaMailSender.send(message)
-        logger.info { "Mail to $receiver sent successfully" }
+        try {
+            val message = prepareAccountActivationMessage(receiver, activationCode)
+            logger.info { "Sending mail to $receiver..." }
+            javaMailSender.send(message)
+            logger.info { "Mail to $receiver sent successfully" }
+        } catch (e: MailException) {
+            val message = "Sending mail to $receiver failed"
+            logger.error(message, e)
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "$message.")
+        }
+    }
+
+    private fun prepareAccountActivationMessage(receiver: String, activationCode: String): MimeMessage {
+        return javaMailSender.createMimeMessage().apply {
+            MimeMessageHelper(this, true).apply {
+                setFrom(senderEmail)
+                setTo(receiver)
+                setSubject(ACCOUNT_ACTIVATION_SUBJECT)
+                setText(prepareAccountActivationContent(receiver, activationCode), true)
+            }
+        }
     }
 
     private fun prepareAccountActivationContent(receiver: String, activationCode: String): String {
-        val context = Context()
-        context.setVariable("usermail", receiver.substringBefore("@"))
-        context.setVariable("code", activationCode)
+        val context = Context().apply {
+            setVariable("usermail", receiver.substringBefore("@"))
+            setVariable("code", activationCode)
+        }
         return templateEngine.process("account-activation", context)
     }
 }
