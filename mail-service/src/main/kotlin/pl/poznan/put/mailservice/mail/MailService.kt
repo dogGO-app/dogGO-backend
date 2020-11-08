@@ -1,6 +1,7 @@
 package pl.poznan.put.mailservice.mail
 
 import mu.KotlinLogging
+import org.apache.commons.validator.routines.EmailValidator
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.mail.MailException
@@ -26,6 +27,7 @@ class MailService(
     }
 
     fun sendAccountActivationMail(receiver: String, activationCode: String) {
+        validateEmail(receiver)
         try {
             val message = prepareAccountActivationMessage(receiver, activationCode)
             logger.info { "Sending mail to $receiver..." }
@@ -36,6 +38,12 @@ class MailService(
             logger.error(message, e)
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "$message.")
         }
+    }
+
+    private fun validateEmail(email: String) {
+        val validator = EmailValidator.getInstance()
+        if (!validator.isValid(email))
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email address: $email")
     }
 
     private fun prepareAccountActivationMessage(receiver: String, activationCode: String): MimeMessage {
