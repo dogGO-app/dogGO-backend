@@ -806,7 +806,8 @@
       "nodeReRegistrationTimeout": -1,
       "defaultClientScopes": [
         "dog-lover",
-        "role_list"
+        "role_list",
+        "email"
       ],
       "optionalClientScopes": [
         "address",
