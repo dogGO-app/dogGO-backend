@@ -1,4 +1,4 @@
-package pl.poznan.put.mailservice.config
+package pl.poznan.put.mailservice.infrastructure.config
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity

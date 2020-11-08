@@ -1,4 +1,4 @@
-package pl.poznan.put.mailservice.mail
+package pl.poznan.put.mailservice.modules.mail
 
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
