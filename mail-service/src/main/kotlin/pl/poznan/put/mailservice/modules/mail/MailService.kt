@@ -1,16 +1,16 @@
-package pl.poznan.put.mailservice.mail
+package pl.poznan.put.mailservice.modules.mail
 
 import mu.KotlinLogging
 import org.apache.commons.validator.routines.EmailValidator
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpStatus
 import org.springframework.mail.MailException
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
 import org.thymeleaf.context.Context
 import org.thymeleaf.spring5.SpringTemplateEngine
+import pl.poznan.put.mailservice.infrastructure.exceptions.InvalidEmailException
+import pl.poznan.put.mailservice.infrastructure.exceptions.MailSendException
 import javax.mail.internet.MimeMessage
 
 private val logger = KotlinLogging.logger {}
@@ -34,16 +34,15 @@ class MailService(
             javaMailSender.send(message)
             logger.info { "Mail to $receiver sent successfully" }
         } catch (e: MailException) {
-            val message = "Sending mail to $receiver failed"
-            logger.error(message, e)
-            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "$message.")
+            logger.error(e) { "Sending mail to $receiver failed" }
+            throw MailSendException(receiver)
         }
     }
 
     private fun validateEmail(email: String) {
         val validator = EmailValidator.getInstance()
         if (!validator.isValid(email))
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email address: $email")
+            throw InvalidEmailException(email)
     }
 
     private fun prepareAccountActivationMessage(receiver: String, activationCode: String): MimeMessage {
