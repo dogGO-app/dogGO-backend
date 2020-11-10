@@ -20,7 +20,7 @@ class MapMarkerController(
 
     @ApiResponses(
             ApiResponse(description = "Map marker created.", responseCode = "201"),
-            ApiResponse(description = "Bad request.", responseCode = "400"),
+            ApiResponse(description = "Longitude or latitude is out of range.", responseCode = "400"),
             ApiResponse(description = "Map marker already exists or is too close to another marker", responseCode = "409"))
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

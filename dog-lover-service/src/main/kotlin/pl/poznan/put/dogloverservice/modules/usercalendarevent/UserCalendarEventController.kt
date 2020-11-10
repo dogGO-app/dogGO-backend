@@ -40,7 +40,7 @@ class UserCalendarEventController(
 
     @ApiResponses(
             ApiResponse(description = "Calendar event created.", responseCode = "201"),
-            ApiResponse(description = "Bad request.", responseCode = "400"),
+            ApiResponse(description = "Description is blank or date is from the past.", responseCode = "400"),
             ApiResponse(description = "Dog lover or dog doesn't exist.", responseCode = "404"),
             ApiResponse(description = "Calendar event already exists", responseCode = "409"))
     @PostMapping
@@ -51,7 +51,7 @@ class UserCalendarEventController(
 
     @ApiResponses(
             ApiResponse(description = "Calendar event updated.", responseCode = "200"),
-            ApiResponse(description = "Bad request.", responseCode = "400"),
+            ApiResponse(description = "Description is blank or date is from the past or calendar event id is empty.", responseCode = "400"),
             ApiResponse(description = "Dog lover, dog or calendar event doesn't exist.", responseCode = "404"),
             ApiResponse(description = "Calendar event already exists", responseCode = "409"))
     @PutMapping

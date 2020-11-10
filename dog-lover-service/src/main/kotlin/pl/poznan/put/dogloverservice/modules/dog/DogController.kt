@@ -23,7 +23,7 @@ class DogController(
     @ApiResponses(
             ApiResponse(description = "Dog created.", responseCode = "201"),
             ApiResponse(description = "Dog lover doesn't exist.", responseCode = "404"),
-            ApiResponse(description = "This dog with already exists for user.", responseCode = "409"))
+            ApiResponse(description = "This dog already exists for user.", responseCode = "409"))
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun addDog(@RequestBody dog: DogDTO): DogDTO {
