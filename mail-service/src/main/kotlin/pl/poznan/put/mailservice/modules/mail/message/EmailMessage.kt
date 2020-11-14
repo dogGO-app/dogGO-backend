@@ -1,8 +1,7 @@
 package pl.poznan.put.mailservice.modules.mail.message
 
-interface EmailMessage {
-    val templateName: String
-    val subject: String
-    val receiverEmail: String
-    val variables: Map<String, Any>
+abstract class EmailMessage(val receiverEmail: String) {
+    abstract val templateName: String
+    abstract val subject: String
+    abstract val variables: Map<String, Any>
 }

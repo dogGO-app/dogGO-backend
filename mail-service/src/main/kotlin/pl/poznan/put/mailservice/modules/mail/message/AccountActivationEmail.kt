@@ -1,9 +1,9 @@
 package pl.poznan.put.mailservice.modules.mail.message
 
 class AccountActivationEmail(
-    override val receiverEmail: String,
+    receiverEmail: String,
     activationCode: String
-) : EmailMessage {
+) : EmailMessage(receiverEmail) {
     override val templateName = "account-activation"
     override val subject = "Account activation in the dogGO application"
     override val variables = mapOf(
