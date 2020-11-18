@@ -2,13 +2,11 @@ import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.4.10"
-
     id("org.springframework.boot") version "2.3.4.RELEASE" apply false
     id("io.spring.dependency-management") version "1.0.10.RELEASE" apply false
-    kotlin("jvm") version kotlinVersion apply false
-    kotlin("plugin.spring") version kotlinVersion apply false
-    kotlin("plugin.jpa") version kotlinVersion apply false
+    kotlin("jvm") version Versions.kotlin apply false
+    kotlin("plugin.spring") version Versions.kotlin apply false
+    kotlin("plugin.jpa") version Versions.kotlin apply false
 }
 
 subprojects {
