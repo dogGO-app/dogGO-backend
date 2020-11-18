@@ -3,8 +3,10 @@ package pl.poznan.put.dogloverservice.modules.mapmarker
 import java.lang.Math.toRadians
 import java.time.Instant
 import java.util.UUID
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.MapMarkerAlreadyExistsException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.MapMarkerNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.MapMarkerTooCloseException
 import pl.poznan.put.dogloverservice.modules.mapmarker.dto.MapMarkerDTO
 import kotlin.math.atan2
@@ -37,6 +39,11 @@ class MapMarkerService(
 
     fun getAllMapMarkers(): List<MapMarkerDTO> {
         return mapMarkerRepository.findAll().map { MapMarkerDTO(it) }
+    }
+
+    fun getMapMarker(mapMarkerId: UUID): MapMarker {
+        return mapMarkerRepository.findByIdOrNull(mapMarkerId)
+                ?: throw MapMarkerNotFoundException(mapMarkerId)
     }
 
     private fun checkIfIdNotExistsOrThrow(id: UUID) {
