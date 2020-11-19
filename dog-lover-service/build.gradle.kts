@@ -11,4 +11,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 
 	runtimeOnly("org.postgresql:postgresql")
+
+	Libs.testImplementations.forEach { testImplementation(it) }
 }

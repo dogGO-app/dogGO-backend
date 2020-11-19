@@ -28,4 +28,6 @@ dependencies {
 	implementation("com.github.thomasdarimont.embedded-spring-boot-keycloak-server:embedded-keycloak-server-spring-boot-starter:2.4.0")
 
 	implementation("com.github.ben-manes.caffeine:caffeine:2.8.6")
+
+	Libs.testImplementations.forEach { testImplementation(it) }
 }
