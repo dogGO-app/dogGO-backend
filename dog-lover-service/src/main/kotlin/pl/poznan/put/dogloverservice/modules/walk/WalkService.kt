@@ -9,6 +9,7 @@ import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateExcepti
 import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.*
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
 
 @Service
@@ -30,14 +31,14 @@ class WalkService(
                 dogLover,
                 dog,
                 mapMarker,
-                WalkStatus.ONGOING
+                ONGOING
         )
         return WalkDTO(walkRepository.save(walk))
     }
 
     fun updateWalkStatus(walkId: UUID, walkStatus: WalkStatus, dogLoverId: UUID): WalkDTO {
         val walk = getWalkByIdAndDogLoverId(walkId, dogLoverId)
-        if (!checkIfNewWalkStatusIsPermissible(Pair(walk.walkStatus, walkStatus)))
+        if (!isWalkStatusPermissible(currentWalkStatus = walk.walkStatus, newWalkStatus = walkStatus))
             throw WalkUpdateException()
 
         return WalkDTO(walkRepository.save(
@@ -45,7 +46,7 @@ class WalkService(
     }
 
     private fun checkIfDogLoverIsNotOnWalkAlready(dogLoverId: UUID) {
-        if (walkRepository.existsByDogLoverIdAndWalkStatus(dogLoverId, WalkStatus.ONGOING))
+        if (walkRepository.existsByDogLoverIdAndWalkStatus(dogLoverId, ONGOING))
             throw DogLoverAlreadyOnWalkException()
     }
 
@@ -54,12 +55,11 @@ class WalkService(
                 ?: throw WalkNotFoundException()
     }
 
-    private fun checkIfNewWalkStatusIsPermissible(pair: Pair<WalkStatus, WalkStatus>): Boolean {
-        return when (pair) {
-            Pair(WalkStatus.ONGOING, WalkStatus.ARRIVED_AT_DESTINATION) -> true
-            Pair(WalkStatus.ARRIVED_AT_DESTINATION, WalkStatus.LEFT_DESTINATION) -> true
-            Pair(pair.first, WalkStatus.CANCELED) -> true
-            else -> false
-        }
-    }
+    private fun isWalkStatusPermissible(currentWalkStatus: WalkStatus, newWalkStatus: WalkStatus): Boolean =
+            when (currentWalkStatus to newWalkStatus) {
+                ONGOING to ARRIVED_AT_DESTINATION -> true
+                ARRIVED_AT_DESTINATION to LEFT_DESTINATION -> true
+                currentWalkStatus to CANCELED -> true
+                else -> false
+            }
 }
