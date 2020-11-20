@@ -9,7 +9,7 @@ interface WalkRepository : JpaRepository<Walk, UUID> {
 
     fun existsByDogLoverIdAndWalkStatus(dogLoverId: UUID, walkStatus: WalkStatus): Boolean
 
-    fun existsByIdAndDogLoverId(id: UUID, dogLoverId: UUID): Boolean
+    fun findByIdAndDogLoverId(id: UUID, dogLoverId: UUID): Walk?
 
     fun existsByIdAndWalkStatus(id: UUID, walkStatus: WalkStatus): Boolean
 }

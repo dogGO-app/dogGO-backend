@@ -33,7 +33,7 @@ class WalkController(
 
     @ApiResponses(
             ApiResponse(description = "Walk status updated.", responseCode = "200"),
-            ApiResponse(description = "New walk status is forbidden", responseCode = "403"),
+            ApiResponse(description = "New walk status is forbidden.", responseCode = "403"),
             ApiResponse(description = "Dog lover or walk doesn't exist.", responseCode = "404"))
     @PutMapping("/{walkId}")
     fun updateWalkStatus(@PathVariable walkId: UUID, @RequestParam walkStatus: WalkStatus): WalkDTO {

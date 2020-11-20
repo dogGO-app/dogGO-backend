@@ -9,11 +9,8 @@ import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarker
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.ManyToOne
-import javax.persistence.Table
-import javax.validation.constraints.NotBlank
 
 @Entity
-@Table(name = "walk")
 class Walk(
 
         @Id
@@ -34,12 +31,12 @@ class Walk(
         val walkStatus: WalkStatus
 ) {
 
-        constructor(walk: Walk, walkStatus: WalkStatus): this(
-                walk.id,
-                walk.timestamp,
-                walk.dogLover,
-                walk.dog,
-                walk.mapMarker,
-                walkStatus
-        )
+    constructor(walk: Walk, walkStatus: WalkStatus) : this(
+            walk.id,
+            walk.timestamp,
+            walk.dogLover,
+            walk.dog,
+            walk.mapMarker,
+            walkStatus
+    )
 }

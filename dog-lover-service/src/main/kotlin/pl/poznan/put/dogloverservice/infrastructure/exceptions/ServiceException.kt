@@ -70,7 +70,7 @@ class WalkNotFoundException : ServiceException(
         "Walk not exists for user."
 )
 
-class WalkUpdateException(message: String) : ServiceException(
+class WalkUpdateException : ServiceException(
         HttpStatus.FORBIDDEN,
-        message
+        "Cannot update walk status - new status is forbidden."
 )
