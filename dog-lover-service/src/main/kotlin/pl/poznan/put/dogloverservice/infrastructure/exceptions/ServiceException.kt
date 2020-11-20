@@ -35,6 +35,11 @@ class MapMarkerTooCloseException(latitude: Double, longitude: Double) : ServiceE
         "Map marker with latitude: $latitude and longitude: $longitude is too close!"
 )
 
+class MapMarkerNotFoundException(id: UUID) : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Map marker with id: $id not exists!"
+)
+
 class UserCalendarEventAlreadyExistsException(dateTime: Instant, userId: UUID, dogName: String) : ServiceException(
         HttpStatus.CONFLICT,
         "Calendar event with date and time $dateTime, userId $userId and dog name $dogName already exists."
@@ -53,4 +58,19 @@ class UserCalendarEventNotFoundException(calendarEventId: UUID, userId: UUID) : 
 class UserCalendarIdEmptyException : ServiceException(
         HttpStatus.BAD_REQUEST,
         "Calendar event id is empty."
+)
+
+class DogLoverAlreadyOnWalkException : ServiceException(
+        HttpStatus.CONFLICT,
+        "Dog lover is already on walk."
+)
+
+class WalkNotFoundException : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Walk not exists for user."
+)
+
+class WalkUpdateException : ServiceException(
+        HttpStatus.FORBIDDEN,
+        "Cannot update walk status - new status is forbidden."
 )
