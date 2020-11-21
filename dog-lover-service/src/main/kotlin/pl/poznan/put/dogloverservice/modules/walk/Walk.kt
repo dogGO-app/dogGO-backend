@@ -6,9 +6,7 @@ import org.hibernate.annotations.Type
 import pl.poznan.put.dogloverservice.modules.dog.Dog
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarker
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.ManyToOne
+import javax.persistence.*
 
 @Entity
 class Walk(
@@ -28,6 +26,7 @@ class Walk(
         @ManyToOne
         val mapMarker: MapMarker,
 
+        @Enumerated(EnumType.STRING)
         val walkStatus: WalkStatus
 ) {
 
