@@ -13,7 +13,7 @@ import pl.poznan.put.dogloverservice.modules.mapmarker.dto.MapMarkerDTO
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/mapMarkers")
+@RequestMapping("/map-markers")
 class MapMarkerController(
         private val mapMarkerService: MapMarkerService
 ) {
