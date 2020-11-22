@@ -10,7 +10,7 @@ import pl.poznan.put.authservice.modules.user.dto.UserDTO
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 class UserController(
         private val userService: UserService
 ) {

@@ -17,7 +17,7 @@ import pl.poznan.put.dogloverservice.modules.usercalendarevent.dto.UserCalendarE
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/userCalendarEvents")
+@RequestMapping("/user-calendar-events")
 class UserCalendarEventController(
         private val userCalendarEventService: UserCalendarEventService
 ) {
