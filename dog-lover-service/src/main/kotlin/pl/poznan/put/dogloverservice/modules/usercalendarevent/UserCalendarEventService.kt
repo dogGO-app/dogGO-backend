@@ -35,7 +35,7 @@ class UserCalendarEventService(
 
     fun saveCalendarEvent(userCalendarEventDTO: UserCalendarEventDTO, dogLoverId: UUID): UserCalendarEventDTO {
         val dateTime = getInstantFromDateAndTime(userCalendarEventDTO.date, userCalendarEventDTO.time)
-        checkIfDateTimeIsAfterNowOrThrow(dateTime)
+        checkIfDateTimeIsInPast(dateTime)
 
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         val dog = dogService.getDogEntity(userCalendarEventDTO.dogName, dogLoverId)
@@ -52,7 +52,7 @@ class UserCalendarEventService(
 
     fun updateCalendarEvent(userCalendarEventDTO: UserCalendarEventDTO, dogLoverId: UUID): UserCalendarEventDTO {
         val dateTime = getInstantFromDateAndTime(userCalendarEventDTO.date, userCalendarEventDTO.time)
-        checkIfDateTimeIsAfterNowOrThrow(dateTime)
+        checkIfDateTimeIsInPast(dateTime)
 
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         val calendarEvent = getCalendarEventEntity(userCalendarEventDTO.id
@@ -77,7 +77,7 @@ class UserCalendarEventService(
                 timeZone)
     }
 
-    private fun checkIfDateTimeIsAfterNowOrThrow(dateTime: Instant) {
+    private fun checkIfDateTimeIsInPast(dateTime: Instant) {
         if (dateTime.isBefore(Instant.now()))
             throw UserCalendarEventDateTimeException()
     }
@@ -87,10 +87,9 @@ class UserCalendarEventService(
             if (userCalendarEventRepository.existsByDateTimeAndDogLoverAndDogAndIdIsNot(dateTime, dogLover, dog, calendarEventId))
                 throw UserCalendarEventAlreadyExistsException(dateTime, dogLover.id, dog.name)
         }
-                ?: run {
-                    if (userCalendarEventRepository.existsByDateTimeAndDogLoverAndDog(dateTime, dogLover, dog))
-                        throw UserCalendarEventAlreadyExistsException(dateTime, dogLover.id, dog.name)
-                }
+                ?: if (userCalendarEventRepository.existsByDateTimeAndDogLoverAndDog(dateTime, dogLover, dog))
+                    throw UserCalendarEventAlreadyExistsException(dateTime, dogLover.id, dog.name)
+
     }
 
     private fun getCalendarEventEntity(id: UUID, dogLover: DogLover): UserCalendarEvent {
