@@ -8,7 +8,7 @@ import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/profile") // TODO Discuss if this path should be changed
+@RequestMapping("/profiles")
 class DogLoverController(
         private val dogLoverService: DogLoverService
 ) {
