@@ -16,4 +16,6 @@ interface UserCalendarEventRepository : JpaRepository<UserCalendarEvent, UUID> {
 
     fun existsByDateTimeAndDogLoverAndDog(dateTime: Instant, dogLover: DogLover, dog: Dog): Boolean
 
+    fun existsByDateTimeAndDogLoverAndDogAndIdIsNot(dateTime: Instant, dogLover: DogLover, dog: Dog, eventId: UUID): Boolean
+
 }
