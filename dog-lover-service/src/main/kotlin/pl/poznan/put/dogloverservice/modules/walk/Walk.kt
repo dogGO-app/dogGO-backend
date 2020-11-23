@@ -10,6 +10,7 @@ import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.Id
+import javax.persistence.ManyToMany
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 
@@ -25,7 +26,7 @@ class Walk(
         @ManyToOne
         val dogLover: DogLover,
 
-        @OneToMany
+        @ManyToMany
         val dogs: List<Dog>,
 
         @ManyToOne
