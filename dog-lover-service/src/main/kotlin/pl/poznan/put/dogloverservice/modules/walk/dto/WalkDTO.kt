@@ -8,7 +8,7 @@ data class WalkDTO(
 
         val id: UUID? = null,
 
-        val dogName: String,
+        val dogNames: List<String>,
 
         val mapMarker: UUID,
 
@@ -18,7 +18,7 @@ data class WalkDTO(
 
     constructor(walk: Walk) : this(
             id = walk.id,
-            dogName = walk.dog.name,
+            dogNames = walk.dogs.map { it.name },
             mapMarker = walk.mapMarker.id,
             walkStatus = walk.walkStatus
     )

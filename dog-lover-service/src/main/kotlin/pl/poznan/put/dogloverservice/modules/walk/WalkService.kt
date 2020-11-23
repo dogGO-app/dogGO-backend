@@ -9,7 +9,12 @@ import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateExcepti
 import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.*
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ARRIVED_AT_DESTINATION
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.CANCELED
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.LEFT_DESTINATION
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ONGOING
+import pl.poznan.put.dogloverservice.modules.walk.dto.DogInLocalizationDTO
+import pl.poznan.put.dogloverservice.modules.walk.dto.UserInLocalizationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
 
 @Service
@@ -23,13 +28,13 @@ class WalkService(
     fun saveWalk(walkDTO: WalkDTO, dogLoverId: UUID): WalkDTO {
         checkIfDogLoverIsNotOnWalkAlready(dogLoverId)
         val dogLover = dogLoverService.getDogLover(dogLoverId)
-        val dog = dogService.getDogEntity(walkDTO.dogName, dogLoverId)
+        val dogs = walkDTO.dogNames.map { dogService.getDogEntity(it, dogLoverId) }
         val mapMarker = mapMarkerService.getMapMarker(walkDTO.mapMarker)
         val walk = Walk(
                 UUID.randomUUID(),
                 Instant.now(),
                 dogLover,
-                dog,
+                dogs,
                 mapMarker,
                 ONGOING
         )
@@ -43,6 +48,16 @@ class WalkService(
 
         return WalkDTO(walkRepository.save(
                 Walk(walk, walkStatus)))
+    }
+
+    fun getUsersInLocalization(mapMarkerId: UUID, dogLoverId: UUID): List<UserInLocalizationDTO> {
+        val walks = walkRepository.findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(mapMarkerId, ARRIVED_AT_DESTINATION, dogLoverId)
+
+        return walks.map { walk ->
+            UserInLocalizationDTO(
+                    walk.dogLover,
+                    walk.dogs.map { DogInLocalizationDTO(it) })
+        }
     }
 
     private fun checkIfDogLoverIsNotOnWalkAlready(dogLoverId: UUID) {

@@ -11,5 +11,5 @@ interface WalkRepository : JpaRepository<Walk, UUID> {
 
     fun findByIdAndDogLoverId(id: UUID, dogLoverId: UUID): Walk?
 
-    fun existsByIdAndWalkStatus(id: UUID, walkStatus: WalkStatus): Boolean
+    fun findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(mapMarkerId: UUID, walkStatus: WalkStatus, dogLoverId: UUID): List<Walk>
 }
