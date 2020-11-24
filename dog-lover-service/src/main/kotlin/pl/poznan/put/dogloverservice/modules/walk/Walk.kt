@@ -6,7 +6,13 @@ import org.hibernate.annotations.Type
 import pl.poznan.put.dogloverservice.modules.dog.Dog
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarker
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.Id
+import javax.persistence.ManyToMany
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 
 @Entity
 class Walk(
@@ -20,8 +26,8 @@ class Walk(
         @ManyToOne
         val dogLover: DogLover,
 
-        @ManyToOne
-        val dog: Dog,
+        @ManyToMany
+        val dogs: List<Dog>,
 
         @ManyToOne
         val mapMarker: MapMarker,
@@ -34,7 +40,7 @@ class Walk(
             walk.id,
             walk.timestamp,
             walk.dogLover,
-            walk.dog,
+            walk.dogs,
             walk.mapMarker,
             walkStatus
     )
