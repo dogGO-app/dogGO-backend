@@ -14,7 +14,7 @@ import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.CANCELED
 import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.LEFT_DESTINATION
 import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ONGOING
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogInLocationDTO
-import pl.poznan.put.dogloverservice.modules.walk.dto.UserInLocationDTO
+import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
 
 @Service
@@ -50,11 +50,11 @@ class WalkService(
                 Walk(walk, walkStatus)))
     }
 
-    fun getUsersInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<UserInLocationDTO> {
+    fun getDogLoversInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<DogLoverInLocationDTO> {
         val walks = walkRepository.findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(mapMarkerId, ARRIVED_AT_DESTINATION, dogLoverId)
 
         return walks.map { walk ->
-            UserInLocationDTO(
+            DogLoverInLocationDTO(
                     walk.dogLover,
                     walk.dogs.map { DogInLocationDTO(it) })
         }

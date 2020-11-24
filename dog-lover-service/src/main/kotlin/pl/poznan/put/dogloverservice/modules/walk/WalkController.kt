@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import pl.poznan.put.dogloverservice.infrastructure.commons.AuthCommons.getCurrentUserId
-import pl.poznan.put.dogloverservice.modules.walk.dto.UserInLocationDTO
+import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
 
 @RestController
@@ -42,8 +42,8 @@ class WalkController(
         return walkService.updateWalkStatus(walkId, walkStatus, getCurrentUserId())
     }
 
-    @GetMapping("/users-in-location/{mapMarkerId}")
-    fun getUsersInLocation(@PathVariable mapMarkerId: UUID): List<UserInLocationDTO> {
-        return walkService.getUsersInLocation(mapMarkerId, getCurrentUserId())
+    @GetMapping("/dog-lovers-in-location/{mapMarkerId}")
+    fun getDogLoversInLocation(@PathVariable mapMarkerId: UUID): List<DogLoverInLocationDTO> {
+        return walkService.getDogLoversInLocation(mapMarkerId, getCurrentUserId())
     }
 }

@@ -3,7 +3,7 @@ package pl.poznan.put.dogloverservice.modules.walk.dto
 import java.util.UUID
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 
-data class UserInLocationDTO(
+data class DogLoverInLocationDTO(
 
         val id: UUID,
 
