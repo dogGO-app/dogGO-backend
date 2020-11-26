@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository
 @Repository
 interface WalkRepository : JpaRepository<Walk, UUID> {
 
+    fun findByDogLoverIdAndWalkStatus(dogLoverId: UUID, walkStatus: WalkStatus): Walk?
+
     fun existsByDogLoverIdAndWalkStatus(dogLoverId: UUID, walkStatus: WalkStatus): Boolean
 
     fun findByIdAndDogLoverId(id: UUID, dogLoverId: UUID): Walk?

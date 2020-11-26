@@ -81,6 +81,10 @@ class WalkUpdateException : ServiceException(
         "Cannot update walk status - new status is forbidden."
 )
 
+class DogLoversNotInTheSameLocationException : ServiceException(
+        HttpStatus.BAD_REQUEST,
+        "Dog lovers are not currently at the same location."
+)
 class DogLoverRelationshipAlreadyExists(status: RelationshipStatus) : ServiceException(
         HttpStatus.CONFLICT,
         "Dog lover relationship already exists in status $status."

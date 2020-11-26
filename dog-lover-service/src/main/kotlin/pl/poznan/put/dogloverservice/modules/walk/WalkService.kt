@@ -60,6 +60,11 @@ class WalkService(
         }
     }
 
+    fun getArrivedAtDestinationWalkByDogLoverId(dogLoverId: UUID): Walk {
+        return walkRepository.findByDogLoverIdAndWalkStatus(dogLoverId, ARRIVED_AT_DESTINATION)
+                ?: throw WalkNotFoundException()
+    }
+
     private fun checkIfDogLoverIsNotOnWalkAlready(dogLoverId: UUID) {
         if (walkRepository.existsByDogLoverIdAndWalkStatus(dogLoverId, ONGOING))
             throw DogLoverAlreadyOnWalkException()
