@@ -8,7 +8,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-	implementation("org.springdoc:springdoc-openapi-webmvc-core:1.4.8")
+	implementation("org.springdoc:springdoc-openapi-webmvc-core:${Versions.springDoc}")
 	implementation("io.github.microutils:kotlin-logging-jvm:2.0.3")
 	implementation("commons-validator:commons-validator:1.7")
 
