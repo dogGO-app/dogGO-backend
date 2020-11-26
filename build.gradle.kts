@@ -15,7 +15,6 @@ subprojects {
         plugin("io.spring.dependency-management")
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.kotlin.plugin.spring")
-        plugin("org.jetbrains.kotlin.plugin.jpa")
     }
 
     group = "pl.poznan.put"
