@@ -1,6 +1,8 @@
 package pl.poznan.put.dogloverservice.modules.dogloverlike
 
 import org.springframework.stereotype.Service
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverAlreadyLikedException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverLikeNotExistsException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoversNotInTheSameLocationException
 import pl.poznan.put.dogloverservice.modules.walk.WalkService
 import java.util.*
@@ -12,11 +14,15 @@ class DogLoverLikeService(
 ) {
     fun addLike(giverDogLoverId: UUID, receiverDogLoverId: UUID) {
         val dogLoverLikeId = createDogLoverLikeId(giverDogLoverId, receiverDogLoverId)
+        checkDogLoverAlreadyLiked(dogLoverLikeId)
+
         dogLoverLikeRepository.save(DogLoverLike(dogLoverLikeId))
     }
 
     fun removeLike(giverDogLoverId: UUID, receiverDogLoverId: UUID) {
         val dogLoverLikeId = createDogLoverLikeId(giverDogLoverId, receiverDogLoverId)
+        checkDogLoverLikeNotExists(dogLoverLikeId)
+
         dogLoverLikeRepository.deleteById(dogLoverLikeId)
     }
 
@@ -30,5 +36,15 @@ class DogLoverLikeService(
             throw DogLoversNotInTheSameLocationException()
 
         return DogLoverLikeId(giverDogLoverWalk, receiverDogLoverWalk)
+    }
+
+    private fun checkDogLoverAlreadyLiked(dogLoverLikeId: DogLoverLikeId) {
+        if (dogLoverLikeRepository.existsById(dogLoverLikeId))
+            throw DogLoverAlreadyLikedException()
+    }
+
+    private fun checkDogLoverLikeNotExists(dogLoverLikeId: DogLoverLikeId) {
+        if (!dogLoverLikeRepository.existsById(dogLoverLikeId))
+            throw DogLoverLikeNotExistsException()
     }
 }

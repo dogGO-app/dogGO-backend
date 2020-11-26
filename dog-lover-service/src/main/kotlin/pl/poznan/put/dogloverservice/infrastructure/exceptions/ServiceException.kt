@@ -85,7 +85,16 @@ class DogLoversNotInTheSameLocationException : ServiceException(
         HttpStatus.BAD_REQUEST,
         "Dog lovers are not currently at the same location."
 )
-class DogLoverRelationshipAlreadyExists(status: RelationshipStatus) : ServiceException(
+
+class DogLoverAlreadyLikedException : ServiceException(
+        HttpStatus.CONFLICT,
+        "Dog lover has already been liked in current walk."
+)
+
+class DogLoverLikeNotExistsException : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Dog lover like doesn't exist."
+)class DogLoverRelationshipAlreadyExists(status: RelationshipStatus) : ServiceException(
         HttpStatus.CONFLICT,
         "Dog lover relationship already exists in status $status."
 )
