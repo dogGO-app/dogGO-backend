@@ -1,5 +1,7 @@
 package pl.poznan.put.dogloverservice.modules.dogloverlike
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import pl.poznan.put.dogloverservice.infrastructure.commons.AuthCommons.getCurrentUserId
@@ -12,14 +14,22 @@ class DogLoverLikeController(
 ) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    // TODO Swagger response codes
+    @ApiResponses(
+            ApiResponse(description = "Dog lover successfully liked.", responseCode = "201"),
+            ApiResponse(description = "Dog lovers are not currently at the same location.", responseCode = "400"),
+            ApiResponse(description = "Dog lover has already been liked in current walk.", responseCode = "409")
+    )
     fun addLike(@RequestParam receiverDogLoverId: UUID) {
         dogLoverLikeService.addLike(giverDogLoverId = getCurrentUserId(), receiverDogLoverId)
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    // TODO Swagger response codes
+    @ApiResponses(
+            ApiResponse(description = "Like successfully removed.", responseCode = "204"),
+            ApiResponse(description = "Dog lovers are not currently at the same location.", responseCode = "400"),
+            ApiResponse(description = "Dog lover like doesn't exist.", responseCode = "404")
+    )
     fun removeLike(@RequestParam receiverDogLoverId: UUID) {
         dogLoverLikeService.removeLike(giverDogLoverId = getCurrentUserId(), receiverDogLoverId)
     }
