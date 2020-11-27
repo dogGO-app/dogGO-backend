@@ -76,6 +76,11 @@ class WalkNotFoundException : ServiceException(
         "Walk not exists for user."
 )
 
+class ArrivedAtDestinationWalkNotFoundException : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Walk with status ARRIVED_AT_DESTINATION status not found."
+)
+
 class WalkUpdateException : ServiceException(
         HttpStatus.FORBIDDEN,
         "Cannot update walk status - new status is forbidden."

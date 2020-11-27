@@ -3,6 +3,7 @@ package pl.poznan.put.dogloverservice.modules.walk
 import java.time.Instant
 import java.util.UUID
 import org.springframework.stereotype.Service
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.ArrivedAtDestinationWalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverAlreadyOnWalkException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateException
@@ -62,7 +63,7 @@ class WalkService(
 
     fun getArrivedAtDestinationWalkByDogLoverId(dogLoverId: UUID): Walk {
         return walkRepository.findByDogLoverIdAndWalkStatus(dogLoverId, ARRIVED_AT_DESTINATION)
-                ?: throw WalkNotFoundException()
+                ?: throw ArrivedAtDestinationWalkNotFoundException()
     }
 
     private fun checkIfDogLoverIsNotOnWalkAlready(dogLoverId: UUID) {

@@ -17,6 +17,7 @@ class DogLoverLikeController(
     @ApiResponses(
             ApiResponse(description = "Dog lover successfully liked.", responseCode = "201"),
             ApiResponse(description = "Dog lovers are not currently at the same location.", responseCode = "400"),
+            ApiResponse(description = "Walk with ARRIVED_AT_DESTINATION status not found.", responseCode = "404"),
             ApiResponse(description = "Dog lover has already been liked in current walk.", responseCode = "409")
     )
     fun addLike(@RequestParam receiverDogLoverId: UUID) {
@@ -28,7 +29,10 @@ class DogLoverLikeController(
     @ApiResponses(
             ApiResponse(description = "Like successfully removed.", responseCode = "204"),
             ApiResponse(description = "Dog lovers are not currently at the same location.", responseCode = "400"),
-            ApiResponse(description = "Dog lover like doesn't exist.", responseCode = "404")
+            ApiResponse(
+                    description = "Walk with ARRIVED_AT_DESTINATION status not found or dog lover like doesn't exist.",
+                    responseCode = "404"
+            )
     )
     fun removeLike(@RequestParam receiverDogLoverId: UUID) {
         dogLoverLikeService.removeLike(giverDogLoverId = getCurrentUserId(), receiverDogLoverId)
