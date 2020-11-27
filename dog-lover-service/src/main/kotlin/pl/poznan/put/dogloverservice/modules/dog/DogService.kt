@@ -47,6 +47,10 @@ class DogService(
         return dogRepository.findAllByDogLoverId(dogLoverId).map { DogDTO(it) }
     }
 
+    fun getUserDogsEntity(dogLoverId: UUID): List<Dog> {
+        return dogRepository.findAllByDogLoverId(dogLoverId)
+    }
+
     fun getDog(name: String, dogLoverId: UUID): DogDTO {
         return DogDTO(dogRepository.findByNameAndDogLoverId(name, dogLoverId)
                 ?: throw DogNotFoundException(name, dogLoverId))
