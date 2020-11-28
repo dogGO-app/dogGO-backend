@@ -78,7 +78,7 @@ class WalkNotFoundException : ServiceException(
 
 class ArrivedAtDestinationWalkNotFoundException : ServiceException(
         HttpStatus.NOT_FOUND,
-        "Walk with status ARRIVED_AT_DESTINATION status not found."
+        "Walk with ARRIVED_AT_DESTINATION status not found."
 )
 
 class WalkUpdateException : ServiceException(
