@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverNicknameAlreadyExistsException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverNotFoundException
 import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
+import pl.poznan.put.dogloverservice.modules.doglover.dto.UpdateDogLoverProfileDTO
 
 @Service
 class DogLoverService(
@@ -17,15 +18,22 @@ class DogLoverService(
         )
     }
 
-    fun updateDogLoverProfile(dogLoverProfile: DogLoverProfileDTO, dogLoverId: UUID): DogLoverProfileDTO {
+    fun updateDogLoverProfile(updatedDogLoverProfile: UpdateDogLoverProfileDTO, dogLoverId: UUID): DogLoverProfileDTO {
         val currentDogLoverProfile = dogLoverRepository.findByIdOrNull(dogLoverId)
         currentDogLoverProfile?.let {
             return DogLoverProfileDTO(
-                    dogLoverRepository.save(dogLoverProfile.toDogLoverEntity(dogLoverId, currentDogLoverProfile.nickname))
+                    dogLoverRepository.save(
+                            updatedDogLoverProfile.toDogLoverEntity(
+                                    dogLoverId,
+                                    currentDogLoverProfile.nickname
+                            )
+                    )
             )
-        } ?: checkIfNicknameIsUnique(dogLoverProfile.nickname)
+        }
+
+        checkIfNicknameIsUnique(updatedDogLoverProfile.nickname)
         return DogLoverProfileDTO(
-                dogLoverRepository.save(dogLoverProfile.toDogLoverEntity(dogLoverId))
+                dogLoverRepository.save(updatedDogLoverProfile.toDogLoverEntity(dogLoverId))
         )
     }
 
