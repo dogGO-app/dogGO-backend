@@ -22,8 +22,7 @@ class DogLoverController(
 
     @ApiResponses(
             ApiResponse(description = "Dog lover profile updated.", responseCode = "200"),
-            ApiResponse(description = "Firstname or lastname is empty, or age is negative.", responseCode = "400"),
-            ApiResponse(description = "Dog lover doesn't exist.", responseCode = "404"))
+            ApiResponse(description = "Firstname or lastname is empty, or age is negative.", responseCode = "400"))
     @PutMapping
     fun updateDogLoverProfile(@Valid @RequestBody dogLoverProfile: DogLoverProfileDTO): DogLoverProfileDTO =
             dogLoverService.updateDogLoverProfile(dogLoverProfile, getCurrentUserId())
