@@ -16,9 +16,7 @@ class DogLoverRelationshipService(
 ) {
 
     fun addDogLoverRelationship(dogLoverId: UUID, receiverNickname: String, relationshipStatus: RelationshipStatus) {
-        val receiverDogLover = dogLoverService.getDogLover(receiverNickname)
-        val giverDogLover = dogLoverService.getDogLover(dogLoverId)
-        val dogLoverRelationshipId = DogLoverRelationshipId(giverDogLover, receiverDogLover)
+        val dogLoverRelationshipId = createDogLoverRelationshipId(dogLoverId, receiverNickname)
         checkIfRelationshipAlreadyExists(dogLoverRelationshipId)
 
         dogLoverRelationshipRepository.save(DogLoverRelationship(
@@ -28,9 +26,7 @@ class DogLoverRelationshipService(
     }
 
     fun removeDogLoverRelationship(dogLoverId: UUID, receiverNickname: String) {
-        val receiverDogLover = dogLoverService.getDogLover(receiverNickname)
-        val giverDogLover = dogLoverService.getDogLover(dogLoverId)
-        val dogLoverRelationshipId = DogLoverRelationshipId(giverDogLover, receiverDogLover)
+        val dogLoverRelationshipId = createDogLoverRelationshipId(dogLoverId, receiverNickname)
         checkDogLoverRelationshipNotExists(dogLoverRelationshipId)
 
         dogLoverRelationshipRepository.deleteById(dogLoverRelationshipId)
@@ -43,6 +39,12 @@ class DogLoverRelationshipService(
             DogLoverRelationshipDTO(it,
                     dogService.getUserDogsEntity(it.dogLoverRelationshipId.receiverDogLover.id))
         }
+    }
+
+    private fun createDogLoverRelationshipId(giverDogLoverId: UUID, receiverDogLoverNickname: String): DogLoverRelationshipId {
+        val receiverDogLover = dogLoverService.getDogLover(receiverDogLoverNickname)
+        val giverDogLover = dogLoverService.getDogLover(giverDogLoverId)
+        return DogLoverRelationshipId(giverDogLover, receiverDogLover)
     }
 
     private fun checkIfRelationshipAlreadyExists(dogLoverRelationshipId: DogLoverRelationshipId) {
