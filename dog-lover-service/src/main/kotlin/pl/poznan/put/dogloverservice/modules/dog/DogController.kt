@@ -49,7 +49,7 @@ class DogController(
     @ApiResponses(
             ApiResponse(description = "Ok.", responseCode = "200"))
     @GetMapping
-    fun getUserDogs(): List<DogDTO> {
-        return dogService.getUserDogs(getCurrentUserId())
+    fun getDogLoverDogs(): List<DogDTO> {
+        return dogService.getDogLoverDogsInfo(getCurrentUserId())
     }
 }

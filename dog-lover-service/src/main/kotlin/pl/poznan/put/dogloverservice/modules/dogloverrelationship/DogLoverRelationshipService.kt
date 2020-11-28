@@ -37,7 +37,7 @@ class DogLoverRelationshipService(
 
         return dogLoverRelationships.map {
             DogLoverRelationshipDTO(it,
-                    dogService.getUserDogsEntity(it.dogLoverRelationshipId.receiverDogLover.id))
+                    dogService.getDogLoverDogs(it.dogLoverRelationshipId.receiverDogLover.id))
         }
     }
 
