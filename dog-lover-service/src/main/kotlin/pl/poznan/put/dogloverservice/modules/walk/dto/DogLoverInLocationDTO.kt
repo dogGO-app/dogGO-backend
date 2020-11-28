@@ -12,13 +12,16 @@ data class DogLoverInLocationDTO(
 
         val name: String,
 
-        val dogs: List<DogBasicInfoDTO>
+        val dogs: List<DogBasicInfoDTO>,
+
+        val likesCount: Int
 
 ) {
     constructor(dogLover: DogLover, dogs: List<DogBasicInfoDTO>) : this(
-            dogLover.id,
-            dogLover.nickname,
-            dogLover.firstName,
-            dogs
+            id = dogLover.id,
+            nickname = dogLover.nickname,
+            name = dogLover.firstName,
+            dogs = dogs,
+            likesCount = dogLover.likesCount
     )
 }
