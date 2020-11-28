@@ -99,7 +99,9 @@ class DogLoverAlreadyLikedException : ServiceException(
 class DogLoverLikeNotExistsException : ServiceException(
         HttpStatus.NOT_FOUND,
         "Dog lover like doesn't exist."
-)class DogLoverRelationshipAlreadyExists(status: RelationshipStatus) : ServiceException(
+)
+
+class DogLoverRelationshipAlreadyExists(status: RelationshipStatus) : ServiceException(
         HttpStatus.CONFLICT,
         "Dog lover relationship already exists in status $status."
 )
@@ -107,4 +109,9 @@ class DogLoverLikeNotExistsException : ServiceException(
 class DogLoverRelationshipNotExists : ServiceException(
         HttpStatus.NOT_FOUND,
         "Dog lover relationship not exists."
+)
+
+class DogLoverLikesCountLowerThanZeroException : ServiceException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Likes count cannot be lower than 0."
 )
