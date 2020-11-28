@@ -4,6 +4,7 @@ import java.time.Instant
 import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
+import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
 
 open class ServiceException(
         httpStatus: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
@@ -13,6 +14,11 @@ open class ServiceException(
 class DogLoverNotFoundException : ServiceException(
         HttpStatus.NOT_FOUND,
         "Dog lover profile not found! It may be not created yet."
+)
+
+class DogLoverNicknameAlreadyExistsException : ServiceException(
+        HttpStatus.CONFLICT,
+        "Dog lover with nickname already exists."
 )
 
 class DogNotFoundException(name: String, userId: UUID) : ServiceException(
@@ -73,4 +79,14 @@ class WalkNotFoundException : ServiceException(
 class WalkUpdateException : ServiceException(
         HttpStatus.FORBIDDEN,
         "Cannot update walk status - new status is forbidden."
+)
+
+class DogLoverRelationshipAlreadyExists(status: RelationshipStatus) : ServiceException(
+        HttpStatus.CONFLICT,
+        "Dog lover relationship already exists in status $status."
+)
+
+class DogLoverRelationshipNotExists : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Dog lover relationship not exists."
 )

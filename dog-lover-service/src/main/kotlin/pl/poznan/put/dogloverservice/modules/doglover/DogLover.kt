@@ -1,6 +1,6 @@
 package pl.poznan.put.dogloverservice.modules.doglover
 
-import java.util.*
+import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -12,6 +12,10 @@ class DogLover(
         @Id
         @Column(name = "user_id")
         val id: UUID,
+
+        @field:NotBlank
+        @Column(unique = true)
+        val nickname: String,
 
         @field:NotBlank
         val firstName: String,

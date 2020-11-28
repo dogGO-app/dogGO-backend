@@ -43,8 +43,12 @@ class DogService(
         return DogDTO(dogRepository.save(updatedDog))
     }
 
-    fun getUserDogs(dogLoverId: UUID): List<DogDTO> {
-        return dogRepository.findAllByDogLoverId(dogLoverId).map { DogDTO(it) }
+    fun getDogLoverDogsInfo(dogLoverId: UUID): List<DogDTO> {
+        return getDogLoverDogs(dogLoverId).map { DogDTO(it) }
+    }
+
+    fun getDogLoverDogs(dogLoverId: UUID): List<Dog> {
+        return dogRepository.findAllByDogLoverId(dogLoverId)
     }
 
     fun getDog(name: String, dogLoverId: UUID): DogDTO {

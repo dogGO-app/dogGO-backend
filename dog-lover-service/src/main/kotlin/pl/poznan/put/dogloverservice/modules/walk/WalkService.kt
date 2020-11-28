@@ -13,7 +13,7 @@ import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ARRIVED_AT_DESTINAT
 import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.CANCELED
 import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.LEFT_DESTINATION
 import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ONGOING
-import pl.poznan.put.dogloverservice.modules.walk.dto.DogInLocationDTO
+import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
 
@@ -56,7 +56,7 @@ class WalkService(
         return walks.map { walk ->
             DogLoverInLocationDTO(
                     walk.dogLover,
-                    walk.dogs.map { DogInLocationDTO(it) })
+                    walk.dogs.map { DogBasicInfoDTO(it) })
         }
     }
 
