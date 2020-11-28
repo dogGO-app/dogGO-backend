@@ -6,31 +6,49 @@ import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverNicknameAlreadyExistsException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverNotFoundException
 import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
+import pl.poznan.put.dogloverservice.modules.doglover.dto.UpdateDogLoverProfileDTO
 
 @Service
 class DogLoverService(
         private val dogLoverRepository: DogLoverRepository
 ) {
-    fun getDogLoverProfile(userId: UUID): DogLoverProfileDTO {
+    fun getDogLoverProfile(dogLoverId: UUID): DogLoverProfileDTO {
         return DogLoverProfileDTO(
-                dogLoverRepository.findByIdOrNull(userId) ?: throw DogLoverNotFoundException()
+                getDogLover(dogLoverId)
         )
     }
 
-    fun updateDogLoverProfile(dogLoverProfile: DogLoverProfileDTO, userId: UUID): DogLoverProfileDTO {
-        val currentDogLoverProfile = dogLoverRepository.findByIdOrNull(userId)
+    fun updateDogLoverProfile(updatedDogLoverProfile: UpdateDogLoverProfileDTO, dogLoverId: UUID): DogLoverProfileDTO {
+        val currentDogLoverProfile = dogLoverRepository.findByIdOrNull(dogLoverId)
         currentDogLoverProfile?.let {
             return DogLoverProfileDTO(
-                    dogLoverRepository.save(dogLoverProfile.toDogLoverEntity(userId, currentDogLoverProfile.nickname))
+                    dogLoverRepository.save(
+                            updatedDogLoverProfile.toDogLoverEntity(
+                                    dogLoverId,
+                                    currentDogLoverProfile.nickname
+                            )
+                    )
             )
-        } ?: checkIfNicknameIsUnique(dogLoverProfile.nickname)
+        }
+
+        checkIfNicknameIsUnique(updatedDogLoverProfile.nickname)
         return DogLoverProfileDTO(
-                dogLoverRepository.save(dogLoverProfile.toDogLoverEntity(userId))
+                dogLoverRepository.save(updatedDogLoverProfile.toDogLoverEntity(dogLoverId))
         )
     }
 
-    fun getDogLover(userId: UUID): DogLover {
-        return dogLoverRepository.findByIdOrNull(userId) ?: throw DogLoverNotFoundException()
+    fun getDogLover(dogLoverId: UUID): DogLover {
+        return dogLoverRepository.findByIdOrNull(dogLoverId) ?: throw DogLoverNotFoundException()
+    }
+
+    fun updateDogLover(dogLover: DogLover): DogLover {
+        validateDogLoverExists(dogLover.id)
+        return dogLoverRepository.save(dogLover)
+    }
+
+    private fun validateDogLoverExists(dogLoverId: UUID) {
+        if (!dogLoverRepository.existsById(dogLoverId))
+            throw DogLoverNotFoundException()
     }
 
     fun getDogLover(nickname: String): DogLover {

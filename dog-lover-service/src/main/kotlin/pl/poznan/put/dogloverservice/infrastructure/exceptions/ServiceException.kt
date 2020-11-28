@@ -76,9 +76,29 @@ class WalkNotFoundException : ServiceException(
         "Walk not exists for user."
 )
 
+class ArrivedAtDestinationWalkNotFoundException : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Walk with ARRIVED_AT_DESTINATION status not found."
+)
+
 class WalkUpdateException : ServiceException(
         HttpStatus.FORBIDDEN,
         "Cannot update walk status - new status is forbidden."
+)
+
+class DogLoversNotInTheSameLocationException : ServiceException(
+        HttpStatus.BAD_REQUEST,
+        "Dog lovers are not currently at the same location."
+)
+
+class DogLoverAlreadyLikedException : ServiceException(
+        HttpStatus.CONFLICT,
+        "Dog lover has already been liked in current walk."
+)
+
+class DogLoverLikeNotExistsException : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Dog lover like doesn't exist."
 )
 
 class DogLoverRelationshipAlreadyExists(status: RelationshipStatus) : ServiceException(
@@ -89,4 +109,9 @@ class DogLoverRelationshipAlreadyExists(status: RelationshipStatus) : ServiceExc
 class DogLoverRelationshipNotExists : ServiceException(
         HttpStatus.NOT_FOUND,
         "Dog lover relationship not exists."
+)
+
+class DogLoverLikesCountLowerThanZeroException : ServiceException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Likes count cannot be lower than 0."
 )

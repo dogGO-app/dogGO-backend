@@ -3,6 +3,7 @@ package pl.poznan.put.dogloverservice.modules.walk
 import java.time.Instant
 import java.util.UUID
 import org.springframework.stereotype.Service
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.ArrivedAtDestinationWalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverAlreadyOnWalkException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateException
@@ -58,6 +59,12 @@ class WalkService(
                     walk.dogLover,
                     walk.dogs.map { DogBasicInfoDTO(it) })
         }
+    }
+
+    fun getArrivedAtDestinationWalkByDogLoverId(dogLoverId: UUID): Walk {
+        // TODO Create mechanism which ensures there is always at most one record with ARRIVED_AT_DESTINATION status
+        return walkRepository.findFirstByDogLoverIdAndWalkStatusOrderByTimestampDesc(dogLoverId, ARRIVED_AT_DESTINATION)
+                ?: throw ArrivedAtDestinationWalkNotFoundException()
     }
 
     private fun checkIfDogLoverIsNotOnWalkAlready(dogLoverId: UUID) {
