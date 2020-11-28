@@ -62,7 +62,8 @@ class WalkService(
     }
 
     fun getArrivedAtDestinationWalkByDogLoverId(dogLoverId: UUID): Walk {
-        return walkRepository.findByDogLoverIdAndWalkStatus(dogLoverId, ARRIVED_AT_DESTINATION)
+        // TODO Create mechanism which ensures there is always at most one record with ARRIVED_AT_DESTINATION status
+        return walkRepository.findFirstByDogLoverIdAndWalkStatusOrderByTimestampDesc(dogLoverId, ARRIVED_AT_DESTINATION)
                 ?: throw ArrivedAtDestinationWalkNotFoundException()
     }
 

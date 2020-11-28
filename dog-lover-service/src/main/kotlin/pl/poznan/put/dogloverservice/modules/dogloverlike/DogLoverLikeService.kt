@@ -7,7 +7,6 @@ import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverLikeNotEx
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoversNotInTheSameLocationException
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
-import pl.poznan.put.dogloverservice.modules.dogloverlike.dto.DogLoverLikesCountDTO
 import pl.poznan.put.dogloverservice.modules.walk.Walk
 import pl.poznan.put.dogloverservice.modules.walk.WalkService
 import java.util.*
@@ -18,18 +17,34 @@ class DogLoverLikeService(
         private val walkService: WalkService,
         private val dogLoverService: DogLoverService
 ) {
-    fun addLike(giverDogLoverId: UUID, receiverDogLoverId: UUID): DogLoverLikesCountDTO {
+    fun addLike(giverDogLoverId: UUID, receiverDogLoverId: UUID) {
         val dogLoverLikeId = createDogLoverLikeId(giverDogLoverId, receiverDogLoverId)
         validateDogLoverNotAlreadyLiked(dogLoverLikeId)
 
-        return DogLoverLikesCountDTO(addDogLoverLike(dogLoverLikeId))
+       addDogLoverLike(dogLoverLikeId)
     }
 
-    fun removeLike(giverDogLoverId: UUID, receiverDogLoverId: UUID): DogLoverLikesCountDTO {
+    fun removeLike(giverDogLoverId: UUID, receiverDogLoverId: UUID) {
         val dogLoverLikeId = createDogLoverLikeId(giverDogLoverId, receiverDogLoverId)
         validateDogLoverLikeExists(dogLoverLikeId)
 
-        return DogLoverLikesCountDTO(removeDogLoverLike(dogLoverLikeId))
+        removeDogLoverLike(dogLoverLikeId)
+    }
+
+    @Transactional
+    protected fun addDogLoverLike(dogLoverLikeId: DogLoverLikeId): DogLover {
+        return dogLoverService.updateDogLover(
+                dogLoverLikeId.receiverDogLoverWalk.dogLover.addLike()
+        )
+                .also { dogLoverLikeRepository.save(DogLoverLike(dogLoverLikeId)) }
+    }
+
+    @Transactional
+    protected fun removeDogLoverLike(dogLoverLikeId: DogLoverLikeId): DogLover {
+        return dogLoverService.updateDogLover(
+                dogLoverLikeId.receiverDogLoverWalk.dogLover.removeLike()
+        )
+                .also { dogLoverLikeRepository.deleteById(dogLoverLikeId) }
     }
 
     private fun createDogLoverLikeId(giverDogLoverId: UUID, receiverDogLoverId: UUID): DogLoverLikeId {
@@ -41,22 +56,6 @@ class DogLoverLikeService(
         validateDogLoversInTheSameLocation(giverDogLoverWalk, receiverDogLoverWalk)
 
         return DogLoverLikeId(giverDogLoverWalk, receiverDogLoverWalk)
-    }
-
-    // Maybe @Transactional here?
-    private fun addDogLoverLike(dogLoverLikeId: DogLoverLikeId): DogLover {
-        return dogLoverService.updateDogLover(
-                dogLoverLikeId.receiverDogLoverWalk.dogLover.addLike()
-        )
-                .also { dogLoverLikeRepository.save(DogLoverLike(dogLoverLikeId)) }
-    }
-
-    // Maybe @Transactional here?
-    private fun removeDogLoverLike(dogLoverLikeId: DogLoverLikeId): DogLover {
-        return dogLoverService.updateDogLover(
-                dogLoverLikeId.receiverDogLoverWalk.dogLover.removeLike()
-        )
-                .also { dogLoverLikeRepository.deleteById(dogLoverLikeId) }
     }
 
     private fun validateDogLoverNotAlreadyLiked(dogLoverLikeId: DogLoverLikeId) {
