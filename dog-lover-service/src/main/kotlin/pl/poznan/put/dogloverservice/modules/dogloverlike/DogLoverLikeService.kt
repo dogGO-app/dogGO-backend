@@ -50,9 +50,6 @@ class DogLoverLikeService(
     private fun createDogLoverLikeId(giverDogLoverId: UUID, receiverDogLoverId: UUID): DogLoverLikeId {
         val giverDogLoverWalk = walkService.getArrivedAtDestinationWalkByDogLoverId(giverDogLoverId)
         val receiverDogLoverWalk = walkService.getArrivedAtDestinationWalkByDogLoverId(receiverDogLoverId)
-        // Potencjalny bład, w przypadku, gdy dany Dog Lover będzie miał >1 ARRIVED_AT_DESTINATION spacer
-        // Może to wystąpić w teorii
-
         validateDogLoversInTheSameLocation(giverDogLoverWalk, receiverDogLoverWalk)
 
         return DogLoverLikeId(giverDogLoverWalk, receiverDogLoverWalk)
