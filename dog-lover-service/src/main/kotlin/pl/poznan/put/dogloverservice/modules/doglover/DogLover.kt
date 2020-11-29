@@ -2,6 +2,7 @@ package pl.poznan.put.dogloverservice.modules.doglover
 
 import org.hibernate.annotations.ColumnDefault
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverLikesCountLowerThanZeroException
+import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -17,7 +18,7 @@ class DogLover(
         val id: UUID,
 
         @field:NotBlank
-        @Column(unique = true, nullable = false)
+        @Column(unique = true, updatable = false, nullable = false)
         val nickname: String,
 
         @field:NotBlank

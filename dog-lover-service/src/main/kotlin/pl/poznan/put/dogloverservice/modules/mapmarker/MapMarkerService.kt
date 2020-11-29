@@ -1,19 +1,15 @@
 package pl.poznan.put.dogloverservice.modules.mapmarker
 
-import java.lang.Math.toRadians
-import java.time.Instant
-import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.MapMarkerAlreadyExistsException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.MapMarkerNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.MapMarkerTooCloseException
 import pl.poznan.put.dogloverservice.modules.mapmarker.dto.MapMarkerDTO
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.pow
-import kotlin.math.sin
-import kotlin.math.sqrt
+import java.lang.Math.toRadians
+import java.time.Instant
+import java.util.*
+import kotlin.math.*
 
 @Service
 class MapMarkerService(
@@ -23,7 +19,7 @@ class MapMarkerService(
     private final val maxDistance = 300.0
 
     fun saveMapMarker(mapMarkerDTO: MapMarkerDTO): MapMarkerDTO {
-        checkIfIdNotExistsOrThrow(mapMarkerDTO.id)
+        validateMapMarkerNotAlreadyExists(mapMarkerDTO.id)
         val mapMarker = MapMarker(
                 mapMarkerDTO.id,
                 mapMarkerDTO.name,
@@ -32,7 +28,7 @@ class MapMarkerService(
                 mapMarkerDTO.longitude,
                 Instant.now()
         )
-        checkIfNewMapMarkerIsFarEnough(mapMarker)
+        validateNewMapMarkerIsFarEnough(mapMarker)
 
         return MapMarkerDTO(mapMarkerRepository.save(mapMarker))
     }
@@ -46,12 +42,12 @@ class MapMarkerService(
                 ?: throw MapMarkerNotFoundException(mapMarkerId)
     }
 
-    private fun checkIfIdNotExistsOrThrow(id: UUID) {
+    private fun validateMapMarkerNotAlreadyExists(id: UUID) {
         if (mapMarkerRepository.existsById(id))
             throw MapMarkerAlreadyExistsException(id)
     }
 
-    private fun checkIfNewMapMarkerIsFarEnough(mapMarker: MapMarker) {
+    private fun validateNewMapMarkerIsFarEnough(mapMarker: MapMarker) {
         mapMarkerRepository.findAll().forEach {
             if (countDistance(mapMarker, it) < maxDistance)
                 throw MapMarkerTooCloseException(mapMarker.latitude, mapMarker.longitude)

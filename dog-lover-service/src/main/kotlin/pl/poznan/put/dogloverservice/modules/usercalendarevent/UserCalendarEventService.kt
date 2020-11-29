@@ -1,11 +1,5 @@
 package pl.poznan.put.dogloverservice.modules.usercalendarevent
 
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneId
-import java.util.UUID
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.UserCalendarEventAlreadyExistsException
@@ -17,6 +11,8 @@ import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.usercalendarevent.dto.UserCalendarEventDTO
+import java.time.*
+import java.util.*
 
 @Service
 class UserCalendarEventService(
@@ -35,11 +31,11 @@ class UserCalendarEventService(
 
     fun saveCalendarEvent(userCalendarEventDTO: UserCalendarEventDTO, dogLoverId: UUID): UserCalendarEventDTO {
         val dateTime = getInstantFromDateAndTime(userCalendarEventDTO.date, userCalendarEventDTO.time)
-        checkIfDateTimeIsInPast(dateTime)
+        validateDateTimeIsNotInPast(dateTime)
 
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         val dog = dogService.getDogEntity(userCalendarEventDTO.dogName, dogLoverId)
-        checkIfEventAlreadyExists(dateTime, dogLover, dog)
+        validateEventNotAlreadyExists(dateTime, dogLover, dog)
         val userCalendarEvent = UserCalendarEvent(
                 dateTime = dateTime,
                 description = userCalendarEventDTO.description,
@@ -52,13 +48,13 @@ class UserCalendarEventService(
 
     fun updateCalendarEvent(userCalendarEventDTO: UserCalendarEventDTO, dogLoverId: UUID): UserCalendarEventDTO {
         val dateTime = getInstantFromDateAndTime(userCalendarEventDTO.date, userCalendarEventDTO.time)
-        checkIfDateTimeIsInPast(dateTime)
+        validateDateTimeIsNotInPast(dateTime)
 
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         val calendarEvent = getCalendarEventEntity(userCalendarEventDTO.id
                 ?: throw UserCalendarIdEmptyException(), dogLover)
         val dog = dogService.getDogEntity(userCalendarEventDTO.dogName, dogLoverId)
-        checkIfEventAlreadyExists(dateTime, dogLover, dog, calendarEvent.id)
+        validateEventNotAlreadyExists(dateTime, dogLover, dog, calendarEvent.id)
         val updatedCalendarEvent = UserCalendarEvent(
                 id = calendarEvent.id,
                 dateTime = dateTime,
@@ -77,12 +73,12 @@ class UserCalendarEventService(
                 timeZone)
     }
 
-    private fun checkIfDateTimeIsInPast(dateTime: Instant) {
+    private fun validateDateTimeIsNotInPast(dateTime: Instant) {
         if (dateTime.isBefore(Instant.now()))
             throw UserCalendarEventDateTimeException()
     }
 
-    private fun checkIfEventAlreadyExists(dateTime: Instant, dogLover: DogLover, dog: Dog, calendarEventId: UUID? = null) {
+    private fun validateEventNotAlreadyExists(dateTime: Instant, dogLover: DogLover, dog: Dog, calendarEventId: UUID? = null) {
         calendarEventId?.let {
             if (userCalendarEventRepository.existsByDateTimeAndDogLoverAndDogAndIdIsNot(dateTime, dogLover, dog, calendarEventId))
                 throw UserCalendarEventAlreadyExistsException(dateTime, dogLover.id, dog.name)
