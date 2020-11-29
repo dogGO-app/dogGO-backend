@@ -1,12 +1,12 @@
 package pl.poznan.put.dogloverservice.modules.doglover
 
-import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverNicknameAlreadyExistsException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverNotFoundException
 import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
 import pl.poznan.put.dogloverservice.modules.doglover.dto.UpdateDogLoverProfileDTO
+import java.util.*
 
 @Service
 class DogLoverService(
@@ -31,7 +31,7 @@ class DogLoverService(
             )
         }
 
-        checkIfNicknameIsUnique(updatedDogLoverProfile.nickname)
+        validateNicknameIsUnique(updatedDogLoverProfile.nickname)
         return DogLoverProfileDTO(
                 dogLoverRepository.save(updatedDogLoverProfile.toDogLoverEntity(dogLoverId))
         )
@@ -55,7 +55,7 @@ class DogLoverService(
         return dogLoverRepository.findByNickname(nickname) ?: throw DogLoverNotFoundException()
     }
 
-    private fun checkIfNicknameIsUnique(nickname: String) {
+    private fun validateNicknameIsUnique(nickname: String) {
         if (dogLoverRepository.existsByNickname(nickname))
             throw DogLoverNicknameAlreadyExistsException()
     }

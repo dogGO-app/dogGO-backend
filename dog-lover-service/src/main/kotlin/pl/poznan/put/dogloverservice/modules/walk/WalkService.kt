@@ -1,22 +1,19 @@
 package pl.poznan.put.dogloverservice.modules.walk
 
-import java.time.Instant
-import java.util.UUID
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.ArrivedAtDestinationWalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverAlreadyOnWalkException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateException
 import pl.poznan.put.dogloverservice.modules.dog.DogService
+import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ARRIVED_AT_DESTINATION
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.CANCELED
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.LEFT_DESTINATION
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ONGOING
-import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.*
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
+import java.time.Instant
+import java.util.*
 
 @Service
 class WalkService(
@@ -27,7 +24,7 @@ class WalkService(
 ) {
 
     fun saveWalk(walkDTO: WalkDTO, dogLoverId: UUID): WalkDTO {
-        checkIfDogLoverIsNotOnWalkAlready(dogLoverId)
+        validateDogLoverIsNotAlreadyOnWalk(dogLoverId)
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         val dogs = walkDTO.dogNames.map { dogService.getDogEntity(it, dogLoverId) }
         val mapMarker = mapMarkerService.getMapMarker(walkDTO.mapMarker)
@@ -67,7 +64,7 @@ class WalkService(
                 ?: throw ArrivedAtDestinationWalkNotFoundException()
     }
 
-    private fun checkIfDogLoverIsNotOnWalkAlready(dogLoverId: UUID) {
+    private fun validateDogLoverIsNotAlreadyOnWalk(dogLoverId: UUID) {
         if (walkRepository.existsByDogLoverIdAndWalkStatus(dogLoverId, ONGOING))
             throw DogLoverAlreadyOnWalkException()
     }

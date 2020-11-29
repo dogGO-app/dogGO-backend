@@ -1,11 +1,11 @@
 package pl.poznan.put.dogloverservice.modules.dog
 
-import java.util.UUID
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogAlreadyExistsException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogNotFoundException
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
+import java.util.*
 
 @Service
 class DogService(
@@ -15,7 +15,7 @@ class DogService(
 
     fun addDog(dogDTO: DogDTO, dogLoverId: UUID): DogDTO {
         val dogLover = dogLoverService.getDogLover(dogLoverId)
-        checkIfDogExists(dogDTO.name, dogLoverId)
+        validateDogNotAlreadyExists(dogDTO.name, dogLoverId)
         val dog = Dog(
                 name = dogDTO.name,
                 breed = dogDTO.breed,
@@ -61,7 +61,7 @@ class DogService(
                 ?: throw DogNotFoundException(name, dogLoverId)
     }
 
-    private fun checkIfDogExists(name: String, dogLoverId: UUID) {
+    private fun validateDogNotAlreadyExists(name: String, dogLoverId: UUID) {
         if (dogRepository.existsByNameAndDogLoverId(name, dogLoverId))
             throw DogAlreadyExistsException(name, dogLoverId)
     }
