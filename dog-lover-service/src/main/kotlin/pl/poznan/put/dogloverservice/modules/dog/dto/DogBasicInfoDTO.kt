@@ -9,12 +9,15 @@ data class DogBasicInfoDTO(
 
         val name: String,
 
-        val breed: String?
+        val breed: String?,
+
+        val color: String?
 
 ) {
     constructor(dog: Dog): this(
             dog.id,
             dog.name,
-            dog.breed
+            dog.breed,
+            dog.color
     )
 }
