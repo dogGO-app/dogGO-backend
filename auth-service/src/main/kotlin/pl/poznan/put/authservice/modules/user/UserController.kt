@@ -37,8 +37,8 @@ class UserController(
             ApiResponse(description = "Sent successfully.", responseCode = "200"),
             ApiResponse(description = "User doesn't exist.", responseCode = "404"),
             ApiResponse(description = "User email is already verified.", responseCode = "409"))
-    @PostMapping("/send-activation-mail")
-    fun sendUserActivationMail(@RequestParam userEmail: String) {
-        userService.sendUserActivationMail(userEmail)
+    @PostMapping("/resend-activation-mail")
+    fun resendUserActivationMail(@RequestParam userEmail: String) {
+        userService.resendUserActivationMail(userEmail)
     }
 }

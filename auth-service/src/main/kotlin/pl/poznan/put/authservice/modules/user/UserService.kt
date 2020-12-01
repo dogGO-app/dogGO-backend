@@ -21,7 +21,7 @@ class UserService(
     fun createUser(userDTO: UserDTO): ResponseEntity<String> {
         val response = keycloakService.createUser(userDTO)
         if (response.statusCode == CREATED)
-            sendUserActivationMailRequest(userDTO.email)
+            sendUserActivationMail(userDTO.email)
 
         return response
     }
@@ -34,14 +34,14 @@ class UserService(
         keycloakService.activateUser(userEmail)
     }
 
-    fun sendUserActivationMail(userEmail: String) {
+    fun resendUserActivationMail(userEmail: String) {
         if (keycloakService.isUserEmailVerified(userEmail))
             throw UserEmailAlreadyVerifiedException()
 
-        sendUserActivationMailRequest(userEmail)
+        sendUserActivationMail(userEmail)
     }
 
-    private fun sendUserActivationMailRequest(userEmail: String) {
+    private fun sendUserActivationMail(userEmail: String) {
         val activationCode = userActivationCodeCache.get(userEmail)
         mailServiceClient.sendUserActivationMail("Bearer ${getCurrentJwtTokenValue()}", userEmail, activationCode)
     }
