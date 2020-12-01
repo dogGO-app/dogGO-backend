@@ -19,7 +19,6 @@ class KeycloakService(
         if (response.statusInfo.toEnum() == CREATED) {
             val userId = response.location.path.replace(".*/([^/]+)$".toRegex(), "$1")
             keycloakClient.setUserPassword(userId, userDTO.password)
-            keycloakClient.setUserRole(userId)
         }
 
         return ResponseEntity
@@ -41,6 +40,6 @@ class KeycloakService(
     private fun UserDTO.toUserRepresentation() = UserRepresentation().apply {
         email = this@toUserRepresentation.email
         username = this@toUserRepresentation.email
-        isEnabled = true
+        isEnabled = false
     }
 }

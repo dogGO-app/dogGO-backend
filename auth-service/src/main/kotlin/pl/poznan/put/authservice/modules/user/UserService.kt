@@ -1,5 +1,6 @@
 package pl.poznan.put.authservice.modules.user
 
+import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import pl.poznan.put.authservice.infrastructure.client.MailServiceClient
@@ -18,7 +19,11 @@ class UserService(
         private val mailServiceClient: MailServiceClient
 ) {
     fun createUser(userDTO: UserDTO): ResponseEntity<String> {
-        return keycloakService.createUser(userDTO)
+        val response = keycloakService.createUser(userDTO)
+        if (response.statusCode == CREATED)
+            sendUserActivationMailRequest(userDTO.email)
+
+        return response
     }
 
     fun activateUser(userActivationDTO: UserActivationDTO) {
@@ -33,6 +38,10 @@ class UserService(
         if (keycloakService.isUserEmailVerified(userEmail))
             throw UserEmailAlreadyVerifiedException()
 
+        sendUserActivationMailRequest(userEmail)
+    }
+
+    private fun sendUserActivationMailRequest(userEmail: String) {
         val activationCode = userActivationCodeCache.get(userEmail)
         mailServiceClient.sendUserActivationMail("Bearer ${getCurrentJwtTokenValue()}", userEmail, activationCode)
     }

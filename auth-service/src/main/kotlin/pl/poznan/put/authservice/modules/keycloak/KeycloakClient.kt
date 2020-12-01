@@ -21,9 +21,8 @@ final class KeycloakClient(
 ) {
     private companion object {
         const val CLIENT_ID = "admin-cli"
-        const val CLIENT_SECRET = "043a5366-3120-4ec2-93d1-4d69120481c9"
+        const val CLIENT_SECRET = "043a5366-3120-4ec2-93d1-4d69120481c9" // TODO Not store secret in code
         const val MASTER_REALM_NAME = "master"
-        const val USER_ROLE = "user"
     }
 
     private val client: Keycloak = KeycloakBuilder.builder()
@@ -53,11 +52,6 @@ final class KeycloakClient(
             isEnabled = enabled
             isEmailVerified = emailVerified
         })
-    }
-
-    fun setUserRole(userId: String) {
-        val userRoleRepresentation = getMasterRealm().roles().get(USER_ROLE).toRepresentation()
-        getUser(userId).roles().realmLevel().add(listOf(userRoleRepresentation))
     }
 
     fun getUserByEmail(email: String): UserRepresentation? =
