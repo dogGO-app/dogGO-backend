@@ -2,19 +2,16 @@ package pl.poznan.put.dogloverservice.modules.locationrecommendation
 
 import java.util.UUID
 import org.springframework.stereotype.Service
-import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationshipService
+import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
 import pl.poznan.put.dogloverservice.modules.locationrecommendation.dto.LocationRecommendationDTO
-import pl.poznan.put.dogloverservice.modules.locationrecommendation.dto.MapMarkerRecommendationDTO
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
 import pl.poznan.put.dogloverservice.modules.walk.WalkService
-import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 
 @Service
 class LocationRecommendationService(
         private val mapMarkerService: MapMarkerService,
         private val walkService: WalkService,
-        private val dogLoverService: DogLoverService,
         private val dogLoverRelationshipService: DogLoverRelationshipService
 ) {
     fun getRecommendedLocations(dogLoverId: UUID, dogLoverLatitude: Double, dogLoverLongitude: Double): List<LocationRecommendationDTO> {
@@ -26,12 +23,27 @@ class LocationRecommendationService(
         val dogLoverRelationships = dogLoverRelationshipService.getDogLoverRelationships(dogLoverId)
         val dogLoversInLocations = walkService.getDogLoversInLocations(
                 neighbourhoodLocations.map { it.id },
-                dogLoverRelationships.map { it.dogLoverRelationshipId.receiverDogLover.id })
+                dogLoverRelationships)
 
+        val locationRecommendationsWithInitialRatings = neighbourhoodLocations.mapIndexed { index, mapMarkerRecommendationDTO ->
+            LocationRecommendationDTO(
+                    mapMarkerRecommendationDTO,
+                    dogLoversInLocations[mapMarkerRecommendationDTO.id] ?: emptyList(),
+                    (index + 1) * 4.0
+            )
+        }
 
+        locationRecommendationsWithInitialRatings.forEach { it.rating = countLocationRating(it) }
+
+        return locationRecommendationsWithInitialRatings.sortedByDescending { it.rating }
     }
 
-    private fun countLocationRating(mapMarkerRecommendationDTO: MapMarkerRecommendationDTO, dogLoversInLocation: List<DogLoverInLocationDTO>): Double {
-
+    private fun countLocationRating(locationRecommendationDTO: LocationRecommendationDTO): Double {
+        val relationshipsCounter = locationRecommendationDTO.dogLoversInLocationDTO.groupBy { it.relationshipStatus }
+        return locationRecommendationDTO.rating +
+                (relationshipsCounter[RelationshipStatus.FOLLOWS]?.size?.times(3.0)
+                        ?: 0.0) * locationRecommendationDTO.rating * 0.2 -
+                (relationshipsCounter[RelationshipStatus.BLOCKS]?.size?.times(3.0)
+                        ?: 0.0) * locationRecommendationDTO.rating * 0.2
     }
 }

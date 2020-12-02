@@ -55,7 +55,7 @@ class MapMarkerService(
                     countDistance(dogLoverLatitude, dogLoverLongitude, it.latitude, it.longitude))
         }
                 .filter { it.distance <= maxNeighbourhoodDistance }
-                .sortedBy { it.distance }
+                .sortedByDescending { it.distance }
     }
 
     private fun validateMapMarkerNotAlreadyExists(id: UUID) {

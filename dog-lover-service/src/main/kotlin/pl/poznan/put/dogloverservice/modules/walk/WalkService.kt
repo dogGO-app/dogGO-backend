@@ -10,6 +10,7 @@ import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateExcepti
 import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
+import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationship
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationshipService
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
 import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ARRIVED_AT_DESTINATION
@@ -62,18 +63,23 @@ class WalkService(
             DogLoverInLocationDTO(
                     walk.dogLover,
                     walk.dogs.map { DogBasicInfoDTO(it) },
-                    dogLoverRelationships[walk.dogLover.id]?.first()?.relationshipStatus)
+                    dogLoverRelationships[walk.dogLover.id]?.first()?.relationshipStatus,
+                    walk.walkStatus)
         }
     }
 
-    fun getDogLoversInLocations(mapMarkerIds: List<UUID>, dogLoverRelationshipIds: List<UUID>): Map<UUID, List<DogLoverInLocationDTO>> {
-        val walks = walkRepository.findAllByMapMarkerIdInAndWalkStatusInAndDogLoverIdIn(mapMarkerIds, listOf(ONGOING, ARRIVED_AT_DESTINATION), dogLoverRelationshipIds)
+    fun getDogLoversInLocations(mapMarkerIds: List<UUID>, dogLoverRelationships: List<DogLoverRelationship>): Map<UUID, List<DogLoverInLocationDTO>> {
+        val walks = walkRepository.findAllByMapMarkerIdInAndWalkStatusInAndDogLoverIdIn(
+                mapMarkerIds,
+                listOf(ONGOING, ARRIVED_AT_DESTINATION),
+                dogLoverRelationships.map { it.dogLoverRelationshipId.receiverDogLover.id })
 
         return walks.groupBy { it.mapMarker.id }.mapValues { mapMarkerWalks ->
             mapMarkerWalks.value.map { walk ->
                 DogLoverInLocationDTO(
                         walk.dogLover,
                         walk.dogs.map { DogBasicInfoDTO(it) },
+                        dogLoverRelationships.find { it.dogLoverRelationshipId.receiverDogLover == walk.dogLover }?.relationshipStatus,
                         walk.walkStatus)
             }
         }
