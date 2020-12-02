@@ -5,7 +5,6 @@ import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
 import pl.poznan.put.dogloverservice.modules.walk.WalkStatus
-import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
 
 data class DogLoverInLocationDTO(
 

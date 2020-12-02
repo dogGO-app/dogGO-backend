@@ -8,5 +8,5 @@ data class LocationRecommendationDTO(
 
         val dogLoversInLocationDTO: List<DogLoverInLocationDTO>,
 
-        val rating: Int
+        val rating: Double
 )
