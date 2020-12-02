@@ -1,5 +1,7 @@
 package pl.poznan.put.dogloverservice.modules.walk
 
+import java.time.Instant
+import java.util.UUID
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.ArrivedAtDestinationWalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverAlreadyOnWalkException
@@ -9,11 +11,12 @@ import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.*
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ARRIVED_AT_DESTINATION
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.CANCELED
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.LEFT_DESTINATION
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ONGOING
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
-import java.time.Instant
-import java.util.*
 
 @Service
 class WalkService(
@@ -55,6 +58,19 @@ class WalkService(
             DogLoverInLocationDTO(
                     walk.dogLover,
                     walk.dogs.map { DogBasicInfoDTO(it) })
+        }
+    }
+
+    fun getDogLoversInLocations(mapMarkerIds: List<UUID>, dogLoverRelationshipIds: List<UUID>): Map<UUID, List<DogLoverInLocationDTO>> {
+        val walks = walkRepository.findAllByMapMarkerIdInAndWalkStatusInAndDogLoverIdIn(mapMarkerIds, listOf(ONGOING, ARRIVED_AT_DESTINATION), dogLoverRelationshipIds)
+
+        return walks.groupBy { it.mapMarker.id }.mapValues { mapMarkerWalks ->
+            mapMarkerWalks.value.map { walk ->
+                DogLoverInLocationDTO(
+                        walk.dogLover,
+                        walk.dogs.map { DogBasicInfoDTO(it) },
+                        walk.walkStatus)
+            }
         }
     }
 

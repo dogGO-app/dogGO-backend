@@ -3,6 +3,8 @@ package pl.poznan.put.dogloverservice.modules.walk.dto
 import java.util.UUID
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
+import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus
 
 data class DogLoverInLocationDTO(
 
@@ -14,14 +16,17 @@ data class DogLoverInLocationDTO(
 
         val dogs: List<DogBasicInfoDTO>,
 
+        val walkStatus: WalkStatus?,
+
         val likesCount: Int
 
 ) {
-    constructor(dogLover: DogLover, dogs: List<DogBasicInfoDTO>) : this(
+    constructor(dogLover: DogLover, dogs: List<DogBasicInfoDTO>, walkStatus: WalkStatus? = null) : this(
             id = dogLover.id,
             nickname = dogLover.nickname,
             name = dogLover.firstName,
             dogs = dogs,
+            walkStatus = walkStatus,
             likesCount = dogLover.likesCount
     )
 }
