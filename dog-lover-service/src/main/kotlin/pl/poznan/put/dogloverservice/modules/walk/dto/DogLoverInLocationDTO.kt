@@ -5,6 +5,7 @@ import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
 import pl.poznan.put.dogloverservice.modules.walk.WalkStatus
+import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
 
 data class DogLoverInLocationDTO(
 
@@ -16,16 +17,19 @@ data class DogLoverInLocationDTO(
 
         val dogs: List<DogBasicInfoDTO>,
 
+        val relationshipStatus: RelationshipStatus?,
+
         val walkStatus: WalkStatus?,
 
         val likesCount: Int
 
 ) {
-    constructor(dogLover: DogLover, dogs: List<DogBasicInfoDTO>, walkStatus: WalkStatus? = null) : this(
+    constructor(dogLover: DogLover, dogs: List<DogBasicInfoDTO>, relationshipStatus: RelationshipStatus? = null, walkStatus: WalkStatus? = null) : this(
             id = dogLover.id,
             nickname = dogLover.nickname,
             name = dogLover.firstName,
             dogs = dogs,
+            relationshipStatus = relationshipStatus,
             walkStatus = walkStatus,
             likesCount = dogLover.likesCount
     )
