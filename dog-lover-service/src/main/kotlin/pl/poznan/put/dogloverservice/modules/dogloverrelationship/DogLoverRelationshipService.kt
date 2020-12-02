@@ -32,8 +32,12 @@ class DogLoverRelationshipService(
         dogLoverRelationshipRepository.deleteById(dogLoverRelationshipId)
     }
 
-    fun getDogLoverRelationships(dogLoverId: UUID): List<DogLoverRelationshipDTO> {
-        val dogLoverRelationships = dogLoverRelationshipRepository.findAllByDogLoverRelationshipId_GiverDogLoverId(dogLoverId)
+    fun getDogLoverRelationships(dogLoverId: UUID): List<DogLoverRelationship> {
+        return dogLoverRelationshipRepository.findAllByDogLoverRelationshipId_GiverDogLoverId(dogLoverId)
+    }
+
+    fun getDogLoverRelationshipsInfo(dogLoverId: UUID): List<DogLoverRelationshipDTO> {
+        val dogLoverRelationships = getDogLoverRelationships(dogLoverId)
 
         return dogLoverRelationships.map {
             DogLoverRelationshipDTO(it,

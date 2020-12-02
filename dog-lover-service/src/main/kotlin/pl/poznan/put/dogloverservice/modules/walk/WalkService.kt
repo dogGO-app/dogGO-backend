@@ -1,5 +1,7 @@
 package pl.poznan.put.dogloverservice.modules.walk
 
+import java.time.Instant
+import java.util.UUID
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.ArrivedAtDestinationWalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverAlreadyOnWalkException
@@ -8,19 +10,22 @@ import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateExcepti
 import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
+import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationshipService
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.*
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ARRIVED_AT_DESTINATION
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.CANCELED
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.LEFT_DESTINATION
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ONGOING
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
-import java.time.Instant
-import java.util.*
 
 @Service
 class WalkService(
         private val walkRepository: WalkRepository,
         private val dogLoverService: DogLoverService,
         private val dogService: DogService,
-        private val mapMarkerService: MapMarkerService
+        private val mapMarkerService: MapMarkerService,
+        private val dogLoverRelationshipService: DogLoverRelationshipService
 ) {
 
     fun saveWalk(walkDTO: WalkDTO, dogLoverId: UUID): WalkDTO {
@@ -50,11 +55,14 @@ class WalkService(
 
     fun getDogLoversInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<DogLoverInLocationDTO> {
         val walks = walkRepository.findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(mapMarkerId, ARRIVED_AT_DESTINATION, dogLoverId)
+        val dogLoverRelationships = dogLoverRelationshipService.getDogLoverRelationships(dogLoverId)
+                .groupBy { it.dogLoverRelationshipId.receiverDogLover.id }
 
         return walks.map { walk ->
             DogLoverInLocationDTO(
                     walk.dogLover,
-                    walk.dogs.map { DogBasicInfoDTO(it) })
+                    walk.dogs.map { DogBasicInfoDTO(it) },
+                    dogLoverRelationships[walk.dogLover.id]?.first()?.relationshipStatus)
         }
     }
 
