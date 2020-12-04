@@ -54,15 +54,16 @@ class WalkService(
     }
 
     fun getDogLoversInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<DogLoverInLocationDTO> {
-        val walks = walkRepository.findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(mapMarkerId, ARRIVED_AT_DESTINATION, dogLoverId)
+        val otherDogLoversWalks = walkRepository.findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(
+                mapMarkerId, ARRIVED_AT_DESTINATION, dogLoverId)
         val dogLoverRelationships = dogLoverRelationshipService.getDogLoverRelationships(dogLoverId)
-                .groupBy { it.dogLoverRelationshipId.receiverDogLover.id }
 
-        return walks.map { walk ->
+        return otherDogLoversWalks.map { walk ->
             DogLoverInLocationDTO(
                     walk.dogLover,
                     walk.dogs.map { DogBasicInfoDTO(it) },
-                    dogLoverRelationships[walk.dogLover.id]?.first()?.relationshipStatus)
+                    dogLoverRelationships.find {
+                        it.id.receiverDogLover.id == walk.dogLover.id }?.relationshipStatus)
         }
     }
 

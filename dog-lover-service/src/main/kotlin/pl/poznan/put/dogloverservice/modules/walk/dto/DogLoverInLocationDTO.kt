@@ -20,7 +20,7 @@ data class DogLoverInLocationDTO(
         val likesCount: Int
 
 ) {
-    constructor(dogLover: DogLover, dogs: List<DogBasicInfoDTO>, relationshipStatus: RelationshipStatus? = null) : this(
+    constructor(dogLover: DogLover, dogs: List<DogBasicInfoDTO>, relationshipStatus: RelationshipStatus?) : this(
             id = dogLover.id,
             nickname = dogLover.nickname,
             name = dogLover.firstName,

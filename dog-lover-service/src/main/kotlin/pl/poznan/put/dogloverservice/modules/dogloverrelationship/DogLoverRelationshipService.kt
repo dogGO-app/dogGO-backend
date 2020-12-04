@@ -7,6 +7,7 @@ import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.dto.DogLoverRelationshipDTO
 import java.util.*
+import org.springframework.data.repository.findByIdOrNull
 
 @Service
 class DogLoverRelationshipService(
@@ -33,7 +34,7 @@ class DogLoverRelationshipService(
     }
 
     fun getDogLoverRelationships(dogLoverId: UUID): List<DogLoverRelationship> {
-        return dogLoverRelationshipRepository.findAllByDogLoverRelationshipId_GiverDogLoverId(dogLoverId)
+        return dogLoverRelationshipRepository.findAllByIdGiverDogLoverId(dogLoverId)
     }
 
     fun getDogLoverRelationshipsInfo(dogLoverId: UUID): List<DogLoverRelationshipDTO> {
@@ -41,7 +42,7 @@ class DogLoverRelationshipService(
 
         return dogLoverRelationships.map {
             DogLoverRelationshipDTO(it,
-                    dogService.getDogLoverDogs(it.dogLoverRelationshipId.receiverDogLover.id))
+                    dogService.getDogLoverDogs(it.id.receiverDogLover.id))
         }
     }
 
@@ -52,7 +53,7 @@ class DogLoverRelationshipService(
     }
 
     private fun validateRelationshipNotAlreadyExists(dogLoverRelationshipId: DogLoverRelationshipId) {
-        dogLoverRelationshipRepository.findByDogLoverRelationshipId(dogLoverRelationshipId)
+        dogLoverRelationshipRepository.findByIdOrNull(dogLoverRelationshipId)
                 ?.let {
                     throw DogLoverRelationshipAlreadyExists(it.relationshipStatus)
                 }
