@@ -7,7 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface DogLoverRelationshipRepository : JpaRepository<DogLoverRelationship, DogLoverRelationshipId> {
 
-    fun findByDogLoverRelationshipId(dogLoverRelationshipId: DogLoverRelationshipId): DogLoverRelationship?
-
-    fun findAllByDogLoverRelationshipId_GiverDogLoverId(giverDogLoverId: UUID): List<DogLoverRelationship>
+    fun findAllByIdGiverDogLoverId(giverDogLoverId: UUID): List<DogLoverRelationship>
 }

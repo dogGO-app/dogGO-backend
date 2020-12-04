@@ -18,8 +18,8 @@ data class DogLoverRelationshipDTO(
 ) {
 
     constructor(dogLoverRelationship: DogLoverRelationship, dogLoverDogs: List<Dog>) : this(
-            dogLoverRelationship.dogLoverRelationshipId.receiverDogLover.id,
-            dogLoverRelationship.dogLoverRelationshipId.receiverDogLover.nickname,
+            dogLoverRelationship.id.receiverDogLover.id,
+            dogLoverRelationship.id.receiverDogLover.nickname,
             dogLoverDogs.map { DogBasicInfoDTO(it) },
             dogLoverRelationship.relationshipStatus
     )
