@@ -73,14 +73,14 @@ class WalkService(
         val walks = walkRepository.findAllByMapMarkerIdInAndWalkStatusInAndDogLoverIdIn(
                 mapMarkerIds,
                 listOf(ONGOING, ARRIVED_AT_DESTINATION),
-                dogLoverRelationships.map { it.dogLoverRelationshipId.receiverDogLover.id })
+                dogLoverRelationships.map { it.id.receiverDogLover.id })
 
         return walks.groupBy { it.mapMarker.id }.mapValues { mapMarkerWalks ->
             mapMarkerWalks.value.map { walk ->
                 DogLoverInLocationDTO(
                         walk.dogLover,
                         walk.dogs.map { DogBasicInfoDTO(it) },
-                        dogLoverRelationships.find { it.dogLoverRelationshipId.receiverDogLover == walk.dogLover }?.relationshipStatus,
+                        dogLoverRelationships.find { it.id.receiverDogLover == walk.dogLover }?.relationshipStatus,
                         walk.walkStatus)
             }
         }
