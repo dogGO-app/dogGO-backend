@@ -42,6 +42,6 @@ class DogLoverRelationshipController(
             ApiResponse(description = "Ok.", responseCode = "200"))
     @GetMapping
     fun getDogLoverRelationships(): List<DogLoverRelationshipDTO> {
-        return dogLoverRelationshipService.getDogLoverRelationships(getCurrentUserId())
+        return dogLoverRelationshipService.getDogLoverRelationshipsInfo(getCurrentUserId())
     }
 }

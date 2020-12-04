@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne
 class DogLoverRelationship(
 
         @EmbeddedId
-        val dogLoverRelationshipId: DogLoverRelationshipId,
+        val id: DogLoverRelationshipId,
 
         @Enumerated(EnumType.STRING)
         val relationshipStatus: RelationshipStatus
