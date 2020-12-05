@@ -20,9 +20,11 @@ import kotlin.math.sqrt
 class MapMarkerService(
         private val mapMarkerRepository: MapMarkerRepository
 ) {
-    private final val earthRadius = 6371000.0
-    private final val maxDistance = 300.0
-    private final val maxNeighbourhoodDistance = 2000.0 //TODO jaką my tu jednostkę przyjęliśmy? Metry? :D
+    private companion object {
+        const val EARTH_RADIUS_IN_METERS = 6371000.0
+        const val MAX_DISTANCE_IN_METERS = 300.0
+        const val MAX_NEIGHBOURHOOD_DISTANCE_IN_METERS = 2000.0
+    }
 
     fun saveMapMarker(mapMarkerDTO: MapMarkerDTO): MapMarkerDTO {
         validateMapMarkerNotAlreadyExists(mapMarkerDTO.id)
@@ -49,13 +51,16 @@ class MapMarkerService(
     }
 
     fun getNeighbourhoodLocations(dogLoverLatitude: Double, dogLoverLongitude: Double): List<MapMarkerRecommendationDTO> {
-        return mapMarkerRepository.findAll().map {
-            MapMarkerRecommendationDTO(
-                    it,
-                    countDistance(dogLoverLatitude, dogLoverLongitude, it.latitude, it.longitude))
-        }
-                .filter { it.distance <= maxNeighbourhoodDistance }
-                .sortedByDescending { it.distance }
+        return mapMarkerRepository.findNeighbourhoodMapMarkers(
+                dogLoverLatitude,
+                dogLoverLongitude,
+                MAX_NEIGHBOURHOOD_DISTANCE_IN_METERS)
+                .map {
+                    MapMarkerRecommendationDTO(
+                            it,
+                            countDistance(dogLoverLatitude, dogLoverLongitude, it.latitude, it.longitude))
+                }
+                .sortedByDescending { it.distanceInMeters }
     }
 
     private fun validateMapMarkerNotAlreadyExists(id: UUID) {
@@ -65,7 +70,7 @@ class MapMarkerService(
 
     private fun validateNewMapMarkerIsFarEnough(mapMarker: MapMarker) {
         mapMarkerRepository.findAll().forEach {
-            if (countDistance(mapMarker, it) < maxDistance)
+            if (countDistance(mapMarker, it) < MAX_DISTANCE_IN_METERS)
                 throw MapMarkerTooCloseException(mapMarker.latitude, mapMarker.longitude)
         }
     }
@@ -76,7 +81,7 @@ class MapMarkerService(
         val a = sin(latitudeDiff / 2).pow(2) + cos(toRadians(newMapMarker.latitude)) * cos(toRadians(newMapMarker.longitude)) * sin(longitudeDiff / 2).pow(2)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
-        return earthRadius * c
+        return EARTH_RADIUS_IN_METERS * c
     }
 
     private fun countDistance(firstLatitude: Double, firstLongitude: Double, secondLatitude: Double, secondLongitude: Double): Double {
@@ -85,7 +90,7 @@ class MapMarkerService(
         val a = sin(latitudeDiff / 2).pow(2) + cos(toRadians(firstLatitude)) * cos(toRadians(firstLongitude)) * sin(longitudeDiff / 2).pow(2)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
-        return earthRadius * c
+        return EARTH_RADIUS_IN_METERS * c
     }
 
 }

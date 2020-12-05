@@ -43,7 +43,7 @@ class WalkController(
     }
 
     @GetMapping("/dog-lovers-in-location/{mapMarkerId}")
-    fun getDogLoversInLocation(@PathVariable mapMarkerId: UUID): List<DogLoverInLocationDTO> {
-        return walkService.getDogLoversInLocation(mapMarkerId, getCurrentUserId())
+    fun getOtherDogLoversInLocation(@PathVariable mapMarkerId: UUID): List<DogLoverInLocationDTO> {
+        return walkService.getOtherDogLoversInLocation(mapMarkerId, getCurrentUserId())
     }
 }

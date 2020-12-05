@@ -8,13 +8,13 @@ import pl.poznan.put.dogloverservice.infrastructure.commons.AuthCommons.getCurre
 import pl.poznan.put.dogloverservice.modules.locationrecommendation.dto.LocationRecommendationDTO
 
 @RestController
-@RequestMapping("/location-recommendation")
+@RequestMapping("/location-recommendations")
 class LocationRecommendationController(
         private val locationRecommendationService: LocationRecommendationService
 ) {
 
     @GetMapping
-    fun getRecommendedLocations(@RequestParam dogLoverLongitude: Double, dogLoverLatitude: Double): List<LocationRecommendationDTO> {
+    fun getRecommendedLocations(@RequestParam dogLoverLongitude: Double, @RequestParam dogLoverLatitude: Double): List<LocationRecommendationDTO> {
         return locationRecommendationService.getRecommendedLocations(getCurrentUserId(), dogLoverLatitude, dogLoverLongitude)
     }
 }

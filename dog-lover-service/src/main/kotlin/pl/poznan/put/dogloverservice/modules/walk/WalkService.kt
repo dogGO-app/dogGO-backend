@@ -54,36 +54,34 @@ class WalkService(
                 Walk(walk, walkStatus)))
     }
 
-    fun getDogLoversInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<DogLoverInLocationDTO> {
+    fun getOtherDogLoversInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<DogLoverInLocationDTO> {
         val otherDogLoversWalks = walkRepository.findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(
                 mapMarkerId, ARRIVED_AT_DESTINATION, dogLoverId)
         val dogLoverRelationships = dogLoverRelationshipService.getDogLoverRelationships(dogLoverId)
 
         return otherDogLoversWalks.map { walk ->
-            DogLoverInLocationDTO(
-                    walk.dogLover,
-                    walk.dogs.map { DogBasicInfoDTO(it) },
-                    dogLoverRelationships.find {
-                        it.id.receiverDogLover.id == walk.dogLover.id }?.relationshipStatus,
-                    walk.walkStatus)
+            DogLoverInLocationDTO(walk,
+            dogLoverRelationships)
         }
     }
 
-    fun getDogLoversInLocations(mapMarkerIds: List<UUID>, dogLoverRelationships: List<DogLoverRelationship>): Map<UUID, List<DogLoverInLocationDTO>> {
+    fun getDogLoversInLocations(mapMarkerIds: List<UUID>, dogLoverRelationships: List<DogLoverRelationship>
+    ): Map<UUID, List<DogLoverInLocationDTO>> {
         val walks = walkRepository.findAllByMapMarkerIdInAndWalkStatusInAndDogLoverIdIn(
                 mapMarkerIds,
                 listOf(ONGOING, ARRIVED_AT_DESTINATION),
                 dogLoverRelationships.map { it.id.receiverDogLover.id })
 
-        return walks.groupBy { it.mapMarker.id }.mapValues { mapMarkerWalks ->
-            mapMarkerWalks.value.map { walk ->
-                DogLoverInLocationDTO(
-                        walk.dogLover,
-                        walk.dogs.map { DogBasicInfoDTO(it) },
-                        dogLoverRelationships.find { it.id.receiverDogLover == walk.dogLover }?.relationshipStatus,
-                        walk.walkStatus)
-            }
-        }
+        return walks
+                .groupBy { it.mapMarker.id }
+                .mapValues { (_, walks) ->
+                    walks.map { walk ->
+                        DogLoverInLocationDTO(
+                                walk,
+                                dogLoverRelationships
+                        )
+                    }
+                }
     }
 
     fun getArrivedAtDestinationWalkByDogLoverId(dogLoverId: UUID): Walk {

@@ -4,9 +4,9 @@ import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 
 data class LocationRecommendationDTO(
 
-        val mapMarkerRecommendationDTO: MapMarkerRecommendationDTO,
+        val mapMarkerRecommendation: MapMarkerRecommendationDTO,
 
-        val dogLoversInLocationDTO: List<DogLoverInLocationDTO>,
+        val dogLoversInLocation: List<DogLoverInLocationDTO>,
 
         var rating: Double
 )

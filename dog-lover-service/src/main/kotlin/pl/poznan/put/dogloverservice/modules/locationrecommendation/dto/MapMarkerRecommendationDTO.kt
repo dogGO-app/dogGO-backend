@@ -2,9 +2,7 @@ package pl.poznan.put.dogloverservice.modules.locationrecommendation.dto
 
 import java.util.UUID
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarker
-import javax.validation.constraints.DecimalMax
-import javax.validation.constraints.DecimalMin
-import javax.validation.constraints.NotBlank
+import kotlin.math.roundToInt
 
 data class MapMarkerRecommendationDTO(
 
@@ -18,7 +16,7 @@ data class MapMarkerRecommendationDTO(
 
         val longitude: Double,
 
-        val distance: Double
+        val distanceInMeters: Int
 ) {
     constructor(mapMarker: MapMarker, distance: Double) : this(
             id = mapMarker.id,
@@ -26,6 +24,6 @@ data class MapMarkerRecommendationDTO(
             description = mapMarker.description,
             latitude = mapMarker.latitude,
             longitude = mapMarker.longitude,
-            distance = distance
+            distanceInMeters = distance.roundToInt()
     )
 }

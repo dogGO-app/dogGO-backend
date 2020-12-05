@@ -39,11 +39,13 @@ class LocationRecommendationService(
     }
 
     private fun countLocationRating(locationRecommendationDTO: LocationRecommendationDTO): Double {
-        val relationshipsCounter = locationRecommendationDTO.dogLoversInLocationDTO.groupBy { it.relationshipStatus }
+        val relationshipsCounter = locationRecommendationDTO.dogLoversInLocation
+                .groupingBy { it.relationshipStatus }
+                .eachCount()
         return locationRecommendationDTO.rating +
-                (relationshipsCounter[RelationshipStatus.FOLLOWS]?.size?.times(3.0)
+                (relationshipsCounter[RelationshipStatus.FOLLOWS]?.times(3.0)
                         ?: 0.0) * locationRecommendationDTO.rating * 0.2 -
-                (relationshipsCounter[RelationshipStatus.BLOCKS]?.size?.times(3.0)
+                (relationshipsCounter[RelationshipStatus.BLOCKS]?.times(3.0)
                         ?: 0.0) * locationRecommendationDTO.rating * 0.2
     }
 }
