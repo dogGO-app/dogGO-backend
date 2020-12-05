@@ -1,12 +1,14 @@
 package pl.poznan.put.dogloverservice.modules.locationrecommendation
 
-import java.util.UUID
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationshipService
-import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
+import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus.BLOCKS
+import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus.FOLLOWS
 import pl.poznan.put.dogloverservice.modules.locationrecommendation.dto.LocationRecommendationDTO
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
 import pl.poznan.put.dogloverservice.modules.walk.WalkService
+import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
+import java.util.*
 
 @Service
 class LocationRecommendationService(
@@ -26,26 +28,24 @@ class LocationRecommendationService(
                 dogLoverRelationships)
 
         val locationRecommendationsWithInitialRatings = neighbourhoodLocations.mapIndexed { index, mapMarkerRecommendationDTO ->
+            val dogLoversInLocation = dogLoversInLocations[mapMarkerRecommendationDTO.id] ?: emptyList()
             LocationRecommendationDTO(
-                    mapMarkerRecommendationDTO,
-                    dogLoversInLocations[mapMarkerRecommendationDTO.id] ?: emptyList(),
-                    (index + 1) * 4.0
+                    mapMarkerRecommendation = mapMarkerRecommendationDTO,
+                    dogLoversInLocation = dogLoversInLocation,
+                    rating = countLocationRating(initialRating = (index + 1) * 4.0, dogLoversInLocation)
             )
         }
-
-        locationRecommendationsWithInitialRatings.forEach { it.rating = countLocationRating(it) }
 
         return locationRecommendationsWithInitialRatings.sortedByDescending { it.rating }
     }
 
-    private fun countLocationRating(locationRecommendationDTO: LocationRecommendationDTO): Double {
-        val relationshipsCounter = locationRecommendationDTO.dogLoversInLocation
+    private fun countLocationRating(initialRating: Double, dogLoversInLocation: List<DogLoverInLocationDTO>): Double {
+        val relationshipsCount = dogLoversInLocation
                 .groupingBy { it.relationshipStatus }
                 .eachCount()
-        return locationRecommendationDTO.rating +
-                (relationshipsCounter[RelationshipStatus.FOLLOWS]?.times(3.0)
-                        ?: 0.0) * locationRecommendationDTO.rating * 0.2 -
-                (relationshipsCounter[RelationshipStatus.BLOCKS]?.times(3.0)
-                        ?: 0.0) * locationRecommendationDTO.rating * 0.2
+                .withDefault { 0 }
+        return initialRating +
+                relationshipsCount.getValue(FOLLOWS) * 3.0 * initialRating * 0.2 -
+                relationshipsCount.getValue(BLOCKS) * 3.0 * initialRating * 0.2
     }
 }
