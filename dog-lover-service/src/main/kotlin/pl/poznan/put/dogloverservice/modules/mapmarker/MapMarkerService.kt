@@ -5,20 +5,17 @@ import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.MapMarkerAlreadyExistsException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.MapMarkerNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.MapMarkerTooCloseException
-import pl.poznan.put.dogloverservice.modules.locationrecommendation.dto.MapMarkerRecommendationDTO
 import pl.poznan.put.dogloverservice.modules.mapmarker.dto.MapMarkerDTO
-import java.lang.Math.toRadians
+import pl.poznan.put.dogloverservice.modules.mapmarker.dto.MapMarkerDistanceDTO
 import java.time.Instant
 import java.util.*
-import kotlin.math.*
 
 @Service
 class MapMarkerService(
         private val mapMarkerRepository: MapMarkerRepository
 ) {
     private companion object {
-        const val EARTH_RADIUS_IN_METERS = 6371000.0
-        const val MIN_DISTANCE_IN_METERS = 300.0
+        const val MIN_NEIGHBOURHOOD_DISTANCE_IN_METERS = 300.0
         const val MAX_NEIGHBOURHOOD_DISTANCE_IN_METERS = 2000.0
     }
 
@@ -46,16 +43,13 @@ class MapMarkerService(
                 ?: throw MapMarkerNotFoundException(mapMarkerId)
     }
 
-    fun getNeighbourhoodLocations(dogLoverLatitude: Double, dogLoverLongitude: Double): List<MapMarkerRecommendationDTO> {
+    fun getNeighbourhoodMapMarkers(dogLoverLatitude: Double, dogLoverLongitude: Double): List<MapMarkerDistanceDTO> {
         return mapMarkerRepository.findNeighbourhoodMapMarkers(
-                dogLoverLatitude,
-                dogLoverLongitude,
-                MAX_NEIGHBOURHOOD_DISTANCE_IN_METERS)
-                .map {
-                    MapMarkerRecommendationDTO(
-                            it,
-                            countDistance(dogLoverLatitude, dogLoverLongitude, it.latitude, it.longitude))
-                }
+                latitude = dogLoverLatitude,
+                longitude = dogLoverLongitude,
+                maxDistanceInMeters = MAX_NEIGHBOURHOOD_DISTANCE_IN_METERS
+        )
+                .map(::MapMarkerDistanceDTO)
                 .sortedByDescending { it.distanceInMeters }
     }
 
@@ -68,23 +62,9 @@ class MapMarkerService(
         if (!mapMarkerRepository.isMapMarkerFarEnough(
                         latitude = mapMarker.latitude,
                         longitude = mapMarker.longitude,
-                        minDistanceInMeters = MIN_DISTANCE_IN_METERS
+                        minDistanceInMeters = MIN_NEIGHBOURHOOD_DISTANCE_IN_METERS
                 )
         ) throw MapMarkerTooCloseException(mapMarker.latitude, mapMarker.longitude)
-    }
-
-    private fun countDistance(
-            firstLatitude: Double,
-            firstLongitude: Double,
-            secondLatitude: Double,
-            secondLongitude: Double
-    ): Double {
-        val latitudeDiff = toRadians(firstLatitude - secondLatitude)
-        val longitudeDiff = toRadians(firstLongitude - secondLongitude)
-        val a = sin(latitudeDiff / 2).pow(2) + cos(toRadians(firstLatitude)) * cos(toRadians(firstLongitude)) * sin(longitudeDiff / 2).pow(2)
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        return EARTH_RADIUS_IN_METERS * c
     }
 
 }
