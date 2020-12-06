@@ -16,8 +16,12 @@ class LocationRecommendationService(
         private val walkService: WalkService,
         private val dogLoverRelationshipService: DogLoverRelationshipService
 ) {
-    fun getRecommendedLocations(dogLoverId: UUID, dogLoverLatitude: Double, dogLoverLongitude: Double): List<LocationRecommendationDTO> {
-        val neighbourhoodLocations = mapMarkerService.getNeighbourhoodLocations(dogLoverLatitude, dogLoverLongitude)
+    fun getRecommendedLocations(
+        dogLoverId: UUID,
+        dogLoverLatitude: Double,
+        dogLoverLongitude: Double
+    ): List<LocationRecommendationDTO> {
+        val neighbourhoodLocations = mapMarkerService.getNeighbourhoodMapMarkers(dogLoverLatitude, dogLoverLongitude)
 
         if (neighbourhoodLocations.isEmpty())
             return emptyList()

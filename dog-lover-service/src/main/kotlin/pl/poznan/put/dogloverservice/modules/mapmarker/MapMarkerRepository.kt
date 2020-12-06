@@ -9,15 +9,24 @@ import java.util.*
 @Repository
 interface MapMarkerRepository : JpaRepository<MapMarker, UUID> {
 
-    @Query(value = """SELECT * FROM map_marker mm
-            WHERE SQRT(POW(111.12 * (mm.latitude - :lat), 2) + 
-            POW(111.12 * (:lon - mm.longitude) * COS(mm.latitude / 92.215), 2)) * 1000 <= :max_dist""",
-            nativeQuery = true)
+    @Query(value = """
+            WITH t AS (
+                SELECT CAST(mm.id AS varchar), mm.name, mm.description, mm.latitude, mm.longitude,
+                       (SQRT(POW(111.12 * (mm.latitude - :lat), 2) +
+                             POW(111.12 * (:lon - mm.longitude) * COS(mm.latitude / 92.215), 2)) * 1000) AS "distanceInMeters"
+                FROM map_marker mm
+            )
+            SELECT *
+            FROM t
+            WHERE "distanceInMeters" <= :max_dist
+            """,
+            nativeQuery = true
+    )
     fun findNeighbourhoodMapMarkers(
             @Param("lat") latitude: Double,
             @Param("lon") longitude: Double,
             @Param("max_dist") maxDistanceInMeters: Double
-    ): List<MapMarker>
+    ): List<MapMarkerDistanceView>
 
     @Query(value = """
             SELECT BOOL_AND(
@@ -37,4 +46,18 @@ interface MapMarkerRepository : JpaRepository<MapMarker, UUID> {
             @Param("lon") longitude: Double,
             @Param("min_dist") minDistanceInMeters: Double
     ): Boolean
+}
+
+interface MapMarkerDistanceView {
+    val id: UUID
+
+    val name: String
+
+    val description: String?
+
+    val latitude: Double
+
+    val longitude: Double
+
+    val distanceInMeters: Double
 }
