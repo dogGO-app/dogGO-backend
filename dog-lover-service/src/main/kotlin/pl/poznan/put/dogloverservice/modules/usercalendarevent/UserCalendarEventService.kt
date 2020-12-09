@@ -24,8 +24,7 @@ class UserCalendarEventService(
 
     fun getUserCalendar(dogLoverId: UUID): List<UserCalendarEventDTO> {
         val dogLover = dogLoverService.getDogLover(dogLoverId)
-        return userCalendarEventRepository.findAllByDogLoverAndDateTimeAfter(dogLover, Instant.now())
-                .sortedBy { it.dateTime }
+        return userCalendarEventRepository.findAllByDogLoverOrderByDateTimeAsc(dogLover)
                 .map { UserCalendarEventDTO(it, timeZone) }
     }
 
