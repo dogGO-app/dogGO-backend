@@ -1,33 +1,36 @@
 package pl.poznan.put.dogloverservice.modules.walk
 
-import java.time.Instant
-import java.util.UUID
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.ArrivedAtDestinationWalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverAlreadyOnWalkException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateException
 import pl.poznan.put.dogloverservice.modules.dog.DogService
-import pl.poznan.put.dogloverservice.modules.dog.dto.DogBasicInfoDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationship
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationshipService
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ARRIVED_AT_DESTINATION
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.CANCELED
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.LEFT_DESTINATION
-import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.ONGOING
+import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.*
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
+import java.time.Instant
+import java.util.*
 
 @Service
 class WalkService(
+        @Value("\${self.time-zone}") private val timeZone: String,
         private val walkRepository: WalkRepository,
         private val dogLoverService: DogLoverService,
         private val dogService: DogService,
         private val mapMarkerService: MapMarkerService,
         private val dogLoverRelationshipService: DogLoverRelationshipService
 ) {
+    fun getWalks(dogLoverId: UUID): List<WalkDTO> {
+        val dogLover = dogLoverService.getDogLover(dogLoverId)
+        return walkRepository.findAllByDogLoverOrderByCreatedAtAsc(dogLover)
+                .map { WalkDTO(it, timeZone) }
+    }
 
     fun saveWalk(walkDTO: WalkDTO, dogLoverId: UUID): WalkDTO {
         validateDogLoverIsNotAlreadyOnWalk(dogLoverId)
@@ -35,14 +38,13 @@ class WalkService(
         val dogs = walkDTO.dogNames.map { dogService.getDogEntity(it, dogLoverId) }
         val mapMarker = mapMarkerService.getMapMarker(walkDTO.mapMarker)
         val walk = Walk(
-                UUID.randomUUID(),
-                Instant.now(),
-                dogLover,
-                dogs,
-                mapMarker,
-                ONGOING
+                createdAt = Instant.now(),
+                dogLover = dogLover,
+                dogs = dogs,
+                mapMarker = mapMarker,
+                walkStatus = ONGOING
         )
-        return WalkDTO(walkRepository.save(walk))
+        return WalkDTO(walk = walkRepository.save(walk), timeZone = timeZone)
     }
 
     fun updateWalkStatus(walkId: UUID, walkStatus: WalkStatus, dogLoverId: UUID): WalkDTO {
@@ -50,8 +52,10 @@ class WalkService(
         if (!isWalkStatusPermissible(currentWalkStatus = walk.walkStatus, newWalkStatus = walkStatus))
             throw WalkUpdateException()
 
-        return WalkDTO(walkRepository.save(
-                Walk(walk, walkStatus)))
+        return WalkDTO(
+                walk = walkRepository.save(Walk(walk, walkStatus)),
+                timeZone = timeZone
+        )
     }
 
     fun getOtherDogLoversInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<DogLoverInLocationDTO> {
@@ -61,7 +65,7 @@ class WalkService(
 
         return otherDogLoversWalks.map { walk ->
             DogLoverInLocationDTO(walk,
-            dogLoverRelationships)
+                    dogLoverRelationships)
         }
     }
 
@@ -86,7 +90,7 @@ class WalkService(
 
     fun getArrivedAtDestinationWalkByDogLoverId(dogLoverId: UUID): Walk {
         // TODO Create mechanism which ensures there is always at most one record with ARRIVED_AT_DESTINATION status
-        return walkRepository.findFirstByDogLoverIdAndWalkStatusOrderByTimestampDesc(dogLoverId, ARRIVED_AT_DESTINATION)
+        return walkRepository.findFirstByDogLoverIdAndWalkStatusOrderByCreatedAtDesc(dogLoverId, ARRIVED_AT_DESTINATION)
                 ?: throw ArrivedAtDestinationWalkNotFoundException()
     }
 
@@ -103,8 +107,8 @@ class WalkService(
     private fun isWalkStatusPermissible(currentWalkStatus: WalkStatus, newWalkStatus: WalkStatus): Boolean =
             when (currentWalkStatus to newWalkStatus) {
                 ONGOING to ARRIVED_AT_DESTINATION -> true
+                ONGOING to CANCELED -> true
                 ARRIVED_AT_DESTINATION to LEFT_DESTINATION -> true
-                currentWalkStatus to CANCELED -> true
                 else -> false
             }
 }
