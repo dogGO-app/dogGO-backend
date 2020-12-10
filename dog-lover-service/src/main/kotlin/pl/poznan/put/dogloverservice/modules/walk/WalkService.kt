@@ -29,7 +29,7 @@ class WalkService(
     fun getCompletedWalksHistory(dogLoverId: UUID): List<WalkDTO> {
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         return walkRepository
-                .findAllByDogLoverAndWalkStatusInOrderByCreatedAtAsc(dogLover, walkStatuses = setOf(LEFT_DESTINATION))
+                .findAllByDogLoverAndWalkStatusOrderByCreatedAtAsc(dogLover, walkStatus = LEFT_DESTINATION)
                 .map { WalkDTO(it, timeZone) }
     }
 
