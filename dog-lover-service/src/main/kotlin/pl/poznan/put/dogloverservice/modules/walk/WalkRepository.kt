@@ -8,7 +8,8 @@ import java.util.*
 @Repository
 interface WalkRepository : JpaRepository<Walk, UUID> {
 
-    fun findAllByDogLoverOrderByCreatedAtAsc(dogLover: DogLover): List<Walk>
+    fun findAllByDogLoverAndWalkStatusInOrderByCreatedAtAsc(dogLover: DogLover,
+                                                            walkStatuses: Set<WalkStatus>): List<Walk>
 
     fun findFirstByDogLoverIdAndWalkStatusOrderByCreatedAtDesc(dogLoverId: UUID, walkStatus: WalkStatus): Walk?
 

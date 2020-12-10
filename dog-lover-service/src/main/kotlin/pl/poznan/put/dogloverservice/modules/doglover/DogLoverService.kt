@@ -41,6 +41,10 @@ class DogLoverService(
         return dogLoverRepository.findByIdOrNull(dogLoverId) ?: throw DogLoverNotFoundException()
     }
 
+    fun getDogLover(nickname: String): DogLover {
+        return dogLoverRepository.findByNickname(nickname) ?: throw DogLoverNotFoundException()
+    }
+
     fun updateDogLover(dogLover: DogLover): DogLover {
         validateDogLoverExists(dogLover.id)
         return dogLoverRepository.save(dogLover)
@@ -49,10 +53,6 @@ class DogLoverService(
     private fun validateDogLoverExists(dogLoverId: UUID) {
         if (!dogLoverRepository.existsById(dogLoverId))
             throw DogLoverNotFoundException()
-    }
-
-    fun getDogLover(nickname: String): DogLover {
-        return dogLoverRepository.findByNickname(nickname) ?: throw DogLoverNotFoundException()
     }
 
     private fun validateNicknameIsUnique(nickname: String) {

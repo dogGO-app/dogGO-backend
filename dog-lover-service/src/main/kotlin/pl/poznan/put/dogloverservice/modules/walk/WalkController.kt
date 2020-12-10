@@ -17,9 +17,9 @@ class WalkController(
     @ApiResponses(
             ApiResponse(description = "Ok.", responseCode = "200"),
             ApiResponse(description = "Dog lover doesn't exist.", responseCode = "404"))
-    @GetMapping
-    fun getWalks(): List<WalkDTO> {
-        return walkService.getWalks(dogLoverId = getCurrentUserId())
+    @GetMapping("/history")
+    fun getCompletedWalksHistory(): List<WalkDTO> {
+        return walkService.getCompletedWalksHistory(dogLoverId = getCurrentUserId())
     }
 
     @ApiResponses(
