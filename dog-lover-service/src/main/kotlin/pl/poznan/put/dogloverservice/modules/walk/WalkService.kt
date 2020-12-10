@@ -2,6 +2,7 @@ package pl.poznan.put.dogloverservice.modules.walk
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.ArrivedAtDestinationWalkNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverAlreadyOnWalkException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkNotFoundException
@@ -33,6 +34,7 @@ class WalkService(
                 .map { WalkDTO(it, timeZone) }
     }
 
+    @Transactional
     fun saveWalk(walkDTO: WalkDTO, dogLoverId: UUID): WalkDTO {
         validateDogLoverIsNotAlreadyOnWalk(dogLoverId)
         val dogLover = dogLoverService.getDogLover(dogLoverId)
@@ -45,6 +47,8 @@ class WalkService(
                 mapMarker = mapMarker,
                 walkStatus = ONGOING
         )
+        
+        walkRepository.completeDogLoverStartedWalks(dogLover)
         return WalkDTO(walk = walkRepository.save(walk), timeZone = timeZone)
     }
 
