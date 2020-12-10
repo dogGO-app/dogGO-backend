@@ -14,6 +14,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 
+	implementation("com.github.ben-manes.caffeine:caffeine:${Versions.caffeine}")
+
 	runtimeOnly("org.postgresql:postgresql")
 
 	Libs.testImplementations.forEach { testImplementation(it) }
