@@ -40,3 +40,8 @@ springdoc:
 
 self:
   time-zone: Europe/Warsaw
+  calendar-events-reminder-cron: 0 0 21 ? * * *
+  token:
+    url: ${AUTH_SERVICE_URL:http://localhost:8888}/keycloak/realms/master/protocol/openid-connect/token
+    client-id: ${TOKEN_CLIENT_ID:doggo}
+    client-secret: ${TOKEN_CLIENT_SECRET:secret}
