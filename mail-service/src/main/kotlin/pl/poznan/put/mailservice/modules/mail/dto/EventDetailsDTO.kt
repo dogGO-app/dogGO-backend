@@ -1,7 +1,7 @@
 package pl.poznan.put.mailservice.modules.mail.dto
 
 
-data class EventDetails(
+data class EventDetailsDTO(
 
         val description: String,
 

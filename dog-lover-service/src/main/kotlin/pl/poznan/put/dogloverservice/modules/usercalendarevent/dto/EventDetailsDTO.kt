@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import pl.poznan.put.dogloverservice.modules.usercalendarevent.UserCalendarEvent
 
-data class EventDetails(
+data class EventDetailsDTO(
 
         val description: String,
 

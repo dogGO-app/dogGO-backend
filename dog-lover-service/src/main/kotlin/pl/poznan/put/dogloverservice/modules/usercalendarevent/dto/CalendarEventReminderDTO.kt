@@ -1,10 +1,10 @@
 package pl.poznan.put.dogloverservice.modules.usercalendarevent.dto
 
-data class CalendarEventReminder(
+data class CalendarEventReminderDTO(
 
         val dogLoverEmail: String,
 
         val dogLoverNickname: String,
 
-        val eventsDetails: List<EventDetails>
+        val eventsDetails: List<EventDetailsDTO>
 )

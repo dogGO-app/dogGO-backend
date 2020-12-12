@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @FeignClient(name = "auth-service")
 interface AuthServiceClient {
 
-    @GetMapping("/emails")
+    @GetMapping("/users/emails")
     fun getUsersEmails(@RequestHeader(value = "Authorization") token: String,
                        @RequestParam usersIds: List<UUID>
     ): Map<UUID, String>

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.client.AuthServiceClient
 import pl.poznan.put.dogloverservice.infrastructure.client.MailServiceClient
 import pl.poznan.put.dogloverservice.infrastructure.commons.RestTemplateTokenRequester
-import pl.poznan.put.dogloverservice.modules.usercalendarevent.dto.CalendarEventReminder
-import pl.poznan.put.dogloverservice.modules.usercalendarevent.dto.EventDetails
+import pl.poznan.put.dogloverservice.modules.usercalendarevent.dto.CalendarEventReminderDTO
+import pl.poznan.put.dogloverservice.modules.usercalendarevent.dto.EventDetailsDTO
 
 @Service
 @EnableScheduling
@@ -29,14 +29,14 @@ class UserCalendarReminderService(
         val dogLoversEmails = authServiceClient.getUsersEmails("Bearer $accessToken",
                 dogLoverTomorrowEvents.keys.map { it.id })
 
-        val requestBody = dogLoverTomorrowEvents.map { (dogLover, calendarEvents) ->
+        val requestBody = dogLoverTomorrowEvents.mapNotNull { (dogLover, calendarEvents) ->
             dogLoversEmails[dogLover.id]?.let { dogLoverEmail ->
-                CalendarEventReminder(
+                CalendarEventReminderDTO(
                         dogLoverEmail,
                         dogLover.nickname,
-                        calendarEvents.map { EventDetails(it, timeZone) }
+                        calendarEvents.map { EventDetailsDTO(it, timeZone) }
                 )
-            }!!
+            }
         }
 
         mailServiceClient.sendCalendarEventsReminderEmail("Bearer $accessToken", requestBody)

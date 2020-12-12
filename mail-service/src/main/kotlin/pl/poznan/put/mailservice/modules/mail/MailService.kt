@@ -1,7 +1,5 @@
 package pl.poznan.put.mailservice.modules.mail
 
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import mu.KotlinLogging
 import org.apache.commons.validator.routines.EmailValidator
 import org.springframework.beans.factory.annotation.Value
@@ -13,11 +11,7 @@ import org.thymeleaf.context.Context
 import org.thymeleaf.spring5.SpringTemplateEngine
 import pl.poznan.put.mailservice.infrastructure.exceptions.InvalidEmailException
 import pl.poznan.put.mailservice.infrastructure.exceptions.MailSendException
-import pl.poznan.put.mailservice.modules.mail.dto.CalendarEventReminder
-import pl.poznan.put.mailservice.modules.mail.dto.EventDetails
-import pl.poznan.put.mailservice.modules.mail.message.CalendarEventsReminderEmail
 import pl.poznan.put.mailservice.modules.mail.message.EmailMessage
-import javax.annotation.PostConstruct
 import javax.mail.internet.MimeMessage
 
 private val logger = KotlinLogging.logger {}
@@ -28,15 +22,6 @@ class MailService(
         private val templateEngine: SpringTemplateEngine,
         @Value("\${spring.mail.username}") private val senderEmail: String
 ) {
-
-    @PostConstruct
-    fun test() {
-        sendEmail(CalendarEventsReminderEmail("adriangl1997@gmail.com", "stickler",
-                listOf(EventDetails("Project",  LocalTime.parse("10:15",
-                        DateTimeFormatter.ofPattern("HH:mm")).toString(), "CJ"),
-                        EventDetails("Walk", LocalTime.parse("15:15",
-                                DateTimeFormatter.ofPattern("HH:mm")).toString(), "Azorek hau hau"))))
-    }
 
     fun sendEmail(emailMessage: EmailMessage) {
         val receiver = emailMessage.receiverEmail
@@ -52,12 +37,15 @@ class MailService(
         }
     }
 
-    fun sendCalendarEventsReminders(calendarEventsReminders: List<CalendarEventReminder>) {
-        calendarEventsReminders.forEach {
-            sendEmail(CalendarEventsReminderEmail(
-                    receiverEmail = it.dogLoverEmail,
-                    nickname = it.dogLoverNickname,
-                    eventDetails = it.eventsDetails))
+    fun sendEmails(emailsMessages: List<EmailMessage>) {
+        emailsMessages.forEach {
+            try {
+                sendEmail(it)
+            } catch (e: InvalidEmailException) {
+                logger.error(e) { "Sending mail to ${it.receiverEmail} failed - invalid email address" }
+            } catch (e: MailSendException) {
+                logger.error(e) { "Sending mail to ${it.receiverEmail} failed" }
+            }
         }
     }
 

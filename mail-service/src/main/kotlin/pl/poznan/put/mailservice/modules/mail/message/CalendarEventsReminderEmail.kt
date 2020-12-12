@@ -1,11 +1,11 @@
 package pl.poznan.put.mailservice.modules.mail.message
 
-import pl.poznan.put.mailservice.modules.mail.dto.EventDetails
+import pl.poznan.put.mailservice.modules.mail.dto.EventDetailsDTO
 
 class CalendarEventsReminderEmail(
     receiverEmail: String,
     nickname: String,
-    eventDetails: List<EventDetails>
+    eventDetails: List<EventDetailsDTO>
 ) : EmailMessage(receiverEmail) {
     override val templateName = "calendar-events-reminder"
     override val subject = "Your tomorrow plans saved in the dogGO application"
