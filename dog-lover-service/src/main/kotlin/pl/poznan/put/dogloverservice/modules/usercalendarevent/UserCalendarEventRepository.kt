@@ -1,7 +1,6 @@
 package pl.poznan.put.dogloverservice.modules.usercalendarevent
 
 import java.time.Instant
-import java.time.LocalDate
 import java.util.UUID
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -12,7 +11,7 @@ import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 @Repository
 interface UserCalendarEventRepository : JpaRepository<UserCalendarEvent, UUID> {
 
-    fun findAllByDogLoverAndDateTimeAfter(dogLover: DogLover, dateTime: Instant): List<UserCalendarEvent>
+    fun findAllByDogLoverOrderByDateTimeAsc(dogLover: DogLover): List<UserCalendarEvent>
 
     fun findByIdAndDogLover(id: UUID, dogLover: DogLover): UserCalendarEvent?
 
