@@ -66,11 +66,6 @@ class UserCalendarIdEmptyException : ServiceException(
         "Calendar event id is empty."
 )
 
-class DogLoverAlreadyOnWalkException : ServiceException(
-        HttpStatus.CONFLICT,
-        "Dog lover is already on walk."
-)
-
 class WalkNotFoundException : ServiceException(
         HttpStatus.NOT_FOUND,
         "Walk not exists for user."

@@ -31,8 +31,7 @@ class WalkController(
 
     @ApiResponses(
             ApiResponse(description = "Walk created.", responseCode = "201"),
-            ApiResponse(description = "Dog lover, dog or map marker doesn't exist.", responseCode = "404"),
-            ApiResponse(description = "Dog lover is already on walk - cannot add another walk.", responseCode = "409"))
+            ApiResponse(description = "Dog lover, dog or map marker doesn't exist.", responseCode = "404"))
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun saveWalk(@RequestBody createWalkDTO: CreateWalkDTO): WalkDTO {

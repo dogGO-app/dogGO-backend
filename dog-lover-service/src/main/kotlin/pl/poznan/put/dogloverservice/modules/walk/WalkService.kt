@@ -3,7 +3,10 @@ package pl.poznan.put.dogloverservice.modules.walk
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import pl.poznan.put.dogloverservice.infrastructure.exceptions.*
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.ActiveWalkNotFoundException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.ArrivedAtDestinationWalkNotFoundException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkNotFoundException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateException
 import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationship
@@ -35,7 +38,6 @@ class WalkService(
 
     @Transactional
     fun saveWalk(createWalkDTO: CreateWalkDTO, dogLoverId: UUID): WalkDTO {
-        validateDogLoverIsNotAlreadyOnWalk(dogLoverId)
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         val dogs = createWalkDTO.dogNames.map { dogService.getDogEntity(it, dogLoverId) }
         val mapMarker = mapMarkerService.getMapMarker(createWalkDTO.mapMarker)
@@ -118,11 +120,6 @@ class WalkService(
                         WalkStatus.activeWalkStatuses()
                 )
                 ?: throw ActiveWalkNotFoundException()
-    }
-
-    private fun validateDogLoverIsNotAlreadyOnWalk(dogLoverId: UUID) {
-        if (walkRepository.existsByDogLoverIdAndWalkStatus(dogLoverId, ONGOING))
-            throw DogLoverAlreadyOnWalkException()
     }
 
     private fun getWalkByIdAndDogLoverId(walkId: UUID, dogLoverId: UUID): Walk {
