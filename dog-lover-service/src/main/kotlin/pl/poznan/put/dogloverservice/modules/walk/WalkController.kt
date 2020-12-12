@@ -1,10 +1,12 @@
 package pl.poznan.put.dogloverservice.modules.walk
 
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import pl.poznan.put.dogloverservice.infrastructure.commons.AuthCommons.getCurrentUserId
+import pl.poznan.put.dogloverservice.modules.walk.dto.CreateWalkDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
 import java.util.*
@@ -22,14 +24,18 @@ class WalkController(
         return walkService.getCompletedWalksHistory(dogLoverId = getCurrentUserId())
     }
 
+    @GetMapping("/dog-lovers-in-location/{mapMarkerId}")
+    fun getOtherDogLoversInLocation(@PathVariable mapMarkerId: UUID): List<DogLoverInLocationDTO> {
+        return walkService.getOtherDogLoversInLocation(mapMarkerId, getCurrentUserId())
+    }
+
     @ApiResponses(
             ApiResponse(description = "Walk created.", responseCode = "201"),
-            ApiResponse(description = "Dog lover, dog or map marker doesn't exist.", responseCode = "404"),
-            ApiResponse(description = "Dog lover is already on walk - cannot add another walk.", responseCode = "409"))
+            ApiResponse(description = "Dog lover, dog or map marker doesn't exist.", responseCode = "404"))
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun saveWalk(@RequestBody walkDTO: WalkDTO): WalkDTO {
-        return walkService.saveWalk(walkDTO, getCurrentUserId())
+    fun saveWalk(@RequestBody createWalkDTO: CreateWalkDTO): WalkDTO {
+        return walkService.saveWalk(createWalkDTO, getCurrentUserId())
     }
 
     @ApiResponses(
@@ -41,8 +47,18 @@ class WalkController(
         return walkService.updateWalkStatus(walkId, walkStatus, getCurrentUserId())
     }
 
-    @GetMapping("/dog-lovers-in-location/{mapMarkerId}")
-    fun getOtherDogLoversInLocation(@PathVariable mapMarkerId: UUID): List<DogLoverInLocationDTO> {
-        return walkService.getOtherDogLoversInLocation(mapMarkerId, getCurrentUserId())
+    @Operation(
+            summary = "Keep walk in active status",
+            description = "This request has to be sent every 30 minutes during walk to keep it " +
+                    "in ONGOING or ARRIVED_AT_DESTINATION status. If the request is not sent in a 30 minutes " +
+                    "timespan, the walk will change its status to either CANCELED or LEFT_DESTINATION automatically.",
+            responses = [
+                ApiResponse(description = "Ok.", responseCode = "200"),
+                ApiResponse(description = "Active dog lover walk not found.", responseCode = "404")
+            ]
+    )
+    @PutMapping("/active")
+    fun keepWalkActive() {
+        walkService.keepWalkActive(dogLoverId = getCurrentUserId())
     }
 }

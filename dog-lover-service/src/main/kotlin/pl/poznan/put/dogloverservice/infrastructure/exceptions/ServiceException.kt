@@ -1,10 +1,10 @@
 package pl.poznan.put.dogloverservice.infrastructure.exceptions
 
-import java.time.Instant
-import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
+import java.time.Instant
+import java.util.*
 
 open class ServiceException(
         httpStatus: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
@@ -66,11 +66,6 @@ class UserCalendarIdEmptyException : ServiceException(
         "Calendar event id is empty."
 )
 
-class DogLoverAlreadyOnWalkException : ServiceException(
-        HttpStatus.CONFLICT,
-        "Dog lover is already on walk."
-)
-
 class WalkNotFoundException : ServiceException(
         HttpStatus.NOT_FOUND,
         "Walk not exists for user."
@@ -79,6 +74,11 @@ class WalkNotFoundException : ServiceException(
 class ArrivedAtDestinationWalkNotFoundException : ServiceException(
         HttpStatus.NOT_FOUND,
         "Walk with ARRIVED_AT_DESTINATION status not found."
+)
+
+class ActiveWalkNotFoundException : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Active dog lover walk not found."
 )
 
 class WalkUpdateException : ServiceException(
@@ -114,6 +114,11 @@ class DogLoverRelationshipNotExists : ServiceException(
 class DogLoverLikesCountLowerThanZeroException : ServiceException(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Likes count cannot be lower than 0."
+)
+
+class DogLoverIdNullException : ServiceException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Dog lover ID is null."
 )
 
 class AccessTokenException : ServiceException(

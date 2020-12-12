@@ -3,6 +3,7 @@ object Versions {
     const val kotest = "4.3.1"
     const val mockK = "1.10.2"
     const val springDoc = "1.5.0"
+    const val caffeine = "2.8.8"
 }
 
 object Libs {
