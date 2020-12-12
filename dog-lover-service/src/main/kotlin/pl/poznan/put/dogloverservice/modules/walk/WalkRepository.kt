@@ -17,8 +17,6 @@ interface WalkRepository : JpaRepository<Walk, UUID> {
 
     fun findFirstByDogLoverIdAndWalkStatusInOrderByCreatedAtDesc(dogLoverId: UUID, walkStatuses: Set<WalkStatus>): Walk?
 
-    fun existsByDogLoverIdAndWalkStatus(dogLoverId: UUID, walkStatus: WalkStatus): Boolean
-
     fun findByIdAndDogLoverId(id: UUID, dogLoverId: UUID): Walk?
 
     fun findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(mapMarkerId: UUID,

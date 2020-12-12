@@ -50,8 +50,8 @@ class WalkController(
     @Operation(
             summary = "Keep walk in active status",
             description = "This request has to be sent every 30 minutes during walk to keep it " +
-                    "in ONGOING or ARRIVED_AT_DESTINATION status. If the request is not sent in a 30 minutes timespan," +
-                    "it will change its status to either CANCELED or LEFT_DESTINATION automatically.",
+                    "in ONGOING or ARRIVED_AT_DESTINATION status. If the request is not sent in a 30 minutes " +
+                    "timespan, the walk will change its status to either CANCELED or LEFT_DESTINATION automatically.",
             responses = [
                 ApiResponse(description = "Ok.", responseCode = "200"),
                 ApiResponse(description = "Active dog lover walk not found.", responseCode = "404")
