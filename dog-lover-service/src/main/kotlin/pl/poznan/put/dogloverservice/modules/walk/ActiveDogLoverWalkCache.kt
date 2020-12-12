@@ -2,6 +2,7 @@ package pl.poznan.put.dogloverservice.modules.walk
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.RemovalListener
+import com.github.benmanes.caffeine.cache.Scheduler
 import org.springframework.stereotype.Component
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverIdNullException
 import java.time.Duration
@@ -23,6 +24,7 @@ class ActiveDogLoverWalkCache(
                     )
                 }
             })
+            .scheduler(Scheduler.systemScheduler())
             .build<DogLoverId, WalkId>()
 
     fun put(dogLoverId: DogLoverId, walkId: WalkId) {
