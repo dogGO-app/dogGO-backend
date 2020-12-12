@@ -118,5 +118,5 @@ class DogLoverLikesCountLowerThanZeroException : ServiceException(
 
 class AccessTokenException : ServiceException(
         HttpStatus.INTERNAL_SERVER_ERROR,
-        "Cannot get access token"
+        "Cannot get access token."
 )

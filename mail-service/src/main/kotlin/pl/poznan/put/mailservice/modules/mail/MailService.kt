@@ -37,15 +37,13 @@ class MailService(
         }
     }
 
-    fun sendEmails(emailsMessages: List<EmailMessage>) {
-        emailsMessages.forEach {
+    fun sendEmails(emailMessages: List<EmailMessage>) {
+        emailMessages.forEach {
             try {
                 sendEmail(it)
             } catch (e: InvalidEmailException) {
                 logger.error(e) { "Sending mail to ${it.receiverEmail} failed - invalid email address" }
-            } catch (e: MailSendException) {
-                logger.error(e) { "Sending mail to ${it.receiverEmail} failed" }
-            }
+            } catch (e: MailSendException) { }
         }
     }
 

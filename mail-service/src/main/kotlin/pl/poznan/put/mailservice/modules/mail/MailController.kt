@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import pl.poznan.put.mailservice.modules.mail.dto.CalendarEventReminderDTO
@@ -28,10 +27,7 @@ class MailController(
             ApiResponse(description = "Sent successfully.", responseCode = "200"),
             ApiResponse(description = "Sending mail failed.", responseCode = "500"))
     @PostMapping("/calendar-events-reminder")
-    fun sendCalendarEventsReminderEmail(
-            @RequestHeader(value = "Authorization") token: String,
-            @RequestBody calendarEventsReminders: List<CalendarEventReminderDTO>
-    ) {
+    fun sendCalendarEventsReminderEmails(@RequestBody calendarEventsReminders: List<CalendarEventReminderDTO>) {
         mailService.sendEmails(calendarEventsReminders.map {
             CalendarEventsReminderEmail(
                     receiverEmail = it.dogLoverEmail,

@@ -10,7 +10,7 @@ import pl.poznan.put.dogloverservice.modules.usercalendarevent.dto.CalendarEvent
 interface MailServiceClient {
 
     @PostMapping("/calendar-events-reminder")
-    fun sendCalendarEventsReminderEmail(
+    fun sendCalendarEventsReminderEmails(
             @RequestHeader(value = "Authorization") token: String,
             @RequestBody calendarEventsReminders: List<CalendarEventReminderDTO>
     )

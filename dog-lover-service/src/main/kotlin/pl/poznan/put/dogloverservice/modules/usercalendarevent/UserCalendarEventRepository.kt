@@ -19,7 +19,7 @@ interface UserCalendarEventRepository : JpaRepository<UserCalendarEvent, UUID> {
 
     fun existsByDateTimeAndDogLoverAndDogAndIdIsNot(dateTime: Instant, dogLover: DogLover, dog: Dog, eventId: UUID): Boolean
 
-    @Query(value = "SELECT * FROM user_calendar e WHERE DATE(e.date_time) = CURRENT_DATE + 1 ORDER BY e.date_time ASC",
+    @Query(value = "SELECT * FROM user_calendar e WHERE DATE(e.date_time) = CURRENT_DATE + 1 ORDER BY e.date_time",
             nativeQuery = true)
     fun findAllTomorrowEvents(): List<UserCalendarEvent>
 }

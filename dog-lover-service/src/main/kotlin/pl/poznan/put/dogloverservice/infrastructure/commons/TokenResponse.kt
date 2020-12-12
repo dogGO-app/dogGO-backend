@@ -7,15 +7,15 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class TokenResponse (
 
     @JsonProperty("access_token")
-    val accessToken: String?,
+    val accessToken: String,
 
     @JsonProperty("refresh_token")
-    val refreshToken: String?,
+    val refreshToken: String,
 
     @JsonProperty("expires_in")
-    val expiresIn: Int?,
+    val expiresIn: Int,
 
     @JsonProperty("scope")
-    val scope: String?
+    val scope: String
 
 )

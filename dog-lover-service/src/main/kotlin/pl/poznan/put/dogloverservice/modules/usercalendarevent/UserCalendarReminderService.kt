@@ -39,6 +39,6 @@ class UserCalendarReminderService(
             }
         }
 
-        mailServiceClient.sendCalendarEventsReminderEmail("Bearer $accessToken", requestBody)
+        mailServiceClient.sendCalendarEventsReminderEmails("Bearer $accessToken", requestBody)
     }
 }
