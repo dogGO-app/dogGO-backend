@@ -1,5 +1,6 @@
 package pl.poznan.put.authservice.modules.user
 
+import java.util.UUID
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -40,6 +41,9 @@ class UserService(
 
         sendUserActivationMail(userEmail)
     }
+
+    fun getUsersEmails(usersIds: List<UUID>) =
+            keycloakService.getUsersEmails(usersIds)
 
     private fun sendUserActivationMail(userEmail: String) {
         val activationCode = userActivationCodeCache.get(userEmail)

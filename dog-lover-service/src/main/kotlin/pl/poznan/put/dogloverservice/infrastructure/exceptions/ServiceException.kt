@@ -120,3 +120,8 @@ class DogLoverIdNullException : ServiceException(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Dog lover ID is null."
 )
+
+class AccessTokenException : ServiceException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Cannot get access token."
+)

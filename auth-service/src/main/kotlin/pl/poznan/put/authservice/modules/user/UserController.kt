@@ -2,9 +2,17 @@ package pl.poznan.put.authservice.modules.user
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 import pl.poznan.put.authservice.modules.user.dto.UserActivationDTO
 import pl.poznan.put.authservice.modules.user.dto.UserDTO
 import javax.validation.Valid
@@ -40,5 +48,11 @@ class UserController(
     @PostMapping("/resend-activation-mail")
     fun resendUserActivationMail(@RequestParam userEmail: String) {
         userService.resendUserActivationMail(userEmail)
+    }
+
+    @ApiResponses(ApiResponse(description = "Ok.", responseCode = "200"))
+    @GetMapping("/emails")
+    fun getUsersEmails(@RequestParam usersIds: List<UUID>): Map<UUID, String> {
+        return userService.getUsersEmails(usersIds)
     }
 }
