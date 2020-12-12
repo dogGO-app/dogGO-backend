@@ -1,10 +1,10 @@
 package pl.poznan.put.dogloverservice.infrastructure.exceptions
 
-import java.time.Instant
-import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.RelationshipStatus
+import java.time.Instant
+import java.util.*
 
 open class ServiceException(
         httpStatus: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
@@ -81,6 +81,11 @@ class ArrivedAtDestinationWalkNotFoundException : ServiceException(
         "Walk with ARRIVED_AT_DESTINATION status not found."
 )
 
+class ActiveWalkNotFoundException : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Active dog lover walk not found."
+)
+
 class WalkUpdateException : ServiceException(
         HttpStatus.FORBIDDEN,
         "Cannot update walk status - new status is forbidden."
@@ -114,4 +119,9 @@ class DogLoverRelationshipNotExists : ServiceException(
 class DogLoverLikesCountLowerThanZeroException : ServiceException(
         HttpStatus.INTERNAL_SERVER_ERROR,
         "Likes count cannot be lower than 0."
+)
+
+class DogLoverIdNotFoundException : ServiceException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "Dog lover ID not found."
 )

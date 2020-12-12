@@ -3,10 +3,7 @@ package pl.poznan.put.dogloverservice.modules.walk
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import pl.poznan.put.dogloverservice.infrastructure.exceptions.ArrivedAtDestinationWalkNotFoundException
-import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverAlreadyOnWalkException
-import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkNotFoundException
-import pl.poznan.put.dogloverservice.infrastructure.exceptions.WalkUpdateException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.*
 import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationship
@@ -22,6 +19,7 @@ import java.util.*
 class WalkService(
         @Value("\${self.time-zone}") private val timeZone: String,
         private val walkRepository: WalkRepository,
+        private val activeDogLoverWalkCache: ActiveDogLoverWalkCache,
         private val dogLoverService: DogLoverService,
         private val dogService: DogService,
         private val mapMarkerService: MapMarkerService,
@@ -47,9 +45,10 @@ class WalkService(
                 mapMarker = mapMarker,
                 walkStatus = ONGOING
         )
-        
-        walkRepository.completeDogLoverStartedWalks(dogLover)
+
+        walkRepository.completeDogLoverStartedWalks(dogLoverId)
         return WalkDTO(walk = walkRepository.save(walk), timeZone = timeZone)
+                .also { activeDogLoverWalkCache.put(dogLoverId, walk.id) }
     }
 
     fun updateWalkStatus(walkId: UUID, walkStatus: WalkStatus, dogLoverId: UUID): WalkDTO {
@@ -61,6 +60,12 @@ class WalkService(
                 walk = walkRepository.save(Walk(walk, walkStatus)),
                 timeZone = timeZone
         )
+                .also { activeDogLoverWalkCache.put(dogLoverId, walkId) }
+    }
+
+    fun keepWalkActive(dogLoverId: UUID) {
+        val activeWalk = getActiveWalkByDogLoverId(dogLoverId)
+        activeDogLoverWalkCache.put(dogLoverId, activeWalk.id)
     }
 
     fun getOtherDogLoversInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<DogLoverInLocationDTO> {
@@ -94,9 +99,18 @@ class WalkService(
     }
 
     fun getArrivedAtDestinationWalkByDogLoverId(dogLoverId: UUID): Walk {
-        // TODO Create mechanism which ensures there is always at most one record with ARRIVED_AT_DESTINATION status
-        return walkRepository.findFirstByDogLoverIdAndWalkStatusOrderByCreatedAtDesc(dogLoverId, ARRIVED_AT_DESTINATION)
+        return walkRepository
+                .findFirstByDogLoverIdAndWalkStatusInOrderByCreatedAtDesc(dogLoverId, setOf(ARRIVED_AT_DESTINATION))
                 ?: throw ArrivedAtDestinationWalkNotFoundException()
+    }
+
+    private fun getActiveWalkByDogLoverId(dogLoverId: UUID): Walk {
+        return walkRepository
+                .findFirstByDogLoverIdAndWalkStatusInOrderByCreatedAtDesc(
+                        dogLoverId,
+                        setOf(ONGOING, ARRIVED_AT_DESTINATION)
+                )
+                ?: throw ActiveWalkNotFoundException()
     }
 
     private fun validateDogLoverIsNotAlreadyOnWalk(dogLoverId: UUID) {

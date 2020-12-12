@@ -22,6 +22,11 @@ class WalkController(
         return walkService.getCompletedWalksHistory(dogLoverId = getCurrentUserId())
     }
 
+    @GetMapping("/dog-lovers-in-location/{mapMarkerId}")
+    fun getOtherDogLoversInLocation(@PathVariable mapMarkerId: UUID): List<DogLoverInLocationDTO> {
+        return walkService.getOtherDogLoversInLocation(mapMarkerId, getCurrentUserId())
+    }
+
     @ApiResponses(
             ApiResponse(description = "Walk created.", responseCode = "201"),
             ApiResponse(description = "Dog lover, dog or map marker doesn't exist.", responseCode = "404"),
@@ -41,8 +46,11 @@ class WalkController(
         return walkService.updateWalkStatus(walkId, walkStatus, getCurrentUserId())
     }
 
-    @GetMapping("/dog-lovers-in-location/{mapMarkerId}")
-    fun getOtherDogLoversInLocation(@PathVariable mapMarkerId: UUID): List<DogLoverInLocationDTO> {
-        return walkService.getOtherDogLoversInLocation(mapMarkerId, getCurrentUserId())
+    @ApiResponses(
+            ApiResponse(description = "Ok.", responseCode = "200"),
+            ApiResponse(description = "Active dog lover walk not found.", responseCode = "404"))
+    @PutMapping("/active")
+    fun keepWalkActive() {
+        walkService.keepWalkActive(dogLoverId = getCurrentUserId())
     }
 }

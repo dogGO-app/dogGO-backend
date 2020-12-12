@@ -1,9 +1,11 @@
 package pl.poznan.put.dogloverservice.modules.walk
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
 import java.util.*
 
@@ -13,7 +15,7 @@ interface WalkRepository : JpaRepository<Walk, UUID> {
     fun findAllByDogLoverAndWalkStatusOrderByCreatedAtAsc(dogLover: DogLover,
                                                           walkStatus: WalkStatus): List<Walk>
 
-    fun findFirstByDogLoverIdAndWalkStatusOrderByCreatedAtDesc(dogLoverId: UUID, walkStatus: WalkStatus): Walk?
+    fun findFirstByDogLoverIdAndWalkStatusInOrderByCreatedAtDesc(dogLoverId: UUID, walkStatuses: Set<WalkStatus>): Walk?
 
     fun existsByDogLoverIdAndWalkStatus(dogLoverId: UUID, walkStatus: WalkStatus): Boolean
 
@@ -27,6 +29,8 @@ interface WalkRepository : JpaRepository<Walk, UUID> {
                                                              walkStatuses: List<WalkStatus>,
                                                              dogLoverIds: List<UUID>): List<Walk>
 
+    @Transactional
+    @Modifying
     @Query(
             value = """
                 UPDATE Walk w
@@ -35,8 +39,8 @@ interface WalkRepository : JpaRepository<Walk, UUID> {
                                        ELSE 'LEFT_DESTINATION'
                     END
                 WHERE w.walkStatus IN ('ONGOING', 'ARRIVED_AT_DESTINATION')
-                  AND w.dogLover = :dogLover 
+                  AND w.dogLover.id = :dogLoverId 
             """
     )
-    fun completeDogLoverStartedWalks(@Param("dogLover") dogLover: DogLover)
+    fun completeDogLoverStartedWalks(@Param("dogLoverId") dogLoverId: UUID)
 }
