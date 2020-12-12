@@ -1,5 +1,6 @@
 package pl.poznan.put.authservice.modules.keycloak
 
+import java.util.UUID
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder
 import org.keycloak.admin.client.Keycloak
 import org.keycloak.admin.client.KeycloakBuilder
@@ -36,18 +37,18 @@ final class KeycloakClient(
             .build()
 
     fun createUser(userRepresentation: UserRepresentation): Response =
-            getUsers().create(userRepresentation)
+            getUsersResource().create(userRepresentation)
 
     fun setUserPassword(userId: String, password: String) {
         val passwordCredential = createPasswordCredential(password)
-        getUser(userId).resetPassword(passwordCredential)
+        getUserResource(userId).resetPassword(passwordCredential)
     }
 
     fun setUserStatus(userEmail: String, enabled: Boolean, emailVerified: Boolean) {
         val userRepresentation = getUserByEmail(userEmail)
                 ?: throw UserWithGivenEmailNotFoundException(userEmail)
 
-        val userResource = getUser(userRepresentation.id)
+        val userResource = getUserResource(userRepresentation.id)
         userResource.update(userRepresentation.apply {
             isEnabled = enabled
             isEmailVerified = emailVerified
@@ -55,16 +56,19 @@ final class KeycloakClient(
     }
 
     fun getUserByEmail(email: String): UserRepresentation? =
-            getUsers().search(email, 0, 1).firstOrNull()
+            getUsersResource().search(email, 0, 1).firstOrNull()
 
-    private fun getMasterRealm(): RealmResource =
+    fun getUserEmail(id: UUID): String =
+            getUserResource(id.toString()).toRepresentation().email
+
+    private fun getMasterRealmResource(): RealmResource =
             client.realm(MASTER_REALM_NAME)
 
-    private fun getUsers(): UsersResource =
-            getMasterRealm().users()
+    private fun getUsersResource(): UsersResource =
+            getMasterRealmResource().users()
 
-    private fun getUser(id: String): UserResource =
-            getUsers().get(id)
+    private fun getUserResource(id: String): UserResource =
+            getUsersResource().get(id)
 
     private fun createPasswordCredential(password: String) =
             CredentialRepresentation().apply {

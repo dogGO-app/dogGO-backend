@@ -22,6 +22,7 @@ class MailService(
         private val templateEngine: SpringTemplateEngine,
         @Value("\${spring.mail.username}") private val senderEmail: String
 ) {
+
     fun sendEmail(emailMessage: EmailMessage) {
         val receiver = emailMessage.receiverEmail
         validateEmail(receiver)
@@ -33,6 +34,16 @@ class MailService(
         } catch (e: MailException) {
             logger.error(e) { "Sending mail to $receiver failed" }
             throw MailSendException(receiver)
+        }
+    }
+
+    fun sendEmails(emailMessages: List<EmailMessage>) {
+        emailMessages.forEach {
+            try {
+                sendEmail(it)
+            } catch (e: InvalidEmailException) {
+                logger.error(e) { "Sending mail to ${it.receiverEmail} failed - invalid email address" }
+            } catch (e: MailSendException) { }
         }
     }
 

@@ -1,5 +1,6 @@
 package pl.poznan.put.authservice.modules.keycloak
 
+import java.util.UUID
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -35,6 +36,10 @@ class KeycloakService(
         val user = keycloakClient.getUserByEmail(userEmail)
                 ?: throw UserWithGivenEmailNotFoundException(userEmail)
         return user.isEmailVerified
+    }
+
+    fun getUsersEmails(ids: List<UUID>): Map<UUID, String> {
+        return ids.associateWith { keycloakClient.getUserEmail(it) }
     }
 
     private fun UserDTO.toUserRepresentation() = UserRepresentation().apply {

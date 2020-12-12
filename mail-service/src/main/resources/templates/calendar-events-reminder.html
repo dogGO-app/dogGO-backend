@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<table width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+    <tr>
+        <p style="font-style: italic;font-size: 25px; margin: 0; line-height: 40px; font-family: 'Lato', sans-serif; color: #000000; text-align: left; padding-bottom: 0.5%;">
+            <span>Hello,</span>
+            <span th:text="${nickname}">nickname</span><span>!</span>
+        </p>
+    </tr>
+
+    <tr bgcolor="ffffff">
+        <td align="left" height="50">
+            <p style="font-style: italic;font-size: 20px; margin: 0; line-height: 40px; font-family: 'Lato',sans-serif; color: #000000; text-align: left;">
+                Don't forget your plans for tomorrow!
+                Below we've listed events that you planned with your buddies:
+            </p>
+        </td>
+    </tr>
+
+    <tr th:each="events, event : ${eventsDetails}">
+        <ul>
+            <li>
+                <p style="font-style: italic;font-size: 15px; margin: 0; line-height: 20px; font-family: 'Lato',sans-serif; color: #000000; text-align: left;">
+                    <span th:text="${events.description}"> events.description</span><span> with </span>
+                    <span th:text="${events.dogName}"> events.dogName</span><span> at </span>
+                    <span th:text="${events.time}"> events.time</span>
+                </p>
+            </li>
+        </ul>
+    </tr>
+
+    <tr>
+        <td align="left" height="50">
+            <p style="font-style: italic;font-size: 15px; line-height: 15px; margin: 0; font-family: 'Lato',sans-serif; text-align: left; color: #000000; padding-top: 2%">
+                Best regards, <br/><br/>
+                dogGO team
+            </p>
+    </tr>
+    <p style="font-style: italic;font-size: 13px; margin: 0; line-height: 15px; font-family: 'Lato', sans-serif; color: #0D4260; text-align: left; padding-top: 3%">
+        The message was generated automatically. Please do not reply to it. <br/>
+        <br/> If this e-mail was sent to you by mistake - ignore the above message. </p>
+    </tbody>
+</table>
