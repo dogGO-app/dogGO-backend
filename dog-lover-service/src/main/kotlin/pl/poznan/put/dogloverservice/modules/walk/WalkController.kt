@@ -1,5 +1,6 @@
 package pl.poznan.put.dogloverservice.modules.walk
 
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.HttpStatus
@@ -46,9 +47,16 @@ class WalkController(
         return walkService.updateWalkStatus(walkId, walkStatus, getCurrentUserId())
     }
 
-    @ApiResponses(
-            ApiResponse(description = "Ok.", responseCode = "200"),
-            ApiResponse(description = "Active dog lover walk not found.", responseCode = "404"))
+    @Operation(
+            summary = "Keep walk in active status",
+            description = "This request has to be sent every 30 minutes during walk to keep it " +
+                    "in ONGOING or ARRIVED_AT_DESTINATION status. If the request is not sent in a 30 minutes timespan," +
+                    "it will change its status to either CANCELED or LEFT_DESTINATION automatically.",
+            responses = [
+                ApiResponse(description = "Ok.", responseCode = "200"),
+                ApiResponse(description = "Active dog lover walk not found.", responseCode = "404")
+            ]
+    )
     @PutMapping("/active")
     fun keepWalkActive() {
         walkService.keepWalkActive(dogLoverId = getCurrentUserId())
