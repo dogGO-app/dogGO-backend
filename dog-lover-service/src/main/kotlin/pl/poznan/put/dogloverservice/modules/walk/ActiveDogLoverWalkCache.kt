@@ -3,7 +3,7 @@ package pl.poznan.put.dogloverservice.modules.walk
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.RemovalListener
 import org.springframework.stereotype.Component
-import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverIdNotFoundException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverIdNullException
 import java.time.Duration
 import java.util.*
 
@@ -19,7 +19,7 @@ class ActiveDogLoverWalkCache(
             .removalListener(RemovalListener<DogLoverId, WalkId> { dogLoverId, _, cause ->
                 if (cause.wasEvicted()) {
                     walkRepository.completeDogLoverStartedWalks(
-                            dogLoverId = dogLoverId ?: throw DogLoverIdNotFoundException()
+                            dogLoverId = dogLoverId ?: throw DogLoverIdNullException()
                     )
                 }
             })

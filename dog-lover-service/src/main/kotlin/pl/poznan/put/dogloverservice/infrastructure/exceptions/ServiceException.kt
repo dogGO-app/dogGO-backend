@@ -121,7 +121,7 @@ class DogLoverLikesCountLowerThanZeroException : ServiceException(
         "Likes count cannot be lower than 0."
 )
 
-class DogLoverIdNotFoundException : ServiceException(
+class DogLoverIdNullException : ServiceException(
         HttpStatus.INTERNAL_SERVER_ERROR,
-        "Dog lover ID not found."
+        "Dog lover ID is null."
 )
