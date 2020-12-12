@@ -60,7 +60,11 @@ class WalkService(
                 walk = walkRepository.save(Walk(walk, walkStatus)),
                 timeZone = timeZone
         )
-                .also { activeDogLoverWalkCache.put(dogLoverId, walkId) }
+                .also {
+                    if (walkStatus in WalkStatus.activeWalkStatuses()) {
+                        activeDogLoverWalkCache.put(dogLoverId, walkId)
+                    }
+                }
     }
 
     fun keepWalkActive(dogLoverId: UUID) {
@@ -79,7 +83,9 @@ class WalkService(
         }
     }
 
-    fun getDogLoversInLocations(mapMarkerIds: List<UUID>, dogLoverRelationships: List<DogLoverRelationship>
+    fun getDogLoversInLocations(
+            mapMarkerIds: List<UUID>,
+            dogLoverRelationships: List<DogLoverRelationship>
     ): Map<UUID, List<DogLoverInLocationDTO>> {
         val walks = walkRepository.findAllByMapMarkerIdInAndWalkStatusInAndDogLoverIdIn(
                 mapMarkerIds,
@@ -108,7 +114,7 @@ class WalkService(
         return walkRepository
                 .findFirstByDogLoverIdAndWalkStatusInOrderByCreatedAtDesc(
                         dogLoverId,
-                        setOf(ONGOING, ARRIVED_AT_DESTINATION)
+                        WalkStatus.activeWalkStatuses()
                 )
                 ?: throw ActiveWalkNotFoundException()
     }
