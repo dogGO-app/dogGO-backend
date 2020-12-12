@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import pl.poznan.put.dogloverservice.infrastructure.commons.AuthCommons.getCurrentUserId
+import pl.poznan.put.dogloverservice.modules.walk.dto.CreateWalkDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
 import java.util.*
@@ -34,8 +35,8 @@ class WalkController(
             ApiResponse(description = "Dog lover is already on walk - cannot add another walk.", responseCode = "409"))
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun saveWalk(@RequestBody walkDTO: WalkDTO): WalkDTO {
-        return walkService.saveWalk(walkDTO, getCurrentUserId())
+    fun saveWalk(@RequestBody createWalkDTO: CreateWalkDTO): WalkDTO {
+        return walkService.saveWalk(createWalkDTO, getCurrentUserId())
     }
 
     @ApiResponses(

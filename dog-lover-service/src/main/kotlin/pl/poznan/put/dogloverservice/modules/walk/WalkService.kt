@@ -10,6 +10,7 @@ import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelati
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.DogLoverRelationshipService
 import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
 import pl.poznan.put.dogloverservice.modules.walk.WalkStatus.*
+import pl.poznan.put.dogloverservice.modules.walk.dto.CreateWalkDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
 import java.time.Instant
@@ -33,11 +34,11 @@ class WalkService(
     }
 
     @Transactional
-    fun saveWalk(walkDTO: WalkDTO, dogLoverId: UUID): WalkDTO {
+    fun saveWalk(createWalkDTO: CreateWalkDTO, dogLoverId: UUID): WalkDTO {
         validateDogLoverIsNotAlreadyOnWalk(dogLoverId)
         val dogLover = dogLoverService.getDogLover(dogLoverId)
-        val dogs = walkDTO.dogNames.map { dogService.getDogEntity(it, dogLoverId) }
-        val mapMarker = mapMarkerService.getMapMarker(walkDTO.mapMarker)
+        val dogs = createWalkDTO.dogNames.map { dogService.getDogEntity(it, dogLoverId) }
+        val mapMarker = mapMarkerService.getMapMarker(createWalkDTO.mapMarker)
         val walk = Walk(
                 createdAt = Instant.now(),
                 dogLover = dogLover,

@@ -8,7 +8,7 @@ import java.util.*
 
 data class WalkDTO(
 
-        val id: UUID? = null,
+        val id: UUID,
 
         val createdAt: LocalDateTime,
 
@@ -16,7 +16,7 @@ data class WalkDTO(
 
         val mapMarker: UUID,
 
-        val walkStatus: WalkStatus?
+        val walkStatus: WalkStatus
 
 ) {
 
