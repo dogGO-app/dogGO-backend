@@ -33,7 +33,7 @@ class UserCalendarEventService(
         validateDateTimeIsNotInPast(dateTime)
 
         val dogLover = dogLoverService.getDogLover(dogLoverId)
-        val dog = dogService.getDogEntity(userCalendarEventDTO.dogName, dogLoverId)
+        val dog = dogService.getDog(userCalendarEventDTO.dogName, dogLoverId)
         validateEventNotAlreadyExists(dateTime, dogLover, dog)
         val userCalendarEvent = UserCalendarEvent(
                 dateTime = dateTime,
@@ -52,7 +52,7 @@ class UserCalendarEventService(
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         val calendarEvent = getCalendarEventEntity(userCalendarEventDTO.id
                 ?: throw UserCalendarIdEmptyException(), dogLover)
-        val dog = dogService.getDogEntity(userCalendarEventDTO.dogName, dogLoverId)
+        val dog = dogService.getDog(userCalendarEventDTO.dogName, dogLoverId)
         validateEventNotAlreadyExists(dateTime, dogLover, dog, calendarEvent.id)
         val updatedCalendarEvent = UserCalendarEvent(
                 id = calendarEvent.id,

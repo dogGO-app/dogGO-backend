@@ -51,12 +51,11 @@ class DogService(
         return dogRepository.findAllByDogLoverId(dogLoverId)
     }
 
-    fun getDog(name: String, dogLoverId: UUID): DogDTO {
-        return DogDTO(dogRepository.findByNameAndDogLoverId(name, dogLoverId)
-                ?: throw DogNotFoundException(name, dogLoverId))
+    fun getDogInfo(name: String, dogLoverId: UUID): DogDTO {
+        return DogDTO(getDog(name, dogLoverId))
     }
 
-    fun getDogEntity(name: String, dogLoverId: UUID): Dog {
+    fun getDog(name: String, dogLoverId: UUID): Dog {
         return dogRepository.findByNameAndDogLoverId(name, dogLoverId)
                 ?: throw DogNotFoundException(name, dogLoverId)
     }

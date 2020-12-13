@@ -39,7 +39,7 @@ class WalkService(
     @Transactional
     fun saveWalk(createWalkDTO: CreateWalkDTO, dogLoverId: UUID): WalkDTO {
         val dogLover = dogLoverService.getDogLover(dogLoverId)
-        val dogs = createWalkDTO.dogNames.map { dogService.getDogEntity(it, dogLoverId) }
+        val dogs = createWalkDTO.dogNames.map { dogService.getDog(it, dogLoverId) }
         val mapMarker = mapMarkerService.getMapMarker(createWalkDTO.mapMarker)
         val walk = Walk(
                 createdAt = Instant.now(),

@@ -3,14 +3,7 @@ package pl.poznan.put.dogloverservice.modules.dog
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import pl.poznan.put.dogloverservice.infrastructure.commons.AuthCommons.getCurrentUserId
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogDTO
 
@@ -43,7 +36,7 @@ class DogController(
             ApiResponse(description = "Dog doesn't exist.", responseCode = "404"))
     @GetMapping("/{name}")
     fun getDog(@PathVariable name: String): DogDTO {
-        return dogService.getDog(name, getCurrentUserId())
+        return dogService.getDogInfo(name, getCurrentUserId())
     }
 
     @ApiResponses(
