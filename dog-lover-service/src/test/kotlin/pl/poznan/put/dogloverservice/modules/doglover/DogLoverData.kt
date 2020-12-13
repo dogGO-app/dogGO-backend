@@ -22,4 +22,24 @@ object DogLoverData {
                 age = 40,
                 hobby = "Testing and riding bike"
         )
+
+    val andrew
+        get() = DogLover(
+                id = UUID.fromString("2135274f-6b3d-46a0-a1a2-c4432c67d409"),
+                firstName = "Andrew",
+                lastName = "Smith",
+                nickname = "an.smith",
+                age = 33,
+                hobby = "Hiking"
+        )
+
+    val tom
+        get() = DogLover(
+                id = UUID.fromString("6895b8e9-76ed-40cd-9e53-cec61a9571b5"),
+                firstName = "Tom",
+                lastName = "Smith",
+                nickname = "tom.smith",
+                age = 31,
+                hobby = "Skiing"
+        )
 }

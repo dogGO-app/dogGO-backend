@@ -51,7 +51,7 @@ class WalkService(
 
         walkRepository.completeDogLoverStartedWalks(dogLoverId)
         return WalkDTO(walk = walkRepository.save(walk), timeZone = timeZone)
-                .also { activeDogLoverWalkCache.put(dogLoverId, walk.id) }
+                .also { activeDogLoverWalkCache.put(dogLoverId, it.id) }
     }
 
     fun updateWalkStatus(walkId: UUID, walkStatus: WalkStatus, dogLoverId: UUID): WalkDTO {
@@ -65,7 +65,7 @@ class WalkService(
         )
                 .also {
                     if (walkStatus in WalkStatus.activeWalkStatuses()) {
-                        activeDogLoverWalkCache.put(dogLoverId, walkId)
+                        activeDogLoverWalkCache.put(dogLoverId, it.id)
                     }
                 }
     }
@@ -75,6 +75,7 @@ class WalkService(
         activeDogLoverWalkCache.put(dogLoverId, activeWalk.id)
     }
 
+    // Change function name?
     fun getOtherDogLoversInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<DogLoverInLocationDTO> {
         val otherDogLoversWalks = walkRepository.findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(
                 mapMarkerId, ARRIVED_AT_DESTINATION, dogLoverId)
@@ -86,6 +87,7 @@ class WalkService(
         }
     }
 
+    // Change function name?
     fun getDogLoversInLocations(
             mapMarkerIds: List<UUID>,
             dogLoverRelationships: List<DogLoverRelationship>

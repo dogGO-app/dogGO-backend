@@ -26,4 +26,37 @@ object DogData {
                 lastVaccinationDate = LocalDate.of(2020, 12, 15),
                 dogLover = DogLoverData.john
         )
+
+    val azor
+        get() = Dog(
+                id = UUID.fromString("4995b41b-c78b-40dd-855f-602148aaa875"),
+                name = "Azor",
+                breed = "Shiba",
+                color = "Brown",
+                description = "Some other description",
+                lastVaccinationDate = LocalDate.of(2020, 11, 18),
+                dogLover = DogLoverData.john
+        )
+
+    val reksio
+        get() = Dog(
+                id = UUID.fromString("0747c0f8-e56a-4713-a110-da32ef4e39a6"),
+                name = "Reksio",
+                breed = "Shiba",
+                color = "Brown",
+                description = "Some description",
+                lastVaccinationDate = LocalDate.of(2020, 5, 11),
+                dogLover = DogLoverData.andrew
+        )
+
+    val bolt
+        get() = Dog(
+                id = UUID.fromString("0ac772ce-b542-441d-b37d-506bab63a132"),
+                name = "Bolt",
+                breed = "White German Shepherd ",
+                color = "White",
+                description = "Really fast",
+                lastVaccinationDate = LocalDate.of(2020, 6, 13),
+                dogLover = DogLoverData.tom
+        )
 }
