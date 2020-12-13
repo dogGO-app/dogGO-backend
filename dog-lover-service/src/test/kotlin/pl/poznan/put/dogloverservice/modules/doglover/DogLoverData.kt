@@ -2,14 +2,14 @@ package pl.poznan.put.dogloverservice.modules.doglover
 
 import java.util.*
 
-object DogLoverStub {
-    val dogLover
+object DogLoverData {
+    val john
         get() = DogLover(
                 id = UUID.fromString("11443bdb-a4c9-4921-8a14-239d10189053"),
-                firstName = "Jan",
+                firstName = "John",
                 lastName = "Kowalski",
-                nickname = "jan.kowalski",
+                nickname = "john.kowalski",
                 age = 40,
-                hobby = "Testowanie"
+                hobby = "Testing"
         )
 }
