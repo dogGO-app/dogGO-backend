@@ -32,7 +32,7 @@ class MailController(
             CalendarEventsReminderEmail(
                     receiverEmail = it.dogLoverEmail,
                     nickname = it.dogLoverNickname,
-                    eventDetails = it.eventsDetails)
+                    eventsDetails = it.eventsDetails)
         })
     }
 }

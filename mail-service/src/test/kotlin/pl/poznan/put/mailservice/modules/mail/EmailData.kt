@@ -23,7 +23,7 @@ object EmailData {
         get() = CalendarEventsReminderEmail(
                 receiverEmail = "test@test.pl",
                 nickname = "test.guy",
-                eventDetails = listOf(
+                eventsDetails = listOf(
                         EventDetailsDTO(
                                 description = "Description",
                                 time = "12:44 PM",
@@ -41,7 +41,7 @@ object EmailData {
         get() = CalendarEventsReminderEmail(
                 receiverEmail = "incorrect_email",
                 nickname = "incorrect_email_username",
-                eventDetails = listOf(
+                eventsDetails = listOf(
                         EventDetailsDTO(
                                 description = "Description",
                                 time = "12:44 PM",
