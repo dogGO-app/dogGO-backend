@@ -24,6 +24,7 @@ import pl.poznan.put.dogloverservice.modules.walk.dto.CreateWalkDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
 import java.util.*
+import pl.poznan.put.dogloverservice.modules.walk.WalkData.getArrivedAtDestination
 
 class WalkServiceTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
@@ -106,7 +107,7 @@ class WalkServiceTest : BehaviorSpec({
         }
 
         And("arrived at destination walk") {
-            val arrivedAtDestinationWalk = WalkData.arrivedAtDestination
+            val arrivedAtDestinationWalk = getArrivedAtDestination(dogLover)
 
             every {
                 walkRepository.findFirstByDogLoverIdAndWalkStatusInOrderByCreatedAtDesc(dogLoverId, setOf(WalkStatus.ARRIVED_AT_DESTINATION))
