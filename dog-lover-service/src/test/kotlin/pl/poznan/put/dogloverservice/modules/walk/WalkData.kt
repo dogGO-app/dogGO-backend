@@ -68,7 +68,7 @@ object WalkData {
             createdAt = LocalDateTime.now().toInstant(ZoneOffset.of("+02:00")),
             dogLover = dogLover,
             dogs = listOf(DogData.reksio),
-            mapMarker = MapMarkerData.parkKonin,
+            mapMarker = MapMarkerData.parkMostowa,
             walkStatus = WalkStatus.ARRIVED_AT_DESTINATION
     )
 }
