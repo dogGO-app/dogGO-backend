@@ -1,11 +1,12 @@
 package pl.poznan.put.dogloverservice.modules.walk
 
-import pl.poznan.put.dogloverservice.modules.dog.DogData
-import pl.poznan.put.dogloverservice.modules.doglover.DogLoverData
-import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerData
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.*
+import java.util.UUID
+import pl.poznan.put.dogloverservice.modules.dog.DogData
+import pl.poznan.put.dogloverservice.modules.doglover.DogLover
+import pl.poznan.put.dogloverservice.modules.doglover.DogLoverData
+import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerData
 
 object WalkData {
     val historicalWalks
@@ -62,13 +63,12 @@ object WalkData {
                 walkStatus = WalkStatus.ONGOING
         )
 
-    val arrivedAtDestination
-        get() = Walk(
-                id = UUID.fromString("abbc3e50-21b3-4462-8b8b-b21842ec7ca5"),
-                createdAt = LocalDateTime.now().toInstant(ZoneOffset.of("+02:00")),
-                dogLover = DogLoverData.john,
-                dogs = listOf(DogData.azor),
-                mapMarker = MapMarkerData.parkKonin,
-                walkStatus = WalkStatus.ARRIVED_AT_DESTINATION
-        )
+    fun getArrivedAtDestination(dogLover: DogLover) = Walk(
+            id = UUID.fromString("abbc3e50-21b3-4462-8b8b-b21842ec7ca5"),
+            createdAt = LocalDateTime.now().toInstant(ZoneOffset.of("+02:00")),
+            dogLover = dogLover,
+            dogs = listOf(DogData.reksio),
+            mapMarker = MapMarkerData.parkMostowa,
+            walkStatus = WalkStatus.ARRIVED_AT_DESTINATION
+    )
 }
