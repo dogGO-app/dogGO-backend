@@ -4,7 +4,6 @@ object Versions {
     const val mockK = "1.10.2"
     const val springDoc = "1.5.0"
     const val caffeine = "2.8.8"
-    const val h2 = "1.4.200"
 }
 
 object Libs {
@@ -13,6 +12,7 @@ object Libs {
             "io.kotest:kotest-assertions-core:${Versions.kotest}",
             "io.kotest:kotest-property:${Versions.kotest}",
             "io.kotest:kotest-extensions-spring:${Versions.kotest}",
+            "io.kotest:kotest-extensions-testcontainers:${Versions.kotest}",
             "io.mockk:mockk:${Versions.mockK}",
             "org.springframework.security:spring-security-test"
     )

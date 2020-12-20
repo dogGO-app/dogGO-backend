@@ -3,6 +3,7 @@ package pl.poznan.put.dogloverservice.modules.doglover
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.extensions.testcontainers.perSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.spring.SpringListener
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -12,6 +13,7 @@ import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import pl.poznan.put.dogloverservice.modules.KPostgreSQLContainer
 import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
 import javax.transaction.Transactional
 
@@ -23,6 +25,8 @@ class DogLoverSpringBootTest(
         val dogLoverRepository: DogLoverRepository,
         val mockMvc: MockMvc
 ) : FunSpec({
+    val container = KPostgreSQLContainer.create()
+    listener(container.perSpec())
 
     test("Should get dog lover profile") {
         val dogLover = DogLoverData.john
