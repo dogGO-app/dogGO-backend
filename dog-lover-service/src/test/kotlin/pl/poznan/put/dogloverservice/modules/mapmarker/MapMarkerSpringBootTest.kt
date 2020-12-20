@@ -1,7 +1,7 @@
 package pl.poznan.put.dogloverservice.modules.mapmarker
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
@@ -23,8 +23,7 @@ import javax.transaction.Transactional
 class MapMarkerSpringBootTest(
         val mapMarkerService: MapMarkerService,
         val mapMarkerRepository: MapMarkerRepository,
-        val mockMvc: MockMvc,
-        val gson: Gson
+        val mockMvc: MockMvc
 ) : FunSpec({
     test("Should save map marker") {
         mapMarkerRepository.save(MapMarkerData.parkKonin)
@@ -46,8 +45,8 @@ class MapMarkerSpringBootTest(
                 .response
                 .contentAsString
 
-        val listType = object : TypeToken<List<MapMarkerDTO>>() {}.type
-        val foundMapMarkers = gson.fromJson<List<MapMarkerDTO>>(response, listType)
+
+        val foundMapMarkers = jacksonObjectMapper().readValue<List<MapMarkerDTO>>(response)
 
         foundMapMarkers.size shouldBe 2
         foundMapMarkers.map { it.name } shouldContainExactlyInAnyOrder listOf("Park Mostowa", "Park Konin")
