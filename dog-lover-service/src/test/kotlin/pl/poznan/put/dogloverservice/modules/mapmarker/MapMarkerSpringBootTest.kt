@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -17,8 +18,9 @@ import pl.poznan.put.dogloverservice.modules.mapmarker.dto.MapMarkerDTO
 import javax.transaction.Transactional
 
 @Transactional
-@SpringBootTest
-@WithMockUser(authorities = ["SCOPE_dog-lover"])
+@ActiveProfiles("integration")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WithMockUser(authorities = ["SCOPE_dog-lover"], value = "11443bdb-a4c9-4921-8a14-239d10189053")
 @AutoConfigureMockMvc
 class MapMarkerSpringBootTest(
         val mapMarkerService: MapMarkerService,

@@ -20,5 +20,5 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 
 	Libs.testImplementations.forEach { testImplementation(it) }
-    testImplementation("org.testcontainers:postgresql:1.15.1")
+	Libs.testcontainersTestImplementations.forEach { testImplementation(it) }
 }
