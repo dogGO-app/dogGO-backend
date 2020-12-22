@@ -1,6 +1,6 @@
 package pl.poznan.put.mailservice.modules.mail.dto
 
-data class CalendarEventReminderDTO(
+data class CalendarEventsReminderDTO(
 
         val dogLoverEmail: String,
 
