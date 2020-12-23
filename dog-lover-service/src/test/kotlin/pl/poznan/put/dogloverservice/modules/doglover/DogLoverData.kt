@@ -1,6 +1,7 @@
 package pl.poznan.put.dogloverservice.modules.doglover
 
 import java.util.*
+import pl.poznan.put.dogloverservice.modules.doglover.dto.UpdateDogLoverProfileDTO
 
 object DogLoverData {
     val john
@@ -41,5 +42,14 @@ object DogLoverData {
                 nickname = "tom.smith",
                 age = 31,
                 hobby = "Skiing"
+        )
+
+    fun getUpdateJohnProfileDTO(nickname: String) =
+            UpdateDogLoverProfileDTO(
+                firstName = "John",
+                lastName = "Kowalski",
+                nickname = nickname,
+                age = 40,
+                hobby = "Testing"
         )
 }

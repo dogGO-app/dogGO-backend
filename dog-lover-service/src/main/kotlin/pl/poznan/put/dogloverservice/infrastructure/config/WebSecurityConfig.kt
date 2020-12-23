@@ -12,6 +12,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .antMatchers("/v3/api-docs/**").permitAll()
                 .anyRequest().hasAuthority("SCOPE_dog-lover")
                 .and()
+                .csrf().disable()
                 .oauth2ResourceServer().jwt()
     }
 }
