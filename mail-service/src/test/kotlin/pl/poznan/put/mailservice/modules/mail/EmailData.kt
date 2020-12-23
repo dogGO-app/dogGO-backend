@@ -1,6 +1,7 @@
 package pl.poznan.put.mailservice.modules.mail
 
 import org.apache.commons.validator.routines.EmailValidator
+import pl.poznan.put.mailservice.modules.mail.dto.CalendarEventsReminderDTO
 import pl.poznan.put.mailservice.modules.mail.dto.EventDetailsDTO
 import pl.poznan.put.mailservice.modules.mail.message.AccountActivationEmail
 import pl.poznan.put.mailservice.modules.mail.message.CalendarEventsReminderEmail
@@ -67,4 +68,30 @@ object EmailData {
         get() = emailMessages.filter {
             EmailValidator.getInstance().isValid(it.receiverEmail)
         }
+
+    val correctCalendarEventsReminderDTOs: List<CalendarEventsReminderDTO>
+        get() = listOf(
+                CalendarEventsReminderDTO(
+                        dogLoverEmail = "test1@test.pl",
+                        dogLoverNickname = "test1",
+                        eventsDetails = listOf(
+                                EventDetailsDTO(
+                                        description = "Some description",
+                                        time = "13:00",
+                                        dogName = "Azor"
+                                )
+                        )
+                ),
+                CalendarEventsReminderDTO(
+                        dogLoverEmail = "test2@test.pl",
+                        dogLoverNickname = "test2",
+                        eventsDetails = listOf(
+                                EventDetailsDTO(
+                                        description = "Some other description",
+                                        time = "15:00",
+                                        dogName = "Burek"
+                                )
+                        )
+                )
+        )
 }

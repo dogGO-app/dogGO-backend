@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:tc:postgresql:13.1-alpine:///
+    url: jdbc:tc:postgresql:13.1-alpine:///dog-lover-test-db
   jpa:
     hibernate:
       ddl-auto: create-drop
