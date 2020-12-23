@@ -44,12 +44,22 @@ object DogLoverData {
                 hobby = "Skiing"
         )
 
-    fun getUpdateJohnProfileDTO(nickname: String) =
-            UpdateDogLoverProfileDTO(
-                firstName = "John",
-                lastName = "Kowalski",
-                nickname = nickname,
+    val adam
+        get() = DogLover(
+                id = UUID.fromString("9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5"),
+                firstName = "Adam",
+                lastName = "Malysz",
+                nickname = "adas.malysz11",
                 age = 40,
+                hobby = "Skoki"
+        )
+
+    fun getUpdateAdamProfileDTO() =
+            UpdateDogLoverProfileDTO(
+                firstName = "Adam",
+                lastName = "Nowak",
+                nickname = "adas.malysz11",
+                age = 20,
                 hobby = "Testing"
         )
 }

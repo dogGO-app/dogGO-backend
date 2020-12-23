@@ -40,9 +40,9 @@ object UserCalendarEventData {
             johnAndBurekEvent, johnAndAzorEvent
     )
 
-    fun getDogLoverEvent(dogLover: DogLover, dog: Dog) = UserCalendarEvent(
-            id = UUID.fromString("a2d65908-e4ea-4388-bdd2-a1aef23431aa"),
-            dateTime = Instant.now(),
+    fun getDogLoverEvent(dogLover: DogLover, dog: Dog, dateTime: Instant, id: UUID? = null) = UserCalendarEvent(
+            id = id ?: UUID.fromString("a2d65908-e4ea-4388-bdd2-a1aef23431aa"),
+            dateTime = dateTime,
             description = "Some description",
             dog = dog,
             dogLover = dogLover

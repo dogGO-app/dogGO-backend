@@ -5,6 +5,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.Instant
 import pl.poznan.put.dogloverservice.infrastructure.client.AuthServiceClient
 import pl.poznan.put.dogloverservice.infrastructure.client.MailServiceClient
 import pl.poznan.put.dogloverservice.infrastructure.commons.RestTemplateTokenRequester
@@ -38,7 +39,7 @@ class UserCalendarReminderServiceTest : BehaviorSpec({
         val dog = DogData.burek
         val dogLoverEmail = "johnEmail"
         val dogLoverEmails = mapOf(dogLoverId to dogLoverEmail)
-        val tomorrowEvents = listOf(getDogLoverEvent(dogLover, dog), getDogLoverEvent(dogLover, dog))
+        val tomorrowEvents = listOf(getDogLoverEvent(dogLover, dog, Instant.now()), getDogLoverEvent(dogLover, dog, Instant.now()))
         val tomorrowEventsGrouped = tomorrowEvents.groupBy { it.dogLover }
 
         val expectedRequestBody = tomorrowEventsGrouped.mapNotNull { (dogLover, calendarEvents) ->
