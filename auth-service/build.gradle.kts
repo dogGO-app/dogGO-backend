@@ -28,4 +28,5 @@ dependencies {
 	implementation("com.github.ben-manes.caffeine:caffeine:${Versions.caffeine}")
 
 	Libs.testImplementations.forEach { testImplementation(it) }
+	Libs.testcontainersTestImplementations.forEach { testImplementation(it) }
 }
