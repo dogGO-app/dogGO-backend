@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository
 @Repository
 interface DogRepository : JpaRepository<Dog, UUID> {
 
-    fun existsByNameAndDogLoverId(name: String, dogLoverId: UUID): Boolean
+    fun existsByNameAndDogLoverIdAndRemovedIsFalse(name: String, dogLoverId: UUID): Boolean
 
-    fun findByNameAndDogLoverId(name: String, dogLoverId: UUID): Dog?
+    fun findByNameAndDogLoverIdAndRemovedIsFalse(name: String, dogLoverId: UUID): Dog?
 
-    fun findAllByDogLoverId(dogLoverId: UUID): List<Dog>
+    fun findAllByDogLoverIdAndRemovedIsFalse(dogLoverId: UUID): List<Dog>
 }

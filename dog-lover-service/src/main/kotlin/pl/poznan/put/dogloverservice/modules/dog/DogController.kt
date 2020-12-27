@@ -45,4 +45,13 @@ class DogController(
     fun getDogLoverDogs(): List<DogDTO> {
         return dogService.getDogLoverDogsInfo(getCurrentUserId())
     }
+
+    @ApiResponses(
+            ApiResponse(description = "Dog successfully removed.", responseCode = "204"),
+            ApiResponse(description = "Dog doesn't exist.", responseCode = "404"))
+    @DeleteMapping("/{dogName}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeDog(@PathVariable dogName: String) {
+        return dogService.removeDog(getCurrentUserId(), dogName)
+    }
 }

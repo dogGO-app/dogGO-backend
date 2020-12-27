@@ -6,20 +6,24 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogNotFoundException
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverData
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
+import pl.poznan.put.dogloverservice.modules.usercalendarevent.UserCalendarEventRepository
 
 class DogServiceTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
     val dogRepository = mockk<DogRepository>(relaxed = true)
     val dogLoverService = mockk<DogLoverService>(relaxed = true)
+    val calendarEventRepository = mockk<UserCalendarEventRepository>(relaxed = true)
 
     val dogService = DogService(
             dogRepository,
-            dogLoverService
+            dogLoverService,
+            calendarEventRepository
     )
 
     Given("existing dog name and dog lover id") {
@@ -28,7 +32,7 @@ class DogServiceTest : BehaviorSpec({
         val dog = DogData.burek
 
         every {
-            dogRepository.findByNameAndDogLoverId(dogName, dogLover.id)
+            dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(dogName, dogLover.id)
         } returns dog
 
         When("getting dog DTO") {
@@ -53,7 +57,7 @@ class DogServiceTest : BehaviorSpec({
         val dogLover = DogLoverData.john
 
         every {
-            dogRepository.findByNameAndDogLoverId(dogName, dogLover.id)
+            dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(dogName, dogLover.id)
         } returns null
 
         When("getting dog DTO") {
@@ -83,13 +87,13 @@ class DogServiceTest : BehaviorSpec({
         val dogLoverId = DogLoverData.john.id
 
         every {
-            dogRepository.existsByNameAndDogLoverId(dogDTO.name, dogLoverId)
+            dogRepository.existsByNameAndDogLoverIdAndRemovedIsFalse(dogDTO.name, dogLoverId)
         } returns false
         every {
             dogRepository.save(any())
         } returns dog
         every {
-            dogRepository.findByNameAndDogLoverId(dogDTO.name, dogLoverId)
+            dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(dogDTO.name, dogLoverId)
         } returns null
 
         When("adding new dog") {
@@ -118,7 +122,7 @@ class DogServiceTest : BehaviorSpec({
         val dogLoverId = DogLoverData.john.id
 
         every {
-            dogRepository.findByNameAndDogLoverId(updatedDogDTO.name, dogLoverId)
+            dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(updatedDogDTO.name, dogLoverId)
         } returns dog
         every {
             dogRepository.save(any())
@@ -129,6 +133,31 @@ class DogServiceTest : BehaviorSpec({
 
             Then("actual DogDTO should be equal to expected") {
                 actualDogDTO shouldBe updatedDogDTO
+            }
+        }
+    }
+
+    Given("Dog lover id and dog name") {
+        val dogLoverId = DogLoverData.john.id
+        val dog = DogData.burek
+
+        every {
+            dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(dog.name, dogLoverId)
+        } returns dog
+        every {
+            calendarEventRepository.findAllByDogAndDateTimeAfter(any(), any())
+        } returns emptyList()
+        every {
+            dogRepository.save(any())
+        } returns dog
+
+        When("removing dog") {
+            dogService.removeDog(dogLoverId, dog.name)
+
+            Then("dogRepository::save should be called") {
+                verify(exactly = 1) {
+                    dogRepository.save(any())
+                }
             }
         }
     }

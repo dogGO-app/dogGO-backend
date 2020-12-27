@@ -13,6 +13,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
@@ -120,5 +121,18 @@ class DogControllerIntegrationTest(
         //then
         returnedDogs.size shouldBe 2
         returnedDogs.map { it.name } shouldContain dogName
+    }
+
+    @Test
+    fun `Should remove dog`() {
+        //given
+        val dogName = "yogi"
+
+        //when
+        mockMvc.perform(delete("/dogs/$dogName")
+                .contentType(MediaType.APPLICATION_JSON))
+
+                //then
+                .andExpect(status().isNoContent)
     }
 }

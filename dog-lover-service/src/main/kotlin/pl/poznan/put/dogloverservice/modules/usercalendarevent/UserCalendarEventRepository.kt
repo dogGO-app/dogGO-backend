@@ -22,4 +22,6 @@ interface UserCalendarEventRepository : JpaRepository<UserCalendarEvent, UUID> {
     @Query(value = "SELECT * FROM user_calendar e WHERE DATE(e.date_time) = CURRENT_DATE + 1 ORDER BY e.date_time",
             nativeQuery = true)
     fun findAllTomorrowEvents(): List<UserCalendarEvent>
+
+    fun findAllByDogAndDateTimeAfter(dog: Dog, dateTime: Instant): List<UserCalendarEvent>
 }
