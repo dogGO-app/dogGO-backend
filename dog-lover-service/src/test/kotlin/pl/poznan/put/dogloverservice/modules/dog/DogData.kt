@@ -1,8 +1,8 @@
 package pl.poznan.put.dogloverservice.modules.dog
 
-import pl.poznan.put.dogloverservice.modules.doglover.DogLoverData
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
+import pl.poznan.put.dogloverservice.modules.doglover.DogLoverData
 
 object DogData {
     val burek
@@ -58,5 +58,16 @@ object DogData {
                 description = "Really fast",
                 lastVaccinationDate = LocalDate.of(2020, 6, 13),
                 dogLover = DogLoverData.tom
+        )
+
+    val yogi
+        get() = Dog(
+                id = UUID.fromString("9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5"),
+                name = "yogi",
+                breed = "york",
+                color = "blue",
+                description = "hauhau",
+                lastVaccinationDate = LocalDate.of(2020, 12, 22),
+                dogLover = DogLoverData.adam
         )
 }
