@@ -53,6 +53,13 @@ INSERT INTO public.walk_dogs (walk_id, dogs_id)
 VALUES ('c9db3a67-56db-4a2d-b926-9fdc6fb5ee65' ::uuid, 'c92f4f3f-4af0-411e-857f-79d579dd767b' ::uuid);
 
 INSERT INTO public.walk (id, created_at, walk_status, dog_lover_user_id, map_marker_id)
+VALUES ('b0cc8b75-bfc8-46c5-ad4d-cd3d601f9008' ::uuid, '2020-12-20 18:50:58.000000', 'ARRIVED_AT_DESTINATION',
+        '9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5' ::uuid, '87e5efcc-f8b4-48d4-9986-d2997b8cfda5' ::uuid);
+
+INSERT INTO public.walk_dogs (walk_id, dogs_id)
+VALUES ('b0cc8b75-bfc8-46c5-ad4d-cd3d601f9008' ::uuid, '9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5' ::uuid);
+
+INSERT INTO public.walk (id, created_at, walk_status, dog_lover_user_id, map_marker_id)
 VALUES ('2f009fed-7a43-4bd2-9e3f-623ef688e953' ::uuid, '2020-12-20 16:50:58.000000', 'ONGOING',
         '9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5' ::uuid, '87e5efcc-f8b4-48d4-9986-d2997b8cfda5' ::uuid);
 
