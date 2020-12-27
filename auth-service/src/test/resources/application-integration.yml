@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:13.1-alpine:///auth-test-db
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+eureka:
+  client:
+    enabled: false

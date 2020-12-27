@@ -13,6 +13,7 @@ import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import pl.poznan.put.mailservice.infrastructure.exceptions.InvalidEmailException
 import javax.mail.internet.MimeMessage
 
 @ActiveProfiles("integration")
@@ -59,7 +60,10 @@ class MailControllerIntegrationTest(
         }
                 // Then
                 .andExpect {
-                    status { isBadRequest }
+                    status {
+                        isBadRequest
+                        reason(InvalidEmailException(receiverEmail).message)
+                    }
                 }
 
         verify(exactly = 0) { javaMailSender.send(any<MimeMessage>()) }

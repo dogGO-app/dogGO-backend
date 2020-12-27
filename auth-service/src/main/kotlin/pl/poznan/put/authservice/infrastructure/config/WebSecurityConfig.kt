@@ -13,6 +13,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .antMatchers("/v3/api-docs/**").permitAll()
                 .antMatchers("/user/**").hasAuthority("SCOPE_user")
                 .and()
+                .csrf().disable()
                 .oauth2ResourceServer().jwt()
     }
 
