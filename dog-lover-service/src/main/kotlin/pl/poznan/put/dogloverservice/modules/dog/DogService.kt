@@ -65,7 +65,7 @@ class DogService(
     }
 
     @Transactional
-    fun removeDog(dogLoverId: UUID, dogName: String) {
+    fun removeDog(dogName: String, dogLoverId: UUID) {
         val dog = getDog(dogName, dogLoverId)
         removeAllFutureEventsForDog(dog)
 
@@ -79,8 +79,6 @@ class DogService(
 
     @Transactional
     protected fun removeAllFutureEventsForDog(dog: Dog) {
-        val calendarEvents = calendarEventRepository.findAllByDogAndDateTimeAfter(dog, Instant.now())
-
-        calendarEventRepository.deleteAll(calendarEvents)
+        calendarEventRepository.deleteAllByDogAndDateTimeAfter(dog, Instant.now())
     }
 }

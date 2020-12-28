@@ -23,5 +23,5 @@ interface UserCalendarEventRepository : JpaRepository<UserCalendarEvent, UUID> {
             nativeQuery = true)
     fun findAllTomorrowEvents(): List<UserCalendarEvent>
 
-    fun findAllByDogAndDateTimeAfter(dog: Dog, dateTime: Instant): List<UserCalendarEvent>
+    fun deleteAllByDogAndDateTimeAfter(dog: Dog, dateTime: Instant)
 }

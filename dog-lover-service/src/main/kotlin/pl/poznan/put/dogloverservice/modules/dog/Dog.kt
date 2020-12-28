@@ -33,13 +33,13 @@ class Dog(
         val dogLover: DogLover
 ) {
         constructor(dog: Dog, removed: Boolean): this(
-                dog.id,
-                dog.name,
-                dog.breed,
-                dog.color,
-                dog.description,
-                dog.lastVaccinationDate,
-                removed,
-                dog.dogLover
+                id = dog.id,
+                name = dog.name,
+                breed = dog.breed,
+                color = dog.color,
+                description = dog.description,
+                lastVaccinationDate = dog.lastVaccinationDate,
+                removed = removed,
+                dogLover = dog.dogLover
         )
 }

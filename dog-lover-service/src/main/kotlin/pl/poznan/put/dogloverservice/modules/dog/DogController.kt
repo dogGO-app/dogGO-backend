@@ -52,6 +52,6 @@ class DogController(
     @DeleteMapping("/{dogName}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeDog(@PathVariable dogName: String) {
-        return dogService.removeDog(getCurrentUserId(), dogName)
+        return dogService.removeDog(dogName, dogLoverId = getCurrentUserId())
     }
 }

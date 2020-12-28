@@ -145,14 +145,11 @@ class DogServiceTest : BehaviorSpec({
             dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(dog.name, dogLoverId)
         } returns dog
         every {
-            calendarEventRepository.findAllByDogAndDateTimeAfter(any(), any())
-        } returns emptyList()
-        every {
             dogRepository.save(any())
         } returns dog
 
         When("removing dog") {
-            dogService.removeDog(dogLoverId, dog.name)
+            dogService.removeDog(dog.name, dogLoverId)
 
             Then("dogRepository::save should be called") {
                 verify(exactly = 1) {
