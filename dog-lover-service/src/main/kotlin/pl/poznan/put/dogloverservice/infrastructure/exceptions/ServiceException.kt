@@ -32,7 +32,7 @@ class DogAlreadyExistsException(name: String, userId: UUID) : ServiceException(
 )
 
 class RemoveLastDogException : ServiceException(
-        HttpStatus.CONFLICT,
+        HttpStatus.BAD_REQUEST,
         "Cannot remove the last user dog."
 )
 
