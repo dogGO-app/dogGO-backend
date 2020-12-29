@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogAlreadyExistsException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogNotFoundException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.RemoveLastDogException
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.usercalendarevent.UserCalendarEventRepository
@@ -66,10 +67,18 @@ class DogService(
 
     @Transactional
     fun removeDog(dogName: String, dogLoverId: UUID) {
-        val dog = getDog(dogName, dogLoverId)
+        val dogs = getDogLoverDogs(dogLoverId)
+        val dog = dogs.find { it.name == dogName }
+                ?: throw DogNotFoundException(dogName, dogLoverId)
+        validateDogNotTheLastOne(dogs)
         removeAllFutureEventsForDog(dog)
 
         dogRepository.save(Dog(dog, true))
+    }
+
+    @Transactional
+    protected fun removeAllFutureEventsForDog(dog: Dog) {
+        calendarEventRepository.deleteAllByDogAndDateTimeAfter(dog, Instant.now())
     }
 
     private fun validateDogNotAlreadyExists(name: String, dogLoverId: UUID) {
@@ -77,8 +86,8 @@ class DogService(
             throw DogAlreadyExistsException(name, dogLoverId)
     }
 
-    @Transactional
-    protected fun removeAllFutureEventsForDog(dog: Dog) {
-        calendarEventRepository.deleteAllByDogAndDateTimeAfter(dog, Instant.now())
+    private fun validateDogNotTheLastOne(dogs: List<Dog>) {
+        if (dogs.size < 2)
+            throw RemoveLastDogException()
     }
 }

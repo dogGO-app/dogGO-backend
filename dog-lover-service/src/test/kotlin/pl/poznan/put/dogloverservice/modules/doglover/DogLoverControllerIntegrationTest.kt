@@ -64,7 +64,6 @@ class DogLoverControllerIntegrationTest(
         val returnedDogLoverProfile = jacksonObjectMapper().readValue<DogLoverProfileDTO>(response)
 
         //then
-        returnedDogLoverProfile.age shouldBe 20
         returnedDogLoverProfile.lastName shouldBe "Nowak"
     }
 }

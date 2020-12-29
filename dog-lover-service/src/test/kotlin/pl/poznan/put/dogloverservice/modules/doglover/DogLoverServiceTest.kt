@@ -206,7 +206,5 @@ class DogLoverServiceTest : BehaviorSpec({
 private fun DogLover.toUpdateDogLoverProfileDTO() = UpdateDogLoverProfileDTO(
         firstName = this.firstName,
         lastName = this.lastName,
-        nickname = this.nickname,
-        age = this.age,
-        hobby = this.hobby
+        nickname = this.nickname
 )

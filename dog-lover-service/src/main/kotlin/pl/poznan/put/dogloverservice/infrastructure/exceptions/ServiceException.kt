@@ -31,6 +31,11 @@ class DogAlreadyExistsException(name: String, userId: UUID) : ServiceException(
         "Dog with name: $name already exists for user with id: $userId."
 )
 
+class RemoveLastDogException : ServiceException(
+        HttpStatus.BAD_REQUEST,
+        "Cannot remove the last user dog."
+)
+
 class MapMarkerAlreadyExistsException(id: UUID) : ServiceException(
         HttpStatus.CONFLICT,
         "Map marker with id: $id already exists!"

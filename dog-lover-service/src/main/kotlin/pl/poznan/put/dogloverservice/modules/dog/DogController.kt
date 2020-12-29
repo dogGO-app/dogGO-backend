@@ -48,6 +48,7 @@ class DogController(
 
     @ApiResponses(
             ApiResponse(description = "Dog successfully removed.", responseCode = "204"),
+            ApiResponse(description = "The last one user dog - cannot be removed.", responseCode = "400"),
             ApiResponse(description = "Dog doesn't exist.", responseCode = "404"))
     @DeleteMapping("/{dogName}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
