@@ -31,7 +31,7 @@ class DogAlreadyExistsException(name: String, userId: UUID) : ServiceException(
         "Dog with name: $name already exists for user with id: $userId."
 )
 
-class DogTheLastOneException : ServiceException(
+class RemoveLastDogException : ServiceException(
         HttpStatus.CONFLICT,
         "Cannot remove the last user dog."
 )
