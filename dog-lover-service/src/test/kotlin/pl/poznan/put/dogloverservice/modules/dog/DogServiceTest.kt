@@ -142,6 +142,9 @@ class DogServiceTest : BehaviorSpec({
         val dog = DogData.burek
 
         every {
+            dogRepository.findAllByDogLoverIdAndRemovedIsFalse(dogLoverId)
+        } returns listOf(dog, DogData.azor)
+        every {
             dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(dog.name, dogLoverId)
         } returns dog
         every {

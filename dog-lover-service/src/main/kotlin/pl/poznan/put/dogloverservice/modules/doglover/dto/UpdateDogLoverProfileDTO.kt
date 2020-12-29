@@ -16,7 +16,7 @@ data class UpdateDogLoverProfileDTO(
         val lastName: String,
 
         @field:Positive
-        val age: Int,
+        val age: Int? = null,
 
         val hobby: String? = null
 ) {
@@ -24,8 +24,6 @@ data class UpdateDogLoverProfileDTO(
             id = dogLoverId,
             nickname = nickname ?: this.nickname,
             firstName = this.firstName,
-            lastName = this.lastName,
-            age = this.age,
-            hobby = this.hobby
+            lastName = this.lastName
     )
 }

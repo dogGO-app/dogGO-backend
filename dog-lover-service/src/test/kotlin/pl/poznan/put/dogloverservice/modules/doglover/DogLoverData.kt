@@ -9,9 +9,7 @@ object DogLoverData {
                 id = UUID.fromString("11443bdb-a4c9-4921-8a14-239d10189053"),
                 firstName = "John",
                 lastName = "Kowalski",
-                nickname = "john.kowalski",
-                age = 40,
-                hobby = "Testing"
+                nickname = "john.kowalski"
         )
 
     val updatedJohn
@@ -19,9 +17,7 @@ object DogLoverData {
                 id = UUID.fromString("11443bdb-a4c9-4921-8a14-239d10189053"),
                 firstName = "John",
                 lastName = "Nowak",
-                nickname = "john.nowak",
-                age = 40,
-                hobby = "Testing and riding bike"
+                nickname = "john.nowak"
         )
 
     val andrew
@@ -29,9 +25,7 @@ object DogLoverData {
                 id = UUID.fromString("2135274f-6b3d-46a0-a1a2-c4432c67d409"),
                 firstName = "Andrew",
                 lastName = "Smith",
-                nickname = "an.smith",
-                age = 33,
-                hobby = "Hiking"
+                nickname = "an.smith"
         )
 
     val tom
@@ -39,9 +33,7 @@ object DogLoverData {
                 id = UUID.fromString("6895b8e9-76ed-40cd-9e53-cec61a9571b5"),
                 firstName = "Tom",
                 lastName = "Smith",
-                nickname = "tom.smith",
-                age = 31,
-                hobby = "Skiing"
+                nickname = "tom.smith"
         )
 
     val adam
@@ -49,17 +41,13 @@ object DogLoverData {
                 id = UUID.fromString("9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5"),
                 firstName = "Adam",
                 lastName = "Malysz",
-                nickname = "adas.malysz11",
-                age = 40,
-                hobby = "Skoki"
+                nickname = "adas.malysz11"
         )
 
     fun getUpdateAdamProfileDTO() =
             UpdateDogLoverProfileDTO(
                 firstName = "Adam",
                 lastName = "Nowak",
-                nickname = "adas.malysz11",
-                age = 20,
-                hobby = "Testing"
+                nickname = "adas.malysz11"
         )
 }

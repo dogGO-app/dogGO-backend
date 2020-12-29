@@ -27,10 +27,6 @@ class DogLover(
         @field:NotBlank
         val lastName: String,
 
-        @field:Positive
-        val age: Int,
-
-        val hobby: String? = null
 ) {
     @field:PositiveOrZero
     @ColumnDefault(value = "0")

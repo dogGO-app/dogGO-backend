@@ -1,11 +1,11 @@
-INSERT INTO public.dog_lover (user_id, age, first_name, last_name, hobby, nickname)
-VALUES ('9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5' ::uuid, 40, 'Adam', 'Malysz', 'Skoki', 'adas.malysz11');
+INSERT INTO public.dog_lover (user_id, first_name, last_name, nickname)
+VALUES ('9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5' ::uuid, 'Adam', 'Malysz', 'adas.malysz11');
 
-INSERT INTO public.dog_lover (user_id, age, first_name, last_name, hobby, nickname)
-VALUES ('6860ad51-bf45-46ba-b8d9-84567be4b037' ::uuid, 40, 'Jacek', 'Placek', 'Spanie', 'jacol123');
+INSERT INTO public.dog_lover (user_id, first_name, last_name, nickname)
+VALUES ('6860ad51-bf45-46ba-b8d9-84567be4b037' ::uuid, 'Jacek', 'Placek', 'jacol123');
 
-INSERT INTO public.dog_lover (user_id, age, first_name, last_name, hobby, nickname)
-VALUES ('7e28c2b6-ed80-4cb8-9d74-f352d89fb522' ::uuid, 40, 'Jan', 'Nowak', 'Nic', 'janek.nowak');
+INSERT INTO public.dog_lover (user_id, first_name, last_name, nickname)
+VALUES ('7e28c2b6-ed80-4cb8-9d74-f352d89fb522' ::uuid, 'Jan', 'Nowak', 'janek.nowak');
 
 INSERT INTO public.dog (id, breed, color, description, last_vaccination_date, name, dog_lover_user_id, removed)
 VALUES ('9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5' ::uuid, 'york', 'blue', 'hauhau', '2020-12-22', 'yogi', '9c04f2d5-0f58-4f1b-9f1a-0a2a3a25fad5' ::uuid, false);
