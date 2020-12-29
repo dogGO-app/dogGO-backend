@@ -5,6 +5,7 @@ import pl.poznan.put.dogloverservice.modules.walk.WalkStatus
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import pl.poznan.put.dogloverservice.modules.mapmarker.dto.MapMarkerDTO
 
 data class WalkDTO(
 
@@ -14,7 +15,7 @@ data class WalkDTO(
 
         val dogNames: List<String>,
 
-        val mapMarker: UUID,
+        val mapMarker: MapMarkerDTO,
 
         val walkStatus: WalkStatus
 
@@ -24,7 +25,7 @@ data class WalkDTO(
             id = walk.id,
             createdAt = walk.createdAt.atZone(ZoneId.of(timeZone)).toLocalDateTime(),
             dogNames = walk.dogs.map { it.name },
-            mapMarker = walk.mapMarker.id,
+            mapMarker = MapMarkerDTO(walk.mapMarker),
             walkStatus = walk.walkStatus
     )
 }

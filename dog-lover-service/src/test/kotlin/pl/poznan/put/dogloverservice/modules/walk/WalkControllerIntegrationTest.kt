@@ -88,7 +88,7 @@ class WalkControllerIntegrationTest(
 
         //then
         returnedWalkDTO.dogNames shouldBe dogsNames
-        returnedWalkDTO.mapMarker shouldBe mapMarkerId
+        returnedWalkDTO.mapMarker.id shouldBe mapMarkerId
         returnedWalkDTO.walkStatus shouldBe WalkStatus.ONGOING
     }
 
