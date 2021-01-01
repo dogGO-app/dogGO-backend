@@ -14,8 +14,11 @@ import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.multipart
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.InvalidAvatarImageException
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogDTO
 import pl.poznan.put.dogloverservice.modules.dog.dto.UpdateDogDTO
 import javax.transaction.Transactional
@@ -124,5 +127,61 @@ class DogControllerIntegrationTest(
 
                 //then
                 .andExpect(status().isNoContent)
+    }
+
+    @Test
+    fun `Should save and get dog avatar image`() {
+        //given
+        val dog = DogData.yogi
+        val dogId = dog.id
+        val dogName = dog.name
+        val avatarMultipartFile = DogAvatarImageData.avatarMultipartFile
+
+        //when
+        mockMvc.multipart("/dogs/$dogName/avatar") {
+            file(avatarMultipartFile)
+            with {
+                it.apply { method = "PUT" }
+            }
+        }
+                //then
+                .andExpect {
+                    status { isOk }
+                }
+
+        //when
+        val response = mockMvc.get("/dogs/$dogId/avatar")
+                //then
+                .andExpect {
+                    status { isOk }
+                }
+                .andReturn()
+                .response
+                .contentAsByteArray
+
+        response contentEquals DogAvatarImageData.avatarBytes shouldBe true
+    }
+
+    @Test
+    fun `Should throw when adding invalid dog avatar image`() {
+        //given
+        val dog = DogData.yogi
+        val dogName = dog.name
+        val invalidAvatarMultipartFile = DogAvatarImageData.invalidAvatarMultipartFile
+
+        //when
+        mockMvc.multipart("/dogs/$dogName/avatar") {
+            file(invalidAvatarMultipartFile)
+            with {
+                it.apply { method = "PUT" }
+            }
+        }
+                //then
+                .andExpect {
+                    status {
+                        isBadRequest
+                        reason(InvalidAvatarImageException().message)
+                    }
+                }
     }
 }

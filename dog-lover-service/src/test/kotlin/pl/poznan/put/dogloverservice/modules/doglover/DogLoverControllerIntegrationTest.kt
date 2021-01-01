@@ -5,18 +5,21 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.spring.SpringListener
-import java.util.UUID
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.multipart
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.InvalidAvatarImageException
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverData.getUpdateAdamProfileDTO
 import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
+import java.util.*
 import javax.transaction.Transactional
 
 @Transactional
@@ -65,5 +68,58 @@ class DogLoverControllerIntegrationTest(
 
         //then
         returnedDogLoverProfile.lastName shouldBe "Nowak"
+    }
+
+    @Test
+    fun `Should save and get dog lover avatar image`() {
+        //given
+        val dogLover = DogLoverData.adam
+        val dogLoverId = dogLover.id
+        val avatarMultipartFile = DogLoverAvatarImageData.avatarMultipartFile
+
+        //when
+        mockMvc.multipart("/profiles/avatar") {
+            file(avatarMultipartFile)
+            with {
+                it.apply { method = "PUT" }
+            }
+        }
+                //then
+                .andExpect {
+                    status { isOk }
+                }
+
+        //when
+        val response = mockMvc.get("/profiles/$dogLoverId/avatar")
+                //then
+                .andExpect {
+                    status { isOk }
+                }
+                .andReturn()
+                .response
+                .contentAsByteArray
+
+        response contentEquals DogLoverAvatarImageData.avatarBytes shouldBe true
+    }
+
+    @Test
+    fun `Should throw when adding invalid dog lover avatar image`() {
+        //given
+        val invalidAvatarMultipartFile = DogLoverAvatarImageData.invalidAvatarMultipartFile
+
+        //when
+        mockMvc.multipart("/profiles/avatar") {
+            file(invalidAvatarMultipartFile)
+            with {
+                it.apply { method = "PUT" }
+            }
+        }
+                //then
+                .andExpect {
+                    status {
+                        isBadRequest
+                        reason(InvalidAvatarImageException().message)
+                    }
+                }
     }
 }
