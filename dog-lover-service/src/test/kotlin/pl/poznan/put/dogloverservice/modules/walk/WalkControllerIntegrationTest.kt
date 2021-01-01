@@ -7,20 +7,18 @@ import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe
 import io.kotest.spring.SpringListener
-import java.util.UUID
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import pl.poznan.put.dogloverservice.modules.walk.dto.CreateWalkDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import pl.poznan.put.dogloverservice.modules.walk.dto.WalkDTO
+import java.util.*
 import javax.transaction.Transactional
 
 @Transactional
@@ -87,7 +85,7 @@ class WalkControllerIntegrationTest(
         val returnedWalkDTO = jacksonObjectMapper().registerModule(JavaTimeModule()).readValue<WalkDTO>(response)
 
         //then
-        returnedWalkDTO.dogNames shouldBe dogsNames
+        returnedWalkDTO.dogs.map { it.name } shouldBe dogsNames
         returnedWalkDTO.mapMarker.id shouldBe mapMarkerId
         returnedWalkDTO.walkStatus shouldBe WalkStatus.ONGOING
     }
@@ -120,7 +118,7 @@ class WalkControllerIntegrationTest(
         val newWalkStatus = WalkStatus.LEFT_DESTINATION
 
         //when
-        val response = mockMvc.perform(put("/walks/$walkId")
+        mockMvc.perform(put("/walks/$walkId")
                 .param("walkStatus", newWalkStatus.name)
                 .contentType(MediaType.APPLICATION_JSON))
 
@@ -132,7 +130,7 @@ class WalkControllerIntegrationTest(
     @Test
     fun `Should keep walk active`() {
         //when
-        val response = mockMvc.perform(put("/walks/active")
+        mockMvc.perform(put("/walks/active")
                 .contentType(MediaType.APPLICATION_JSON))
 
                 //then
