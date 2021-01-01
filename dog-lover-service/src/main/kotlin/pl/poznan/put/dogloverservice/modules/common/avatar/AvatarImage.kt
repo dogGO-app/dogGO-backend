@@ -13,32 +13,32 @@ import javax.persistence.FetchType
 
 @Embeddable
 class AvatarImage(
+        entityId: UUID,
+
         @Column(name = "avatar_image")
         @Basic(fetch = FetchType.LAZY)
         val image: ByteArray
 ) {
     init {
-        validateImage()
+        if (!image.isImage()) throw InvalidAvatarImageException()
     }
 
     @Column(name = "avatar_checksum")
-    val checksum: String = DigestUtils.sha512_256Hex(image)
-
-    fun getProperties(entityId: UUID): AvatarImageProperties {
-        val contentType = ByteArrayInputStream(image).use {
-            URLConnection.guessContentTypeFromStream(it)
-        }
-        val filename = run {
-            val extension = contentType.substringAfter('/')
-            "${entityId}_$checksum.$extension"
-        }
-        return AvatarImageProperties(contentType, filename)
+    val checksum: String = run {
+        val entityIdBytes = entityId.toString().toByteArray()
+        val imageChecksum = DigestUtils.sha512_256(image)
+        DigestUtils.sha512_256Hex(entityIdBytes + imageChecksum)
     }
 
-    private fun validateImage() {
-        if (!image.isImage())
-            throw InvalidAvatarImageException()
-    }
+    val properties: AvatarImageProperties
+        get() {
+            val contentType = ByteArrayInputStream(image).use(URLConnection::guessContentTypeFromStream)
+            val filename = run {
+                val extension = contentType.substringAfter('/')
+                "$checksum.$extension"
+            }
+            return AvatarImageProperties(contentType, filename)
+        }
 }
 
 data class AvatarImageProperties(val contentType: String, val filename: String)

@@ -59,7 +59,7 @@ class DogLoverService(
     fun getDogLoverProfileAvatar(dogLoverId: UUID): ResponseEntity<ByteArray> {
         val dogLover = getDogLover(dogLoverId)
         val dogLoverAvatar = dogLover.avatar ?: throw DogLoverAvatarNotFoundException(dogLoverId)
-        val (contentType, filename) = dogLoverAvatar.getProperties(dogLover.id)
+        val (contentType, filename) = dogLoverAvatar.properties
 
         return FileResponseEntityBuilder.build(
                 httpStatus = HttpStatus.OK,
@@ -71,7 +71,7 @@ class DogLoverService(
 
     fun saveDogLoverProfileAvatar(avatar: MultipartFile, dogLoverId: UUID) {
         validateDogLoverExists(dogLoverId)
-        val dogLoverAvatar = AvatarImage(avatar.bytes)
+        val dogLoverAvatar = AvatarImage(dogLoverId, avatar.bytes)
         dogLoverRepository.saveAvatar(dogLoverId, dogLoverAvatar.image, dogLoverAvatar.checksum)
     }
 

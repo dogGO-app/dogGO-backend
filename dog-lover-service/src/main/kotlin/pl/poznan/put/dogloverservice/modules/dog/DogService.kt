@@ -85,7 +85,7 @@ class DogService(
     fun getDogAvatar(dogId: UUID): ResponseEntity<ByteArray> {
         val dog = getDog(dogId)
         val dogAvatar = dog.avatar ?: throw DogAvatarNotFoundException(dogId)
-        val (contentType, filename) = dogAvatar.getProperties(dog.id)
+        val (contentType, filename) = dogAvatar.properties
 
         return FileResponseEntityBuilder.build(
                 httpStatus = HttpStatus.OK,
@@ -95,20 +95,16 @@ class DogService(
         )
     }
 
+    @Transactional
     fun saveDogAvatar(dogName: String, avatar: MultipartFile, dogLoverId: UUID) {
-        validateDogExists(dogName, dogLoverId)
-        val dogAvatar = AvatarImage(avatar.bytes)
-        dogRepository.saveAvatar(dogName, dogAvatar.image, dogAvatar.checksum, dogLoverId)
+        val dog = getDog(dogName, dogLoverId)
+        val dogAvatar = AvatarImage(dog.id, avatar.bytes)
+        dogRepository.saveAvatar(dog.id, dogAvatar.image, dogAvatar.checksum)
     }
 
     @Transactional
     protected fun removeAllFutureEventsForDog(dog: Dog) {
         calendarEventRepository.deleteAllByDogAndDateTimeAfter(dog, Instant.now())
-    }
-
-    private fun validateDogExists(name: String, dogLoverId: UUID) {
-        if (!dogRepository.existsByNameAndDogLoverIdAndRemovedIsFalse(name, dogLoverId))
-            throw DogNotFoundException(name, dogLoverId)
     }
 
     private fun validateDogNotAlreadyExists(name: String, dogLoverId: UUID) {

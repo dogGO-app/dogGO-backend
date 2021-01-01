@@ -28,12 +28,10 @@ interface DogRepository : JpaRepository<Dog, UUID> {
                 UPDATE Dog d
                 SET d.avatar.image = :avatarImage,
                     d.avatar.checksum = :avatarChecksum
-                WHERE d.dogLover.id = :dogLoverId
-                  AND d.name = :name
+                WHERE d.id = :id
             """
     )
-    fun saveAvatar(@Param("name") name: String,
+    fun saveAvatar(@Param("id") id: UUID,
                    @Param("avatarImage") avatarImage: ByteArray,
-                   @Param("avatarChecksum") avatarChecksum: String,
-                   @Param("dogLoverId") dogLoverId: UUID)
+                   @Param("avatarChecksum") avatarChecksum: String)
 }
