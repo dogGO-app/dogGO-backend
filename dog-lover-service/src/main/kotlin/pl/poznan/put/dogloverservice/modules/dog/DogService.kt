@@ -1,15 +1,22 @@
 package pl.poznan.put.dogloverservice.modules.dog
 
-import java.time.Instant
-import java.util.UUID
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.multipart.MultipartFile
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogAlreadyExistsException
+import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogAvatarNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogNotFoundException
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.RemoveLastDogException
+import pl.poznan.put.dogloverservice.infrastructure.response.FileResponseEntityBuilder
+import pl.poznan.put.dogloverservice.modules.common.avatar.AvatarImage
+import pl.poznan.put.dogloverservice.modules.dog.dto.CreateDogDTO
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.usercalendarevent.UserCalendarEventRepository
+import java.time.Instant
+import java.util.*
 
 @Service
 class DogService(
@@ -18,7 +25,7 @@ class DogService(
         private val calendarEventRepository: UserCalendarEventRepository
 ) {
 
-    fun addDog(dogDTO: DogDTO, dogLoverId: UUID): DogDTO {
+    fun addDog(dogDTO: CreateDogDTO, dogLoverId: UUID): DogDTO {
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         validateDogNotAlreadyExists(dogDTO.name, dogLoverId)
         val dog = Dog(
@@ -32,7 +39,7 @@ class DogService(
         return DogDTO(dogRepository.save(dog))
     }
 
-    fun updateDog(dogDTO: DogDTO, dogLoverId: UUID): DogDTO {
+    fun updateDog(dogDTO: CreateDogDTO, dogLoverId: UUID): DogDTO {
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         val dog = dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(dogDTO.name, dogLoverId)
                 ?: throw DogNotFoundException(dogDTO.name, dogLoverId)
@@ -48,16 +55,17 @@ class DogService(
         return DogDTO(dogRepository.save(updatedDog))
     }
 
-    fun getDogLoverDogsInfo(dogLoverId: UUID): List<DogDTO> {
-        return getDogLoverDogs(dogLoverId).map { DogDTO(it) }
+    fun getDogsInfo(dogLoverId: UUID): List<DogDTO> {
+        return getDogs(dogLoverId).map { DogDTO(it) }
     }
 
-    fun getDogLoverDogs(dogLoverId: UUID): List<Dog> {
+    fun getDogs(dogLoverId: UUID): List<Dog> {
         return dogRepository.findAllByDogLoverIdAndRemovedIsFalse(dogLoverId)
     }
 
-    fun getDogInfo(name: String, dogLoverId: UUID): DogDTO {
-        return DogDTO(getDog(name, dogLoverId))
+    fun getDog(dogId: UUID): Dog {
+        return dogRepository.findByIdAndRemovedIsFalse(dogId)
+                ?: throw DogNotFoundException(dogId)
     }
 
     fun getDog(name: String, dogLoverId: UUID): Dog {
@@ -67,13 +75,30 @@ class DogService(
 
     @Transactional
     fun removeDog(dogName: String, dogLoverId: UUID) {
-        val dogs = getDogLoverDogs(dogLoverId)
-        val dog = dogs.find { it.name == dogName }
-                ?: throw DogNotFoundException(dogName, dogLoverId)
-        validateDogNotTheLastOne(dogs)
+        val dog = getDog(dogName, dogLoverId)
+        validateDogNotTheLastOne(dogLoverId)
         removeAllFutureEventsForDog(dog)
 
         dogRepository.save(Dog(dog, true))
+    }
+
+    fun getDogAvatar(dogId: UUID): ResponseEntity<ByteArray> {
+        val dog = getDog(dogId)
+        val dogAvatar = dog.avatar ?: throw DogAvatarNotFoundException(dogId)
+        val (contentType, filename) = dogAvatar.getProperties(dog.id)
+
+        return FileResponseEntityBuilder.build(
+                httpStatus = HttpStatus.OK,
+                filename = filename,
+                contentType = contentType,
+                body = dogAvatar.image
+        )
+    }
+
+    fun saveDogAvatar(dogName: String, avatar: MultipartFile, dogLoverId: UUID) {
+        validateDogExists(dogName, dogLoverId)
+        val dogAvatar = AvatarImage(avatar.bytes)
+        dogRepository.saveAvatar(dogName, dogAvatar.image, dogAvatar.checksum, dogLoverId)
     }
 
     @Transactional
@@ -81,13 +106,18 @@ class DogService(
         calendarEventRepository.deleteAllByDogAndDateTimeAfter(dog, Instant.now())
     }
 
+    private fun validateDogExists(name: String, dogLoverId: UUID) {
+        if (!dogRepository.existsByNameAndDogLoverIdAndRemovedIsFalse(name, dogLoverId))
+            throw DogNotFoundException(name, dogLoverId)
+    }
+
     private fun validateDogNotAlreadyExists(name: String, dogLoverId: UUID) {
         if (dogRepository.existsByNameAndDogLoverIdAndRemovedIsFalse(name, dogLoverId))
             throw DogAlreadyExistsException(name, dogLoverId)
     }
 
-    private fun validateDogNotTheLastOne(dogs: List<Dog>) {
-        if (dogs.size < 2)
+    private fun validateDogNotTheLastOne(dogLoverId: UUID) {
+        if (dogRepository.countAllByDogLoverIdAndRemovedIsFalse(dogLoverId) < 2)
             throw RemoveLastDogException()
     }
 }

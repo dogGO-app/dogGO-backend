@@ -1,5 +1,6 @@
 package pl.poznan.put.dogloverservice.modules.dogloverrelationship
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverRelationshipAlreadyExists
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverRelationshipNotExists
@@ -7,7 +8,6 @@ import pl.poznan.put.dogloverservice.modules.dog.DogService
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.dogloverrelationship.dto.DogLoverRelationshipDTO
 import java.util.*
-import org.springframework.data.repository.findByIdOrNull
 
 @Service
 class DogLoverRelationshipService(
@@ -42,7 +42,7 @@ class DogLoverRelationshipService(
 
         return dogLoverRelationships.map {
             DogLoverRelationshipDTO(it,
-                    dogService.getDogLoverDogs(it.id.receiverDogLover.id))
+                    dogService.getDogs(it.id.receiverDogLover.id))
         }
     }
 
