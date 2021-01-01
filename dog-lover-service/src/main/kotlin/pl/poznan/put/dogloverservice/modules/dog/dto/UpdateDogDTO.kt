@@ -3,7 +3,7 @@ package pl.poznan.put.dogloverservice.modules.dog.dto
 import pl.poznan.put.dogloverservice.modules.dog.Dog
 import java.time.LocalDate
 
-data class CreateDogDTO(
+data class UpdateDogDTO(
 
         val name: String,
 

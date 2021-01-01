@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import pl.poznan.put.dogloverservice.infrastructure.commons.AuthCommons.getCurrentUserId
-import pl.poznan.put.dogloverservice.modules.dog.dto.CreateDogDTO
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogDTO
+import pl.poznan.put.dogloverservice.modules.dog.dto.UpdateDogDTO
 import java.util.*
 
 @RestController
@@ -24,7 +24,7 @@ class DogController(
             ApiResponse(description = "This dog already exists for user.", responseCode = "409"))
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun addDog(@RequestBody dog: CreateDogDTO): DogDTO {
+    fun addDog(@RequestBody dog: UpdateDogDTO): DogDTO {
         return dogService.addDog(dog, getCurrentUserId())
     }
 
@@ -32,7 +32,7 @@ class DogController(
             ApiResponse(description = "Dog updated.", responseCode = "200"),
             ApiResponse(description = "Dog lover or dog doesn't exist.", responseCode = "404"))
     @PutMapping
-    fun updateDog(@RequestBody dog: CreateDogDTO): DogDTO {
+    fun updateDog(@RequestBody dog: UpdateDogDTO): DogDTO {
         return dogService.updateDog(dog, getCurrentUserId())
     }
 

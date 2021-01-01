@@ -11,8 +11,8 @@ import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogNotFoundExcept
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.RemoveLastDogException
 import pl.poznan.put.dogloverservice.infrastructure.response.FileResponseEntityBuilder
 import pl.poznan.put.dogloverservice.modules.common.avatar.AvatarImage
-import pl.poznan.put.dogloverservice.modules.dog.dto.CreateDogDTO
 import pl.poznan.put.dogloverservice.modules.dog.dto.DogDTO
+import pl.poznan.put.dogloverservice.modules.dog.dto.UpdateDogDTO
 import pl.poznan.put.dogloverservice.modules.doglover.DogLoverService
 import pl.poznan.put.dogloverservice.modules.usercalendarevent.UserCalendarEventRepository
 import java.time.Instant
@@ -25,7 +25,7 @@ class DogService(
         private val calendarEventRepository: UserCalendarEventRepository
 ) {
 
-    fun addDog(dogDTO: CreateDogDTO, dogLoverId: UUID): DogDTO {
+    fun addDog(dogDTO: UpdateDogDTO, dogLoverId: UUID): DogDTO {
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         validateDogNotAlreadyExists(dogDTO.name, dogLoverId)
         val dog = Dog(
@@ -39,7 +39,7 @@ class DogService(
         return DogDTO(dogRepository.save(dog))
     }
 
-    fun updateDog(dogDTO: CreateDogDTO, dogLoverId: UUID): DogDTO {
+    fun updateDog(dogDTO: UpdateDogDTO, dogLoverId: UUID): DogDTO {
         val dogLover = dogLoverService.getDogLover(dogLoverId)
         val dog = dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(dogDTO.name, dogLoverId)
                 ?: throw DogNotFoundException(dogDTO.name, dogLoverId)
