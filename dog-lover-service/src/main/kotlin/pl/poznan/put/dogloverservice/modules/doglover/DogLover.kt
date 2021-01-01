@@ -2,13 +2,13 @@ package pl.poznan.put.dogloverservice.modules.doglover
 
 import org.hibernate.annotations.ColumnDefault
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.DogLoverLikesCountLowerThanZeroException
-import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
-import java.util.UUID
+import pl.poznan.put.dogloverservice.modules.common.avatar.AvatarImage
+import java.util.*
 import javax.persistence.Column
+import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.Positive
 import javax.validation.constraints.PositiveOrZero
 
 @Entity
@@ -26,6 +26,9 @@ class DogLover(
 
         @field:NotBlank
         val lastName: String,
+
+        @Embedded
+        val avatar: AvatarImage? = null
 
 ) {
     @field:PositiveOrZero
