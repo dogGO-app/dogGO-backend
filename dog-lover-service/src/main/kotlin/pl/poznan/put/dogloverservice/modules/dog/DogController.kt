@@ -71,9 +71,9 @@ class DogController(
             ApiResponse(description = "Dog successfully removed.", responseCode = "204"),
             ApiResponse(description = "The last one user dog - cannot be removed.", responseCode = "400"),
             ApiResponse(description = "Dog doesn't exist.", responseCode = "404"))
-    @DeleteMapping("/{dogName}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun removeDog(@PathVariable dogName: String) {
-        return dogService.removeDog(dogName, dogLoverId = getCurrentUserId())
+    fun removeDog(@PathVariable(name = "id") dogId: UUID) {
+        return dogService.removeDog(dogId, dogLoverId = getCurrentUserId())
     }
 }

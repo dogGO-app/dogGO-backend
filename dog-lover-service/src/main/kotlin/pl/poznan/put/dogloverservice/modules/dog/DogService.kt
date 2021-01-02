@@ -74,12 +74,11 @@ class DogService(
     }
 
     @Transactional
-    fun removeDog(dogName: String, dogLoverId: UUID) {
-        val dog = getDog(dogName, dogLoverId)
+    fun removeDog(dogId: UUID, dogLoverId: UUID) {
+        validateDogExists(dogId, dogLoverId)
         validateDogNotTheLastOne(dogLoverId)
-        removeAllFutureEventsForDog(dog)
-
-        dogRepository.save(Dog(dog, true))
+        removeAllFutureEventsForDog(dogId, dogLoverId)
+        dogRepository.setRemovedToTrue(dogId, dogLoverId)
     }
 
     fun getDogAvatar(dogId: UUID): ResponseEntity<ByteArray> {
@@ -103,8 +102,8 @@ class DogService(
     }
 
     @Transactional
-    protected fun removeAllFutureEventsForDog(dog: Dog) {
-        calendarEventRepository.deleteAllByDogAndDateTimeAfter(dog, Instant.now())
+    protected fun removeAllFutureEventsForDog(dogId: UUID, dogLoverId: UUID) {
+        calendarEventRepository.deleteAllByDogIdAndDogLoverIdAndDateTimeAfter(dogId, dogLoverId, Instant.now())
     }
 
     private fun validateDogExists(dogId: UUID, dogLoverId: UUID) {

@@ -122,26 +122,29 @@ class DogServiceTest : BehaviorSpec({
         }
     }
 
-    Given("Dog lover id and dog name") {
+    Given("Dog lover id and dog id") {
+        val dogId = DogData.burek.id
         val dogLoverId = DogLoverData.john.id
-        val dog = DogData.burek
 
+        every {
+            dogRepository.existsByIdAndDogLoverIdAndRemovedIsFalse(dogId, dogLoverId)
+        } returns true
         every {
             dogRepository.countAllByDogLoverIdAndRemovedIsFalse(dogLoverId)
         } returns 2
-        every {
-            dogRepository.findByNameAndDogLoverIdAndRemovedIsFalse(dog.name, dogLoverId)
-        } returns dog
-        every {
-            dogRepository.save(any())
-        } returns dog
 
         When("removing dog") {
-            dogService.removeDog(dog.name, dogLoverId)
+            dogService.removeDog(dogId, dogLoverId)
 
-            Then("dogRepository::save should be called") {
+            Then("dogRepository::setRemovedToTrue should be called") {
                 verify(exactly = 1) {
-                    dogRepository.save(any())
+                    dogRepository.setRemovedToTrue(dogId, dogLoverId)
+                }
+            }
+
+            Then("calendarEventRepository::deleteAllByDogIdAndDogLoverIdAndDateTimeAfter should be called") {
+                verify(exactly = 1) {
+                    calendarEventRepository.deleteAllByDogIdAndDogLoverIdAndDateTimeAfter(dogId, dogLoverId, any())
                 }
             }
         }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.spring.SpringListener
@@ -120,14 +121,27 @@ class DogControllerIntegrationTest(
     @Test
     fun `Should remove dog`() {
         //given
-        val dogName = "yogi"
+        val dogId = DogData.yogi.id
 
         //when
-        mockMvc.perform(delete("/dogs/$dogName")
+        mockMvc.perform(delete("/dogs/$dogId")
                 .contentType(MediaType.APPLICATION_JSON))
 
                 //then
                 .andExpect(status().isNoContent)
+
+        //when
+        val response = mockMvc.perform(get("/dogs")
+                .contentType(MediaType.APPLICATION_JSON))
+                //then
+                .andExpect(status().isOk)
+                .andReturn()
+                .response
+                .contentAsString
+        val returnedDogs = jacksonObjectMapper().registerModule(JavaTimeModule()).readValue<List<DogDTO>>(response)
+
+        returnedDogs.size shouldBe 1
+        returnedDogs.map { it.id } shouldNotContain dogId
     }
 
     @Test

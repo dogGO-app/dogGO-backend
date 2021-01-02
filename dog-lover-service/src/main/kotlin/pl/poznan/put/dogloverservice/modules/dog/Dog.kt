@@ -34,15 +34,4 @@ class Dog(
 
         @Embedded
         val avatar: AvatarImage? = null
-) {
-        constructor(dog: Dog, removed: Boolean): this(
-                id = dog.id,
-                name = dog.name,
-                breed = dog.breed,
-                color = dog.color,
-                description = dog.description,
-                lastVaccinationDate = dog.lastVaccinationDate,
-                removed = removed,
-                dogLover = dog.dogLover
-        )
-}
+)

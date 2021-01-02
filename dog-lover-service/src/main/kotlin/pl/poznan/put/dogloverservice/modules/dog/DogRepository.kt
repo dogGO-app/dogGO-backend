@@ -28,6 +28,19 @@ interface DogRepository : JpaRepository<Dog, UUID> {
     @Query(
             value = """
                 UPDATE Dog d
+                SET d.removed = TRUE 
+                WHERE d.id = :dogId
+                  AND d.dogLover.id = :dogLoverId
+            """
+    )
+    fun setRemovedToTrue(@Param("dogId") dogId: UUID,
+                         @Param("dogLoverId") dogLoverId: UUID)
+
+    @Transactional
+    @Modifying
+    @Query(
+            value = """
+                UPDATE Dog d
                 SET d.avatar.image = :avatarImage,
                     d.avatar.checksum = :avatarChecksum
                 WHERE d.id = :dogId
