@@ -11,6 +11,8 @@ import java.util.*
 @Repository
 interface DogRepository : JpaRepository<Dog, UUID> {
 
+    fun existsByIdAndDogLoverIdAndRemovedIsFalse(dogId: UUID, dogLoverId: UUID): Boolean
+
     fun existsByNameAndDogLoverIdAndRemovedIsFalse(name: String, dogLoverId: UUID): Boolean
 
     fun findByNameAndDogLoverIdAndRemovedIsFalse(name: String, dogLoverId: UUID): Dog?
@@ -28,10 +30,12 @@ interface DogRepository : JpaRepository<Dog, UUID> {
                 UPDATE Dog d
                 SET d.avatar.image = :avatarImage,
                     d.avatar.checksum = :avatarChecksum
-                WHERE d.id = :id
+                WHERE d.id = :dogId
+                  AND d.dogLover.id = :dogLoverId
             """
     )
-    fun saveAvatar(@Param("id") id: UUID,
+    fun saveAvatar(@Param("dogId") dogId: UUID,
+                   @Param("dogLoverId") dogLoverId: UUID,
                    @Param("avatarImage") avatarImage: ByteArray,
                    @Param("avatarChecksum") avatarChecksum: String)
 }

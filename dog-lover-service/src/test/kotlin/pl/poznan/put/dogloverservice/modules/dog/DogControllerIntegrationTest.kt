@@ -135,11 +135,10 @@ class DogControllerIntegrationTest(
         //given
         val dog = DogData.yogi
         val dogId = dog.id
-        val dogName = dog.name
         val avatarMultipartFile = DogAvatarImageData.avatarMultipartFile
 
         //when
-        mockMvc.multipart("/dogs/$dogName/avatar") {
+        mockMvc.multipart("/dogs/$dogId/avatar") {
             file(avatarMultipartFile)
             with {
                 it.apply { method = "PUT" }
@@ -169,11 +168,11 @@ class DogControllerIntegrationTest(
     fun `Should throw when adding invalid dog avatar image`() {
         //given
         val dog = DogData.yogi
-        val dogName = dog.name
+        val dogId = dog.id
         val invalidAvatarMultipartFile = DogAvatarImageData.invalidAvatarMultipartFile
 
         //when
-        mockMvc.multipart("/dogs/$dogName/avatar") {
+        mockMvc.multipart("/dogs/$dogId/avatar") {
             file(invalidAvatarMultipartFile)
             with {
                 it.apply { method = "PUT" }

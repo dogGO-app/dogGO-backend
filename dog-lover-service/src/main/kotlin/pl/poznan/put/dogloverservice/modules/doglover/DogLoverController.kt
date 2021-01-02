@@ -43,8 +43,8 @@ class DogLoverController(
 
     @ApiResponses(
             ApiResponse(description = "Ok.", responseCode = "200"),
-            ApiResponse(description = "Dog lover doesn't exist.", responseCode = "404"),
-            ApiResponse(description = "Avatar image data is not correct image.", responseCode = "400")
+            ApiResponse(description = "Avatar image data is not correct image.", responseCode = "400"),
+            ApiResponse(description = "Dog lover doesn't exist.", responseCode = "404")
     )
     @PutMapping("/avatar", consumes = [MULTIPART_FORM_DATA_VALUE])
     fun saveDogLoverProfileAvatar(@RequestPart avatar: MultipartFile) {

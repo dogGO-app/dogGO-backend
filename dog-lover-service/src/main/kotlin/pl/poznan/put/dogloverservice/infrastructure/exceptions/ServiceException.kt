@@ -32,9 +32,14 @@ class DogNotFoundException : ServiceException {
             "Dog with name: $name not exists for user with id: $userId."
     )
 
-    constructor(id: UUID) : super(
+    constructor(dogId: UUID, userId: UUID) : super(
             HttpStatus.NOT_FOUND,
-            "Dog with id: $id not exists."
+            "Dog with id: $dogId not exists for user with id: $userId."
+    )
+
+    constructor(dogId: UUID) : super(
+            HttpStatus.NOT_FOUND,
+            "Dog with id: $dogId not exists."
     )
 }
 

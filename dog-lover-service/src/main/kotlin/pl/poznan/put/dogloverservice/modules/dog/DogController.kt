@@ -49,22 +49,22 @@ class DogController(
     )
     @GetMapping("/{id}/avatar", produces = [IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE])
     fun getDogAvatar(
-            @PathVariable(name = "id") dogId: UUID,
+            @PathVariable(name = "id") dogId: UUID
     ): ResponseEntity<ByteArray> {
         return dogService.getDogAvatar(dogId)
     }
 
     @ApiResponses(
             ApiResponse(description = "Ok.", responseCode = "200"),
-            ApiResponse(description = "Dog doesn't exist.", responseCode = "404"),
-            ApiResponse(description = "Avatar image data is not correct image.", responseCode = "400")
+            ApiResponse(description = "Avatar image data is not correct image.", responseCode = "400"),
+            ApiResponse(description = "Dog doesn't exist.", responseCode = "404")
     )
-    @PutMapping("/{dogName}/avatar", consumes = [MULTIPART_FORM_DATA_VALUE])
+    @PutMapping("/{id}/avatar", consumes = [MULTIPART_FORM_DATA_VALUE])
     fun saveDogAvatar(
-            @PathVariable dogName: String,
+            @PathVariable(name = "id") dogId: UUID,
             @RequestPart avatar: MultipartFile
     ) {
-        dogService.saveDogAvatar(dogName, avatar, dogLoverId = getCurrentUserId())
+        dogService.saveDogAvatar(dogId, avatar, dogLoverId = getCurrentUserId())
     }
 
     @ApiResponses(
