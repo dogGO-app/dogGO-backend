@@ -1,11 +1,9 @@
 package pl.poznan.put.dogloverservice.modules.dog.dto
 
 import pl.poznan.put.dogloverservice.modules.dog.Dog
-import java.util.*
+import java.time.LocalDate
 
-data class DogBasicInfoDTO(
-
-        val id: UUID,
+data class UpdateDogDTO(
 
         val name: String,
 
@@ -13,14 +11,16 @@ data class DogBasicInfoDTO(
 
         val color: String?,
 
-        val avatarChecksum: String?
+        val description: String?,
 
+        val lastVaccinationDate: LocalDate?,
 ) {
-    constructor(dog: Dog): this(
-            id = dog.id,
+
+    constructor(dog: Dog) : this(
             name = dog.name,
             breed = dog.breed,
             color = dog.color,
-            avatarChecksum = dog.avatar?.checksum
+            description = dog.description,
+            lastVaccinationDate = dog.lastVaccinationDate
     )
 }

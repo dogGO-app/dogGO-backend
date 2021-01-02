@@ -1,12 +1,12 @@
 package pl.poznan.put.dogloverservice.modules.usercalendarevent
 
-import java.time.Instant
-import java.util.UUID
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import pl.poznan.put.dogloverservice.modules.dog.Dog
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
+import java.time.Instant
+import java.util.*
 
 @Repository
 interface UserCalendarEventRepository : JpaRepository<UserCalendarEvent, UUID> {
@@ -23,5 +23,5 @@ interface UserCalendarEventRepository : JpaRepository<UserCalendarEvent, UUID> {
             nativeQuery = true)
     fun findAllTomorrowEvents(): List<UserCalendarEvent>
 
-    fun deleteAllByDogAndDateTimeAfter(dog: Dog, dateTime: Instant)
+    fun deleteAllByDogIdAndDogLoverIdAndDateTimeAfter(dogId: UUID, dogLoverId: UUID, dateTime: Instant)
 }

@@ -16,14 +16,41 @@ class DogLoverNotFoundException : ServiceException(
         "Dog lover profile not found! It may be not created yet."
 )
 
+class DogLoverAvatarNotFoundException(id: UUID) : ServiceException(
+        HttpStatus.NOT_FOUND,
+        "Avatar of dog lover with id: $id not exists."
+)
+
 class DogLoverNicknameAlreadyExistsException : ServiceException(
         HttpStatus.CONFLICT,
         "Dog lover with nickname already exists."
 )
 
-class DogNotFoundException(name: String, userId: UUID) : ServiceException(
+class DogNotFoundException : ServiceException {
+    constructor(name: String, userId: UUID) : super(
+            HttpStatus.NOT_FOUND,
+            "Dog with name: $name not exists for user with id: $userId."
+    )
+
+    constructor(dogId: UUID, userId: UUID) : super(
+            HttpStatus.NOT_FOUND,
+            "Dog with id: $dogId not exists for user with id: $userId."
+    )
+
+    constructor(dogId: UUID) : super(
+            HttpStatus.NOT_FOUND,
+            "Dog with id: $dogId not exists."
+    )
+}
+
+class DogAvatarNotFoundException(id: UUID) : ServiceException(
         HttpStatus.NOT_FOUND,
-        "Dog with name: $name not exists for user with id: $userId."
+        "Avatar of dog with id: $id not exists."
+)
+
+class InvalidAvatarImageException : ServiceException(
+        HttpStatus.BAD_REQUEST,
+        "Avatar image data is not correct image."
 )
 
 class DogAlreadyExistsException(name: String, userId: UUID) : ServiceException(

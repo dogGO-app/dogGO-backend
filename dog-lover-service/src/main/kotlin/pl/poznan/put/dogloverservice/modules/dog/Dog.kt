@@ -1,17 +1,15 @@
 package pl.poznan.put.dogloverservice.modules.dog
 
-import java.time.LocalDate
-import java.util.UUID
 import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.Type
+import pl.poznan.put.dogloverservice.modules.common.avatar.AvatarImage
 import pl.poznan.put.dogloverservice.modules.doglover.DogLover
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.ManyToOne
-import javax.persistence.Table
+import java.time.LocalDate
+import java.util.*
+import javax.persistence.*
 
 @Entity
-@Table(name = "dog")
+@Table(uniqueConstraints = [UniqueConstraint(columnNames = ["name", "dog_lover_user_id"])])
 class Dog(
         @Id
         @Type(type = "pg-uuid")
@@ -27,19 +25,13 @@ class Dog(
 
         val lastVaccinationDate: LocalDate?,
 
+        @Column(nullable = false)
+        @ColumnDefault(value = "false")
         val removed: Boolean = false,
 
         @ManyToOne
-        val dogLover: DogLover
-) {
-        constructor(dog: Dog, removed: Boolean): this(
-                id = dog.id,
-                name = dog.name,
-                breed = dog.breed,
-                color = dog.color,
-                description = dog.description,
-                lastVaccinationDate = dog.lastVaccinationDate,
-                removed = removed,
-                dogLover = dog.dogLover
-        )
-}
+        val dogLover: DogLover,
+
+        @Embedded
+        val avatar: AvatarImage? = null
+)

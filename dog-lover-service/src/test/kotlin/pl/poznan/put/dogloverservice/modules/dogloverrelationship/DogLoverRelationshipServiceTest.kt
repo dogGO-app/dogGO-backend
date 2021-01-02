@@ -73,7 +73,7 @@ class DogLoverRelationshipServiceTest : BehaviorSpec({
         val expectedDogLoverRelationships = DogLoverRelationshipData.johnRelationships
         val expectedDogLoverRelationshipsInfo = expectedDogLoverRelationships.map {
             DogLoverRelationshipDTO(it,
-                    dogService.getDogLoverDogs(it.id.receiverDogLover.id))
+                    dogService.getDogs(it.id.receiverDogLover.id))
         }
 
         every {
