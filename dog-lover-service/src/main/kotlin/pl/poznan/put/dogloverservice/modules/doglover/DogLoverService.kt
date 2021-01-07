@@ -31,7 +31,7 @@ class DogLoverService(
                     dogLoverRepository.save(
                             updatedDogLoverProfile.toDogLoverEntity(
                                     dogLoverId,
-                                    currentDogLoverProfile.nickname
+                                    currentDogLoverProfile
                             )
                     )
             )

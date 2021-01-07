@@ -1,5 +1,6 @@
 package pl.poznan.put.dogloverservice.modules.doglover
 
+import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.MediaType.*
@@ -33,7 +34,7 @@ class DogLoverController(
             dogLoverService.updateDogLoverProfile(updatedDogLoverProfile, getCurrentUserId())
 
     @ApiResponses(
-            ApiResponse(description = "Ok.", responseCode = "200"),
+            ApiResponse(description = "Ok.", responseCode = "200", content = [Content(mediaType = APPLICATION_OCTET_STREAM_VALUE)]),
             ApiResponse(description = "Dog lover or dog lover avatar not found.", responseCode = "404")
     )
     @GetMapping("/{id}/avatar", produces = [IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE])

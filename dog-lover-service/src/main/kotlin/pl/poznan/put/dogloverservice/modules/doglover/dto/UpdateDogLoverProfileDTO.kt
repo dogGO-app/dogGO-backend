@@ -20,10 +20,11 @@ data class UpdateDogLoverProfileDTO(
 
         val hobby: String? = null
 ) {
-    fun toDogLoverEntity(dogLoverId: UUID, nickname: String? = null) = DogLover(
+    fun toDogLoverEntity(dogLoverId: UUID, dogLover: DogLover? = null) = DogLover(
             id = dogLoverId,
-            nickname = nickname ?: this.nickname,
+            nickname = dogLover?.nickname ?: this.nickname,
             firstName = this.firstName,
-            lastName = this.lastName
+            lastName = this.lastName,
+            avatar = dogLover?.avatar
     )
 }

@@ -6,8 +6,10 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotContain
+import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import io.kotest.spring.SpringListener
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -80,10 +82,23 @@ class DogControllerIntegrationTest(
     }
 
     @Test
-    fun `Should update dog`() {
+    fun `Should update dog with avatar`() {
         //given
         val updateDogDTO = UpdateDogDTO(DogData.yogi)
         val expectedDogDTO = DogDTO(DogData.yogi)
+        val dogId = expectedDogDTO.id
+        val avatarMultipartFile = DogAvatarImageData.avatarMultipartFile
+
+        mockMvc.multipart("/dogs/$dogId/avatar") {
+            file(avatarMultipartFile)
+            with {
+                it.apply { method = "PUT" }
+            }
+        }
+                //then
+                .andExpect {
+                    status { isOk }
+                }
 
         //when
         val response = mockMvc.perform(put("/dogs")
@@ -96,7 +111,8 @@ class DogControllerIntegrationTest(
         val returnedDogDTO = jacksonObjectMapper().registerModule(JavaTimeModule()).readValue<DogDTO>(response)
 
         //then
-        returnedDogDTO shouldBe expectedDogDTO
+        returnedDogDTO.shouldBeEqualToIgnoringFields(expectedDogDTO, DogDTO::avatarChecksum)
+        returnedDogDTO.avatarChecksum shouldNotBe null
     }
 
     @Test

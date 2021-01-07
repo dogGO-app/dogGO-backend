@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import io.kotest.spring.SpringListener
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -52,9 +53,21 @@ class DogLoverControllerIntegrationTest(
     }
 
     @Test
-    fun `Should update dog lover profile`() {
+    fun `Should update dog lover profile with avatar`() {
         //given
         val updateDogLoverProfileDTO = getUpdateAdamProfileDTO()
+        val avatarMultipartFile = DogLoverAvatarImageData.avatarMultipartFile
+
+        mockMvc.multipart("/profiles/avatar") {
+            file(avatarMultipartFile)
+            with {
+                it.apply { method = "PUT" }
+            }
+        }
+                //then
+                .andExpect {
+                    status { isOk }
+                }
 
         //when
         val response = mockMvc.perform(put("/profiles")
@@ -67,7 +80,9 @@ class DogLoverControllerIntegrationTest(
         val returnedDogLoverProfile = jacksonObjectMapper().readValue<DogLoverProfileDTO>(response)
 
         //then
+        returnedDogLoverProfile.firstName shouldBe "Adam"
         returnedDogLoverProfile.lastName shouldBe "Nowak"
+        returnedDogLoverProfile.avatarChecksum shouldNotBe null
     }
 
     @Test

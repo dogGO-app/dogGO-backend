@@ -50,7 +50,8 @@ class DogService(
                 color = dogDTO.color,
                 description = dogDTO.description,
                 lastVaccinationDate = dogDTO.lastVaccinationDate,
-                dogLover = dogLover
+                dogLover = dogLover,
+                avatar = dog.avatar
         )
         return DogDTO(dogRepository.save(updatedDog))
     }
