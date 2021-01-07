@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.transaction.TestTransaction
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.multipart
@@ -179,8 +178,6 @@ class DogControllerIntegrationTest(
                     status { isOk }
                 }
 
-        commitTransaction()
-
         //when
         val response = mockMvc.get("/dogs/$dogId/avatar")
                 //then
@@ -216,10 +213,4 @@ class DogControllerIntegrationTest(
                     }
                 }
     }
-}
-
-private fun commitTransaction() {
-    TestTransaction.flagForCommit() // need this, otherwise the next line does a rollback
-    TestTransaction.end()
-    TestTransaction.start()
 }
