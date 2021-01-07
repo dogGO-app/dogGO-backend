@@ -27,13 +27,14 @@ class DogLover(
         @field:NotBlank
         val lastName: String,
 
+        likesCount: Int = 0,
+
         @Embedded
         val avatar: AvatarImage? = null
-
 ) {
     @field:PositiveOrZero
     @ColumnDefault(value = "0")
-    var likesCount: Int = 0
+    var likesCount: Int = likesCount
         private set
 
     fun addLike() = this.apply {
