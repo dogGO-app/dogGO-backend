@@ -3,6 +3,7 @@ package pl.poznan.put.dogloverservice.modules.doglover
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.spring.SpringListener
@@ -18,7 +19,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import pl.poznan.put.dogloverservice.infrastructure.exceptions.InvalidAvatarImageException
-import pl.poznan.put.dogloverservice.modules.doglover.DogLoverData.getUpdateAdamProfileDTO
 import pl.poznan.put.dogloverservice.modules.doglover.dto.DogLoverProfileDTO
 import java.util.*
 import javax.transaction.Transactional
@@ -55,7 +55,7 @@ class DogLoverControllerIntegrationTest(
     @Test
     fun `Should update dog lover profile with avatar`() {
         //given
-        val updateDogLoverProfileDTO = getUpdateAdamProfileDTO()
+        val updateDogLoverProfileDTO = DogLoverData.updateAdamProfileDTO
         val avatarMultipartFile = DogLoverAvatarImageData.avatarMultipartFile
 
         mockMvc.multipart("/profiles/avatar") {
@@ -77,12 +77,15 @@ class DogLoverControllerIntegrationTest(
                 .andReturn()
                 .response
                 .contentAsString
-        val returnedDogLoverProfile = jacksonObjectMapper().readValue<DogLoverProfileDTO>(response)
+        val returnedDogLoverProfileDTO = jacksonObjectMapper().readValue<DogLoverProfileDTO>(response)
 
         //then
-        returnedDogLoverProfile.firstName shouldBe "Adam"
-        returnedDogLoverProfile.lastName shouldBe "Nowak"
-        returnedDogLoverProfile.avatarChecksum shouldNotBe null
+        returnedDogLoverProfileDTO.should {
+            it.firstName shouldBe updateDogLoverProfileDTO.firstName
+            it.lastName shouldBe updateDogLoverProfileDTO.lastName
+            it.likesCount shouldBe 1
+            it.avatarChecksum shouldNotBe null
+        }
     }
 
     @Test

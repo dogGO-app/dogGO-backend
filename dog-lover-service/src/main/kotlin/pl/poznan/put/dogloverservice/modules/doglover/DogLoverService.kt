@@ -30,8 +30,8 @@ class DogLoverService(
             return DogLoverProfileDTO(
                     dogLoverRepository.save(
                             updatedDogLoverProfile.toDogLoverEntity(
-                                    dogLoverId,
-                                    currentDogLoverProfile
+                                    dogLoverId = dogLoverId,
+                                    dogLover = it
                             )
                     )
             )

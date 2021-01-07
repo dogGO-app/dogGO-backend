@@ -1,7 +1,7 @@
 package pl.poznan.put.dogloverservice.modules.doglover
 
-import java.util.*
 import pl.poznan.put.dogloverservice.modules.doglover.dto.UpdateDogLoverProfileDTO
+import java.util.*
 
 object DogLoverData {
     val john
@@ -9,7 +9,8 @@ object DogLoverData {
                 id = UUID.fromString("11443bdb-a4c9-4921-8a14-239d10189053"),
                 firstName = "John",
                 lastName = "Kowalski",
-                nickname = "john.kowalski"
+                nickname = "john.kowalski",
+                likesCount = 1
         )
 
     val updatedJohn
@@ -44,8 +45,8 @@ object DogLoverData {
                 nickname = "adas.malysz11"
         )
 
-    fun getUpdateAdamProfileDTO() =
-            UpdateDogLoverProfileDTO(
+    val updateAdamProfileDTO
+        get() = UpdateDogLoverProfileDTO(
                 firstName = "Adam",
                 lastName = "Nowak",
                 nickname = "adas.malysz11"
