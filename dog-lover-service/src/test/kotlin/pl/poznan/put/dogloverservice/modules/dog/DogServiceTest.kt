@@ -86,6 +86,12 @@ class DogServiceTest : BehaviorSpec({
             Then("actual DogDTO should be equal to expected") {
                 actualDogDTO shouldBe expectedDogDTO
             }
+
+            Then("DogRepository::save should be called") {
+                verify(exactly = 1) {
+                    dogRepository.save(any())
+                }
+            }
         }
 
         When("updating dog") {
