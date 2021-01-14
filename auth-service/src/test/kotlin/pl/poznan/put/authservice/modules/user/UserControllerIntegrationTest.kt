@@ -3,6 +3,7 @@ package pl.poznan.put.authservice.modules.user
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.ninjasquad.springmockk.MockkBean
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.AnnotationSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.spring.SpringListener
@@ -33,7 +34,7 @@ import javax.ws.rs.core.Response
 class UserControllerIntegrationTest(
         val mockMvc: MockMvc
 ) : AnnotationSpec() {
-    init {
+    override fun beforeSpec(spec: Spec) {
         mockkStatic("pl.poznan.put.authservice.infrastructure.extensions.JwtExtensionsKt")
         every {
             getCurrentJwtTokenValue()
