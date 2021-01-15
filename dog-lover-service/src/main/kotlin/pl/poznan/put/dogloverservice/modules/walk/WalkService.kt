@@ -75,7 +75,6 @@ class WalkService(
         activeDogLoverWalkCache.put(dogLoverId, activeWalk.id)
     }
 
-    // Change function name?
     fun getOtherDogLoversInLocation(mapMarkerId: UUID, dogLoverId: UUID): List<DogLoverInLocationDTO> {
         val otherDogLoversWalks = walkRepository.findAllByMapMarkerIdAndWalkStatusAndDogLoverIdIsNot(
                 mapMarkerId, ARRIVED_AT_DESTINATION, dogLoverId)
@@ -87,7 +86,6 @@ class WalkService(
         }
     }
 
-    // Change function name?
     fun getDogLoversInLocations(
             mapMarkerIds: List<UUID>,
             dogLoverRelationships: List<DogLoverRelationship>

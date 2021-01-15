@@ -5,10 +5,10 @@ spring:
   application:
     name: mail-service
   mail:
-    host: smtp.mail.yahoo.com
-    port: 465
-    username: ${MAIL_ADDRESS:emailAddress}
-    password: ${MAIL_PASSWORD:somePasswordToChange}
+    host: ${HOST:smtp.mail.yahoo.com}
+    port: ${PORT:465}
+    username: ${MAIL_ADDRESS:dogGO.contact@yahoo.com}
+    password: ${MAIL_PASSWORD:vrczgoacluudgfgy}
     properties:
       mail:
         smtp:

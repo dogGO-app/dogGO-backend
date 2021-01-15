@@ -18,20 +18,18 @@ import javax.ws.rs.core.Response
 final class KeycloakClient(
         @Value("\${keycloak.custom.admin-user.username}") private val username: String,
         @Value("\${keycloak.custom.admin-user.password}") private val password: String,
+        @Value("\${keycloak.custom.client.id}") private val clientId: String,
         @Value("\${keycloak.custom.client.secret}") private val clientSecret: String,
+        @Value("\${keycloak.custom.master-realm-name}") private val masterRealmName: String,
         @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri}") private val issuerUri: String
 ) {
-    private companion object {
-        const val CLIENT_ID = "admin-cli"
-        const val MASTER_REALM_NAME = "master"
-    }
 
     private val client: Keycloak = KeycloakBuilder.builder()
-            .serverUrl(issuerUri.removeSuffix("/realms/$MASTER_REALM_NAME"))
-            .realm(MASTER_REALM_NAME)
+            .serverUrl(issuerUri.removeSuffix("/realms/$masterRealmName"))
+            .realm(masterRealmName)
             .username(username)
             .password(password)
-            .clientId(CLIENT_ID)
+            .clientId(clientId)
             .clientSecret(clientSecret)
             .resteasyClient(ResteasyClientBuilder().connectionPoolSize(10).build())
             .build()
@@ -62,7 +60,7 @@ final class KeycloakClient(
             getUserResource(id.toString()).toRepresentation().email
 
     private fun getMasterRealmResource(): RealmResource =
-            client.realm(MASTER_REALM_NAME)
+            client.realm(masterRealmName)
 
     private fun getUsersResource(): UsersResource =
             getMasterRealmResource().users()
