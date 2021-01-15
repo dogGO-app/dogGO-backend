@@ -9,6 +9,7 @@ import pl.poznan.put.dogloverservice.modules.mapmarker.MapMarkerService
 import pl.poznan.put.dogloverservice.modules.walk.WalkService
 import pl.poznan.put.dogloverservice.modules.walk.dto.DogLoverInLocationDTO
 import java.util.*
+import kotlin.math.pow
 
 @Service
 class LocationRecommendationService(
@@ -36,20 +37,21 @@ class LocationRecommendationService(
             LocationRecommendationDTO(
                     mapMarkerRecommendation = mapMarkerRecommendationDTO,
                     dogLoversInLocation = dogLoversInLocation,
-                    rating = countLocationRating(initialRating = (index + 1) * 4.0, dogLoversInLocation)
+                    rating = countLocationRating(initialRating = index + 1, dogLoversInLocation)
             )
         }
 
         return locationRecommendationsWithInitialRatings.sortedByDescending { it.rating }
     }
 
-    private fun countLocationRating(initialRating: Double, dogLoversInLocation: List<DogLoverInLocationDTO>): Double {
+    private fun countLocationRating(initialRating: Int, dogLoversInLocation: List<DogLoverInLocationDTO>): Double {
         val relationshipsCount = dogLoversInLocation
                 .groupingBy { it.relationshipStatus }
                 .eachCount()
                 .withDefault { 0 }
         return initialRating +
-                relationshipsCount.getValue(FOLLOWS) * 3.0 * initialRating * 0.2 -
-                relationshipsCount.getValue(BLOCKS) * 3.0 * initialRating * 0.2
+                relationshipsCount.getValue(FOLLOWS).toDouble().pow(2) * 0.3 +
+                relationshipsCount.getValue(FOLLOWS) * 0.8 -
+                relationshipsCount.getValue(BLOCKS).toDouble().pow(2) * 1.3
     }
 }

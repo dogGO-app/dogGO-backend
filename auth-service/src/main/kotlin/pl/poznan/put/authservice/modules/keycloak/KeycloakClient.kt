@@ -18,11 +18,11 @@ import javax.ws.rs.core.Response
 final class KeycloakClient(
         @Value("\${keycloak.custom.admin-user.username}") private val username: String,
         @Value("\${keycloak.custom.admin-user.password}") private val password: String,
+        @Value("\${keycloak.custom.client.secret}") private val clientSecret: String,
         @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri}") private val issuerUri: String
 ) {
     private companion object {
         const val CLIENT_ID = "admin-cli"
-        const val CLIENT_SECRET = "043a5366-3120-4ec2-93d1-4d69120481c9" // TODO Not store secret in code
         const val MASTER_REALM_NAME = "master"
     }
 
@@ -32,7 +32,7 @@ final class KeycloakClient(
             .username(username)
             .password(password)
             .clientId(CLIENT_ID)
-            .clientSecret(CLIENT_SECRET)
+            .clientSecret(clientSecret)
             .resteasyClient(ResteasyClientBuilder().connectionPoolSize(10).build())
             .build()
 

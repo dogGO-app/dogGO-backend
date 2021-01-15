@@ -52,6 +52,8 @@ keycloak:
       keycloak-path: /keycloak
     migration:
       import-location: classpath:keycloak-realm-config.json
+    client:
+      secret: ${KEYCLOAK_CLIENT_SECRET:secret}
 
 feign:
   client:

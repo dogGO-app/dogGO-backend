@@ -44,14 +44,14 @@ class LocationRecommendationServiceTest : BehaviorSpec({
 
             val expectedLocationRecommendation = listOf(
                     LocationRecommendationDTO(
-                            neighbourhoodLocations.last(),
-                            emptyList(),
-                            8.0
-                    ),
-                    LocationRecommendationDTO(
                             neighbourhoodLocations.first(),
                             listOf(dogLoverInLocation),
-                            6.4
+                            2.1
+                    ),
+                    LocationRecommendationDTO(
+                            neighbourhoodLocations.last(),
+                            emptyList(),
+                            2.0
                     )
             )
 

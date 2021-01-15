@@ -34,19 +34,19 @@ object MapMarkerData {
     val parksWithDistances
         get() = listOf(
                 MapMarkerDistanceDTO(
-                        id = UUID.fromString("c3bd0f81-4f06-4d37-a039-251d41c6204d"),
-                        name = "Park Mostowa",
-                        description = "Nice place",
-                        latitude = 52.4,
-                        longitude = 16.9,
-                        distanceInMeters = 20),
-                MapMarkerDistanceDTO(
                         id = UUID.fromString("87e5efcc-f8b4-48d4-9986-d2997b8cfda5"),
                         name = "Park Konin",
                         description = "Not so nice place",
                         latitude = 52.22,
                         longitude = 18.25,
-                        distanceInMeters = 100)
+                        distanceInMeters = 100),
+                MapMarkerDistanceDTO(
+                        id = UUID.fromString("c3bd0f81-4f06-4d37-a039-251d41c6204d"),
+                        name = "Park Mostowa",
+                        description = "Nice place",
+                        latitude = 52.4,
+                        longitude = 16.9,
+                        distanceInMeters = 20)
         )
 
     val parksDistanceViews

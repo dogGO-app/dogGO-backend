@@ -7,7 +7,7 @@ spring:
   mail:
     host: smtp.mail.yahoo.com
     port: 465
-    username: dogGO.contact@yahoo.com
+    username: ${MAIL_ADDRESS:emailAddress}
     password: ${MAIL_PASSWORD:somePasswordToChange}
     properties:
       mail:
