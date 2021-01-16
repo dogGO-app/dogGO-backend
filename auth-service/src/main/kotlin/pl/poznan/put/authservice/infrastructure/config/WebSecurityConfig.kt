@@ -11,7 +11,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         http
                 .authorizeRequests()
                 .antMatchers("/v3/api-docs/**").permitAll()
-                .antMatchers("/user/**").hasAuthority("SCOPE_user")
+                .antMatchers("/users/**").hasAuthority("SCOPE_user")
                 .and()
                 .csrf().disable()
                 .oauth2ResourceServer().jwt()
