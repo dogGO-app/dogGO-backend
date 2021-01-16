@@ -5,8 +5,8 @@ spring:
   application:
     name: mail-service
   mail:
-    host: ${HOST:smtp.mail.yahoo.com}
-    port: ${PORT:465}
+    host: ${MAIL_HOST:smtp.mail.yahoo.com}
+    port: ${MAIL_PORT:465}
     username: ${MAIL_ADDRESS:dogGO.contact@yahoo.com}
     password: ${MAIL_PASSWORD:vrczgoacluudgfgy}
     properties:
