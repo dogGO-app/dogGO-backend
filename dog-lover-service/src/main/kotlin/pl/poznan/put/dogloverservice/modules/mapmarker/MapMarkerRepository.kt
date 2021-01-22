@@ -29,15 +29,19 @@ interface MapMarkerRepository : JpaRepository<MapMarker, UUID> {
     ): List<MapMarkerDistanceView>
 
     @Query(value = """
-            SELECT BOOL_AND(
-                           CASE
-                               WHEN SQRT(POW(111.12 * (mm.latitude - :lat), 2) +
-                                         POW(111.12 * (:lon - mm.longitude) * COS(mm.latitude / 92.215), 2)) * 1000 >= :min_dist
-                                   THEN TRUE
-                               ELSE FALSE
-                               END
-                       )
-            FROM map_marker mm
+            WITH bool_and AS (
+                SELECT BOOL_AND(
+                               CASE
+                                   WHEN SQRT(POW(111.12 * (mm.latitude - :lat), 2) +
+                                             POW(111.12 * (:lon - mm.longitude) * COS(mm.latitude / 92.215), 2)) * 1000 >= :min_dist
+                                       THEN TRUE
+                                   ELSE FALSE
+                                   END
+                           )
+                FROM map_marker mm
+            )
+            SELECT COALESCE(bool_and, TRUE)
+            FROM bool_and
             """,
             nativeQuery = true
     )

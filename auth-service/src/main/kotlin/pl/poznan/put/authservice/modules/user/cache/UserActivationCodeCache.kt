@@ -6,6 +6,7 @@ import pl.poznan.put.authservice.infrastructure.exceptions.CacheValueNullExcepti
 import java.time.Duration
 
 typealias Email = String
+typealias ActivationCode = String
 
 @Component
 class UserActivationCodeCache {
@@ -17,15 +18,15 @@ class UserActivationCodeCache {
 
     private val cache = Caffeine.newBuilder()
             .expireAfterWrite(expirationDuration)
-            .build<Email, String> {
+            .build<Email, ActivationCode> {
                 buildString(capacity = CODE_LENGTH) {
                     repeat(CODE_LENGTH) { append(allowedChars.random()) }
                 }
             }
 
-    fun get(key: Email): String =
+    fun get(key: Email): ActivationCode =
             cache.get(key) ?: throw CacheValueNullException()
 
-    fun containsEntry(key: Email, value: String): Boolean =
+    fun containsEntry(key: Email, value: ActivationCode): Boolean =
             cache.getIfPresent(key) == value
 }
